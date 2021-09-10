@@ -71,7 +71,7 @@ public class ListingsActivity extends AppCompatActivity {
                 val parser = remember { PrettifyParser() }
 
                 val theme = remember {
-                    CodeThemeType.Default
+                    CodeThemeType.Monokai
                 }
 
                 var result by remember {
