@@ -1,33 +1,16 @@
-package io.github.kbiakov.codeviewexample;
+package com.wakaztahir.codeeditor
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import io.github.kbiakov.codeview.CodeView
+import io.github.kbiakov.codeview.highlight.ColorTheme
+import io.github.kbiakov.codeview.highlight.Font
 
-import org.jetbrains.annotations.NotNull;
-
-import io.github.kbiakov.codeview.CodeView;
-import io.github.kbiakov.codeview.OnCodeLineClickListener;
-import io.github.kbiakov.codeview.adapters.CodeWithDiffsAdapter;
-import io.github.kbiakov.codeview.adapters.Format;
-import io.github.kbiakov.codeview.adapters.Options;
-import io.github.kbiakov.codeview.highlight.ColorTheme;
-import io.github.kbiakov.codeview.highlight.ColorThemeData;
-import io.github.kbiakov.codeview.highlight.Font;
-import io.github.kbiakov.codeview.highlight.FontCache;
-import io.github.kbiakov.codeview.views.DiffModel;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-
-public class ListingsActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listings);
-
-        final CodeView codeView = (CodeView) findViewById(R.id.code_view);
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_listings)
+        val codeView: CodeView = findViewById(R.id.code_view)
 
 //        /*
 //         * 1: set code content
@@ -124,56 +107,51 @@ public class ListingsActivity extends AppCompatActivity {
 //                .shortcut(10, "Show all");
 
         // - Playground
+        codeView.setCode(
+            """package io.github.kbiakov.codeviewexample;
 
-        codeView.setCode("" +
-                "package io.github.kbiakov.codeviewexample;\n" +
-                "\n" +
-                "import android.os.Bundle;\n" +
-                "import android.support.annotation.Nullable;\n" +
-                "import android.support.v7.app.AppCompatActivity;\n" +
-                "import android.util.Log;\n" +
-                "\n" +
-                "import org.jetbrains.annotations.NotNull;\n" +
-                "\n" +
-                "import io.github.kbiakov.codeview.CodeView;\n" +
-                "import io.github.kbiakov.codeview.OnCodeLineClickListener;\n" +
-                "import io.github.kbiakov.codeview.adapters.CodeWithDiffsAdapter;\n" +
-                "import io.github.kbiakov.codeview.adapters.Options;\n" +
-                "import io.github.kbiakov.codeview.highlight.ColorTheme;\n" +
-                "import io.github.kbiakov.codeview.highlight.ColorThemeData;\n" +
-                "import io.github.kbiakov.codeview.highlight.Font;\n" +
-                "import io.github.kbiakov.codeview.highlight.FontCache;\n" +
-                "import io.github.kbiakov.codeview.views.DiffModel;\n" +
-                "\n" +
-                "public class ListingsActivity extends AppCompatActivity {\n" +
-                "\n" +
-                "    @Override\n" +
-                "    protected void onCreate(@Nullable Bundle savedInstanceState) {\n" +
-                "        super.onCreate(savedInstanceState);\n" +
-                "        setContentView(R.layout.activity_listings);\n" +
-                "\n" +
-                "        final CodeView codeView = (CodeView) findViewById(R.id.code_view);\n" +
-                "\n" +
-                "        /*\n" +
-                "         * 1: set code content\n" +
-                "         */\n" +
-                "\n" +
-                "        // auto language recognition\n" +
-                "        codeView.setCode(getString(R.string.listing_js));\n" +
-                "\n" +
-                "        // specify language for code listing\n" +
-                "        codeView.setCode(getString(R.string.listing_py), \"py\");" +
-                "    }\n" +
-                "}", "java");
-        codeView.updateOptions(new Function1<Options, Unit>() {
-            @Override
-            public Unit invoke(Options options) {
-                options.withFont(Font.Consolas)
-                        .withTheme(ColorTheme.SOLARIZED_LIGHT)
-                        .withShadows()
-                        .setShortcut(false);
-                return null;
-            }
-        });
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+
+import org.jetbrains.annotations.NotNull;
+
+import io.github.kbiakov.codeview.CodeView;
+import io.github.kbiakov.codeview.OnCodeLineClickListener;
+import io.github.kbiakov.codeview.adapters.CodeWithDiffsAdapter;
+import io.github.kbiakov.codeview.adapters.Options;
+import io.github.kbiakov.codeview.highlight.ColorTheme;
+import io.github.kbiakov.codeview.highlight.ColorThemeData;
+import io.github.kbiakov.codeview.highlight.Font;
+import io.github.kbiakov.codeview.highlight.FontCache;
+import io.github.kbiakov.codeview.views.DiffModel;
+
+public class ListingsActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_listings);
+
+        final CodeView codeView = (CodeView) findViewById(R.id.code_view);
+
+        /*
+         * 1: set code content
+         */
+
+        // auto language recognition
+        codeView.setCode(getString(R.string.listing_js));
+
+        // specify language for code listing
+        codeView.setCode(getString(R.string.listing_py), "py");    }
+}""", "java"
+        )
+        codeView.updateOptions {
+            withFont(Font.Consolas)
+                .withTheme(ColorTheme.SOLARIZED_LIGHT)
+                .withShadows()
+                .shortcut = false
+        }
     }
 }

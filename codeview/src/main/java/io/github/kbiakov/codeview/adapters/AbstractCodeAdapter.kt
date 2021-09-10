@@ -3,12 +3,12 @@ package io.github.kbiakov.codeview.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import io.github.kbiakov.codeview.*
 import io.github.kbiakov.codeview.Thread.async
 import io.github.kbiakov.codeview.Thread.ui
@@ -267,7 +267,7 @@ abstract class AbstractCodeAdapter<T> : RecyclerView.Adapter<AbstractCodeAdapter
             private fun Int.lineEndIdx() = this - BordersCount
 
             fun get(pos: Int, n: Int) = when (pos) {
-                in LineStartIdx .. n.lineEndIdx() ->
+                in LineStartIdx..n.lineEndIdx() ->
                     ViewHolderType.Line.viewType
                 else ->
                     ViewHolderType.Border.viewType
@@ -319,35 +319,47 @@ abstract class AbstractCodeAdapter<T> : RecyclerView.Adapter<AbstractCodeAdapter
  * @author Kirill Biakov
  */
 data class Options(
-        val context: Context,
-        var code: String = "",
-        var language: String? = null,
-        var theme: ColorThemeData = ColorTheme.DEFAULT.theme(),
-        var font: Typeface = FontCache.get(context).getTypeface(context),
-        var format: Format = Format.Compact,
-        var animateOnHighlight: Boolean = true,
-        var shadows: Boolean = false,
-        var shortcut: Boolean = false,
-        var shortcutNote: String = context.getString(R.string.show_all),
-        var maxLines: Int = 0,
-        var lineClickListener: OnCodeLineClickListener? = null) {
+    val context: Context,
+    var code: String = "",
+    var language: String? = null,
+    var theme: ColorThemeData = ColorTheme.DEFAULT.theme(),
+    var font: Typeface = FontCache.get(context).getTypeface(context),
+    var format: Format = Format.Compact,
+    var animateOnHighlight: Boolean = true,
+    var shadows: Boolean = false,
+    var shortcut: Boolean = false,
+    var shortcutNote: String = context.getString(R.string.show_all),
+    var maxLines: Int = 0,
+    var lineClickListener: OnCodeLineClickListener? = null
+) {
 
     internal var isHighlighted: Boolean = false
 
     fun withCode(code: String) = apply { this.code = code }
     fun withCode(codeResId: Int) = apply { code = context.getString(codeResId) }
-    fun setCode(codeResId: Int) { withCode(codeResId) }
+    fun setCode(codeResId: Int) {
+        withCode(codeResId)
+    }
+
     fun withLanguage(language: String) = apply { this.language = language }
 
     fun withTheme(theme: ColorThemeData) = apply { this.theme = theme }
     fun withTheme(theme: ColorTheme) = apply { this.theme = theme.theme() }
-    fun setTheme(theme: ColorTheme) { withTheme(theme) }
+    fun setTheme(theme: ColorTheme) {
+        withTheme(theme)
+    }
 
     fun withFont(font: Font) = apply { this.font = font.get() }
     fun withFont(font: Typeface) = font saveAndThen { apply { this.font = font } }
     fun withFont(fontPath: String) = apply { this.font = fontPath.get() }
-    fun setFont(fontPath: String) { withFont(fontPath) }
-    fun setFont(font: Font) { withFont(font) }
+    fun setFont(fontPath: String) {
+        withFont(fontPath)
+    }
+
+    fun setFont(font: Font) {
+        withFont(font)
+    }
+
     fun withFormat(format: Format) = apply { this.format = format }
 
     fun animateOnHighlight() = apply { animateOnHighlight = true }
@@ -355,7 +367,9 @@ data class Options(
     fun withShadows() = apply { shadows = true }
     fun withoutShadows() = apply { shadows = false }
 
-    fun addCodeLineClickListener(listener: OnCodeLineClickListener) = apply { lineClickListener = listener }
+    fun addCodeLineClickListener(listener: OnCodeLineClickListener) =
+        apply { lineClickListener = listener }
+
     fun removeCodeLineClickListener() = apply { lineClickListener = null }
 
     fun shortcut(maxLines: Int, shortcutNote: String) = apply {
@@ -373,14 +387,16 @@ data class Options(
     private val fontCache = FontCache.get(context)
     private fun Font.get() = fontCache.getTypeface(context, this)
     private fun String.get() = fontCache.getTypeface(context, this)
-    private infix fun <T> Typeface.saveAndThen(body: () -> T): T = fontCache.saveTypeface(this).let { body() }
+    private infix fun <T> Typeface.saveAndThen(body: () -> T): T =
+        fontCache.saveTypeface(this).let { body() }
 }
 
 data class Format(
-        val scaleFactor: Float = 1f,
-        val lineHeight: Int = (LineHeight * scaleFactor).toInt(),
-        val borderHeight: Int = (BorderHeight * scaleFactor).toInt(),
-        val fontSize: Float = FontSize.toFloat()) {
+    val scaleFactor: Float = 1f,
+    val lineHeight: Int = (LineHeight * scaleFactor).toInt(),
+    val borderHeight: Int = (BorderHeight * scaleFactor).toInt(),
+    val fontSize: Float = FontSize.toFloat()
+) {
 
     companion object Default {
         private const val LineHeight = 18

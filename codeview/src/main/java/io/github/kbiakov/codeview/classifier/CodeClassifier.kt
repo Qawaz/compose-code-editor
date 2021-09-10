@@ -44,7 +44,7 @@ object CodeClassifier {
      * @param context Context
      */
     fun train(context: Context) {
-        Files.ls(context, TRAINING_SET_FOLDER).forEach { language ->
+        Files.ls(context, TRAINING_SET_FOLDER)?.forEach { language ->
             val path = "$TRAINING_SET_FOLDER/$language"
             val content = Files.content(context, path)
             classifier.learn(language, spaceSplit(content))
