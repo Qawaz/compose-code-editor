@@ -2,113 +2,30 @@ package com.wakaztahir.codeeditorexample
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import com.wakaztahir.codeeditor.CodeView
-import com.wakaztahir.codeeditor.highlight.ColorTheme
-import com.wakaztahir.codeeditor.highlight.Font
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextField
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
+import com.wakaztahir.codeeditor.highlight.prettify.PrettifyParser
+import com.wakaztahir.codeeditorexample.theme.CodeEditorTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_listings)
-        val codeView: CodeView = findViewById(R.id.code_view)
 
-//        /*
-//         * 1: set code content
-//         */
-//
-//        // auto language recognition
-//        codeView.setCode(getString(R.string.listing_js));
-//
-//        // specify language for code listing
-//        codeView.setCode(getString(R.string.listing_py), "py");
-//
-//        /*
-//         * 2: working with options
-//         */
-//
-//        // you can change params as follows (unsafe, initialized view only)
-//        codeView.getOptions()
-//                .withCode(R.string.listing_java)
-//                .withTheme(ColorTheme.MONOKAI);
-//
-//        // short initialization with default params (can be expanded using with() methods)
-//        codeView.setOptions(Options.Default.get(this)
-//                .withLanguage("python")
-//                .withCode(R.string.listing_py)
-//                .withTheme(ColorTheme.MONOKAI)
-//                .withFont(Font.Consolas));
-//
-//        // expanded form of initialization
-//        codeView.setOptions(new Options(
-//                this,                                   // context
-//                getString(R.string.listing_js),         // code
-//                "js",                                   // language
-//                ColorTheme.MONOKAI.theme(),             // theme (data)
-//                FontCache.get(this).getTypeface(this),  // font
-//                Format.Default.getCompact(),            // format
-//                true,                                   // animate on highlight
-//                true,                                   // shadows visible
-//                true,                                   // shortcut
-//                getString(R.string.show_all),           // shortcut note
-//                10,                                     // max lines
-//                new OnCodeLineClickListener() {         // line click listener
-//                    @Override
-//                    public void onCodeLineClicked(int n, @NotNull String line) {
-//                        Log.i("ListingsActivity", "On " + (n + 1) + " line clicked");
-//                    }
-//                }));
-//
-//        /*
-//         * 3: color themes
-//         */
-//
-//        codeView.getOptions().setTheme(ColorTheme.SOLARIZED_LIGHT);
-//
-//        // custom theme
-//        ColorThemeData myTheme = ColorTheme.SOLARIZED_LIGHT.theme()
-//                .withBgContent(android.R.color.black)
-//                .withNoteColor(android.R.color.white);
-//
-//        codeView.getOptions().setTheme(myTheme);
-//
-//        /*
-//         * 4: custom adapter with footer views
-//         */
-//
-//        final CustomAdapter myAdapter = new CustomAdapter(this, getString(R.string.listing_md));
-//        codeView.setAdapter(myAdapter);
-//        codeView.getOptions()
-//                .withLanguage("md")
-//                .addCodeLineClickListener(new OnCodeLineClickListener() {
-//                    @Override
-//                    public void onCodeLineClicked(int n, @NotNull String line) {
-//                        myAdapter.addFooterEntity(n, new CustomAdapter.CustomModel("Line " + (n + 1), line));
-//                    }
-//                });
-//
-//        /*
-//         * 5: diff adapter with footer views
-//         */
-//
-//        final CodeWithDiffsAdapter diffsAdapter = new CodeWithDiffsAdapter(this);
-//        codeView.getOptions()
-//                .withLanguage("python")
-//                .setCode(getString(R.string.listing_py));
-//        codeView.updateAdapter(diffsAdapter);
-//
-//        diffsAdapter.addFooterEntity(16, new DiffModel(getString(R.string.py_addition_16), true));
-//        diffsAdapter.addFooterEntity(11, new DiffModel(getString(R.string.py_deletion_11), false));
-//
-//        /*
-//         * 6: shortcut adapter with footer views
-//         */
-//
-//        codeView.getOptions()
-//                .shortcut(10, "Show all");
+        setContent {
 
-        // - Playground
-        codeView.setCode(
-            """package io.github.kbiakov.codeviewexample;
+            CodeEditorTheme {
+
+                val language = "javascript"
+                val code = """package io.github.kbiakov.codeviewexample;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -145,13 +62,29 @@ public class ListingsActivity extends AppCompatActivity {
 
         // specify language for code listing
         codeView.setCode(getString(R.string.listing_py), "py");    }
-}""", "java"
-        )
-        codeView.updateOptions {
-            withFont(Font.Consolas)
-                .withTheme(ColorTheme.SOLARIZED_LIGHT)
-                .withShadows()
-                .shortcut = false
+}""".trimIndent()
+
+                var result by remember {
+                    mutableStateOf(TextFieldValue(code))
+                }
+
+                val parser = remember { PrettifyParser() }
+
+                val theme = remember { MonokaiTheme() }
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = MaterialTheme.colors.background),
+                    value = result,
+                    onValueChange = {
+                        result = it.copy(
+                            annotatedString = parser.parse(language, it.text)
+                                .toAnnotatedString(theme, it.text)
+                        )
+                    }
+                )
+            }
         }
     }
 }
