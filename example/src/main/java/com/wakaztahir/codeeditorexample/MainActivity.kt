@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,7 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
+import com.wakaztahir.codeeditor.highlight.components.parseCodeAsAnnotatedString
 import com.wakaztahir.codeeditor.highlight.prettify.PrettifyParser
+import com.wakaztahir.codeeditor.highlight.theme.CodeThemeType
 import com.wakaztahir.codeeditorexample.theme.CodeEditorTheme
 
 class MainActivity : ComponentActivity() {
@@ -64,13 +68,28 @@ public class ListingsActivity extends AppCompatActivity {
         codeView.setCode(getString(R.string.listing_py), "py");    }
 }""".trimIndent()
 
-                var result by remember {
-                    mutableStateOf(TextFieldValue(code))
-                }
-
                 val parser = remember { PrettifyParser() }
 
-                val theme = remember { MonokaiTheme() }
+                val theme = remember {
+                    CodeThemeType.Default
+                }
+
+                var result by remember {
+                    mutableStateOf(
+                        TextFieldValue(
+                            parseCodeAsAnnotatedString(
+                                parser = parser,
+                                theme = theme.theme(),
+                                lang = language,
+                                code = code
+                            )
+                        )
+                    )
+                }
+                
+                Column {
+                    Text(text = result.annotatedString)
+                }
 
                 TextField(
                     modifier = Modifier
@@ -79,8 +98,12 @@ public class ListingsActivity extends AppCompatActivity {
                     value = result,
                     onValueChange = {
                         result = it.copy(
-                            annotatedString = parser.parse(language, it.text)
-                                .toAnnotatedString(theme, it.text)
+                            parseCodeAsAnnotatedString(
+                                parser = parser,
+                                theme = theme.theme(),
+                                lang = language,
+                                code = code
+                            )
                         )
                     }
                 )

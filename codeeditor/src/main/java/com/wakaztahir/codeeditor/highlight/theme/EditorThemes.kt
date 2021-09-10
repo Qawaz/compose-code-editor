@@ -1,4 +1,4 @@
-package com.wakaztahir.codeeditorexample
+package com.wakaztahir.codeeditor.highlight.theme
 
 import androidx.compose.ui.graphics.Color
 

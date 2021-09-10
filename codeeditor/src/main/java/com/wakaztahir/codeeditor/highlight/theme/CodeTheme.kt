@@ -1,4 +1,4 @@
-package com.wakaztahir.codeeditorexample
+package com.wakaztahir.codeeditor.highlight.theme
 
 import androidx.compose.ui.text.SpanStyle
 import com.wakaztahir.codeeditor.highlight.parser.ParseResult
@@ -27,4 +27,19 @@ abstract class CodeTheme {
 
         return SpanStyle(color = colorMap[result.styleKeysString] ?: colors.nocode)
     }
+}
+
+enum class CodeThemeType {
+    Default {
+        override fun theme(): CodeTheme {
+            return DefaultTheme()
+        }
+    },
+    Monokai {
+        override fun theme(): CodeTheme {
+            return MonokaiTheme()
+        }
+    };
+
+    abstract fun theme(): CodeTheme
 }
