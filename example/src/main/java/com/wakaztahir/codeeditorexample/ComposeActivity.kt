@@ -1,18 +1,16 @@
 package com.wakaztahir.codeeditorexample
 
 import android.os.Bundle
-import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.TextField
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.text.HtmlCompat
-import com.wakaztahir.codeeditor.highlight.CodeHighlighter
-import com.wakaztahir.codeeditor.highlight.ColorTheme
+import androidx.compose.ui.text.input.TextFieldValue
 import com.wakaztahir.codeeditor.highlight.prettify.PrettifyParser
 
 class ComposeActivity : ComponentActivity() {
@@ -36,7 +34,7 @@ class ComposeActivity : ComponentActivity() {
 //                }
 //            })
 
-            val language = "java"
+            val language = "markdown"
             val code = """
                     public static void main(String[] args){
                         int x = 3;
@@ -44,15 +42,24 @@ class ComposeActivity : ComponentActivity() {
                     }
                 """.trimIndent()
 
-            val result = remember {
-                PrettifyParser().parse(language, code)
+            var result by remember {
+                mutableStateOf(TextFieldValue(code))
             }
 
-            Column {
-                result.forEach {
-                    Text(text = "length : ${it.length} , offset : ${it.offset} , style keys string : ${it.styleKeysString}")
+            val parser = remember { PrettifyParser() }
+
+            val theme = remember { DefaultTheme() }
+
+            TextField(
+                modifier = Modifier.fillMaxSize(),
+                value = result,
+                onValueChange = {
+                    result = it.copy(
+                        annotatedString = parser.parse(language, it.text)
+                            .toAnnotatedString(theme, it.text)
+                    )
                 }
-            }
+            )
         }
     }
 
