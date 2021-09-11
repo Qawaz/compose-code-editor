@@ -4,6 +4,10 @@
 
 **Compose Code Editor** is a code highlighting / editing library for compose
 
+## Demo
+
+![Screen Recording (9-11-2021 4-29-35 PM)](https://user-images.githubusercontent.com/42442700/132946529-c0c76bf4-b055-4be9-b89a-48c1b3295f89.gif)
+
 ## Setup
 
 You can either get this from github packages or jitpack
