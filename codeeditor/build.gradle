@@ -33,7 +33,7 @@ dependencies {
 }
 
 
-def versionName = "1.0.0"
+def versionName = "2.0.0"
 def artifactName = "codeeditor"
 
 def githubProperties = new Properties()
