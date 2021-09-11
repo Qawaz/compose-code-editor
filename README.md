@@ -27,12 +27,14 @@ val theme = remember(themeState) { themeState.theme() }
 
 ```kotlin
 // Step 3. Parse Code For Highlighting
-val parsedCode = parseCodeAsAnnotatedString(
-    parser = parser,
-    theme = theme,
-    lang = language,
-    code = code
-)
+val parsedCode = remember {
+    parseCodeAsAnnotatedString(
+        parser = parser,
+        theme = theme,
+        lang = language,
+        code = code
+    )
+}
 
 // Step 4. Display In A Text Composable
 Text(parsedCode)
