@@ -100,3 +100,12 @@ releases.
 
 * Default
 * [Monokai](http://www.eclipsecolorthemes.org/?view=theme&id=386)
+
+## Issues
+
+* Does not support kotlin yet , but basic syntax highlighting can be achieved by using another
+  language
+* Lack of themes
+* Everytime user types code in a text field , all the code is parsed again rather than only the
+  changed lines which makes it a little inefficient , This is due to compose not supporting
+  multiline text editing yet , so it will be fixed in future
