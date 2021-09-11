@@ -1,13 +1,11 @@
-package com.wakaztahir.codeeditor.highlight.components
+package com.wakaztahir.codeeditor.highlight.utils
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
+import com.wakaztahir.codeeditor.highlight.model.CodeLang
 import com.wakaztahir.codeeditor.highlight.parser.ParseResult
 import com.wakaztahir.codeeditor.highlight.prettify.PrettifyParser
 import com.wakaztahir.codeeditor.highlight.theme.CodeTheme
-import com.wakaztahir.codeeditor.highlight.theme.CodeThemeType
-import com.wakaztahir.codeeditor.highlight.theme.DefaultTheme
-import com.wakaztahir.codeeditor.highlight.theme.MonokaiTheme
 
 fun List<ParseResult>.toAnnotatedString(theme: CodeTheme, source: String): AnnotatedString {
     val result = this
@@ -33,3 +31,15 @@ fun parseCodeAsAnnotatedString(
 ): AnnotatedString {
     return parser.parse(lang, code).toAnnotatedString(theme, code)
 }
+
+fun parseCodeAsAnnotatedString(
+    parser: PrettifyParser,
+    theme: CodeTheme,
+    lang: CodeLang,
+    code: String
+): AnnotatedString = parseCodeAsAnnotatedString(
+    parser = parser,
+    theme = theme,
+    lang = lang.value.first(),
+    code = code,
+)

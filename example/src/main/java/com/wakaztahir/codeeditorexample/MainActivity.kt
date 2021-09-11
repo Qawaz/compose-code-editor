@@ -15,9 +15,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
-import com.wakaztahir.codeeditor.highlight.components.parseCodeAsAnnotatedString
+import com.wakaztahir.codeeditor.highlight.model.CodeLang
 import com.wakaztahir.codeeditor.highlight.prettify.PrettifyParser
 import com.wakaztahir.codeeditor.highlight.theme.CodeThemeType
+import com.wakaztahir.codeeditor.highlight.utils.parseCodeAsAnnotatedString
 import com.wakaztahir.codeeditorexample.theme.CodeEditorTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,81 +29,52 @@ class MainActivity : ComponentActivity() {
 
             CodeEditorTheme {
 
-                val language = "javascript"
-                val code = """package io.github.kbiakov.codeviewexample;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
-import org.jetbrains.annotations.NotNull;
-
-import com.wakaztahir.codeeditor.CodeView;
-import com.wakaztahir.codeeditor.OnCodeLineClickListener;
-import io.github.kbiakov.codeview.adapters.CodeWithDiffsAdapter;
-import io.github.kbiakov.codeview.adapters.Options;
-import io.github.kbiakov.codeview.highlight.ColorTheme;
-import io.github.kbiakov.codeview.highlight.ColorThemeData;
-import io.github.kbiakov.codeview.highlight.Font;
-import io.github.kbiakov.codeview.highlight.FontCache;
-import com.wakaztahir.codeeditor.views.DiffModel;
-
-public class ListingsActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listings);
-
-        final CodeView codeView = (CodeView) findViewById(R.id.code_view);
-
-        /*
-         * 1: set code content
-         */
-
-        // auto language recognition
-        codeView.setCode(getString(R.string.listing_js));
-
-        // specify language for code listing
-        codeView.setCode(getString(R.string.listing_py), "py");    }
-}""".trimIndent()
+                val language = CodeLang.Java
+                val code = """
+                    
+                    package com.wakaztahir.codeeditor
+                    
+                    public static void main(String[] args){
+                        System.out.println("Hello World")
+                    }
+                    
+                """.trimIndent()
 
                 val parser = remember { PrettifyParser() }
 
-                val theme = remember {
-                    CodeThemeType.Monokai
-                }
+                var themeState by remember { mutableStateOf(CodeThemeType.Monokai) }
 
-                var result by remember {
+                val theme = remember(themeState) { themeState.theme() }
+
+                var parsedCode by remember {
                     mutableStateOf(
                         TextFieldValue(
                             parseCodeAsAnnotatedString(
                                 parser = parser,
-                                theme = theme.theme(),
+                                theme = theme,
                                 lang = language,
                                 code = code
                             )
                         )
                     )
                 }
-                
+
                 Column {
-                    Text(text = result.annotatedString)
+                    Text(text = parsedCode.annotatedString)
                 }
 
                 TextField(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(color = MaterialTheme.colors.background),
-                    value = result,
+                    value = parsedCode,
                     onValueChange = {
-                        result = it.copy(
+                        parsedCode = it.copy(
                             parseCodeAsAnnotatedString(
                                 parser = parser,
-                                theme = theme.theme(),
+                                theme = theme,
                                 lang = language,
-                                code = code
+                                code = it.text
                             )
                         )
                     }

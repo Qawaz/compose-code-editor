@@ -2,7 +2,77 @@
 
 ## Description
 
-**Compose Code Editor** is basic text field providing code highlighting
+**Compose Code Editor** is a code highlighting / editing library for compose
+
+## Usage
+
+```kotlin
+// Step 1. Declare Language & Code
+val language = CodeLang.Java
+val code = """             
+    package com.wakaztahir.codeeditor
+    
+    public static void main(String[] args){
+        System.out.println("Hello World")
+    }
+""".trimIndent()
+
+// Step 2. Create Parser & Theme
+val parser = remember { PrettifyParser() }
+var themeState by remember { mutableStateOf(CodeThemeType.Monokai) }
+val theme = remember(themeState) { themeState.theme() }
+```
+
+### Using Text Composable
+
+```kotlin
+// Step 3. Parse Code For Highlighting
+val parsedCode = parseCodeAsAnnotatedString(
+    parser = parser,
+    theme = theme,
+    lang = language,
+    code = code
+)
+
+// Step 4. Display In A Text Composable
+Text(parsedCode)
+```
+
+### Using TextField Composable
+
+```kotlin
+// Step 3. Create TextFieldValue State For Parsed Code 
+var parsedCode by remember {
+    mutableStateOf(
+        TextFieldValue(
+            parseCodeAsAnnotatedString(
+                parser = parser,
+                theme = theme,
+                lang = language,
+                code = code
+            )
+        )
+    )
+}
+
+// Step 4. Display In A TextField Composable
+TextField(
+    modifier = Modifier
+        .fillMaxSize()
+        .background(color = MaterialTheme.colors.background),
+    value = parsedCode,
+    onValueChange = {
+        parsedCode = it.copy(
+            parseCodeAsAnnotatedString(
+                parser = parser,
+                theme = theme,
+                lang = language,
+                code = it.text
+            )
+        )
+    }
+)
+```
 
 ## List of available languages & their extensions
 
@@ -28,39 +98,5 @@ releases.
 
 ## List of available themes
 
-* Default (simple light theme)
-* [Solarized Light](http://www.eclipsecolorthemes.org/?view=theme&id=1013)
+* Default
 * [Monokai](http://www.eclipsecolorthemes.org/?view=theme&id=386)
-
-## List of available fonts
-
-* Consolas
-* CourierNew
-* DejaVuSansMono
-* DroidSansMonoSlashed
-* Inconsolata
-* Monaco
-
-## License MIT
-
-```
-Copyright (c) 2016 Kirill Biakov
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
