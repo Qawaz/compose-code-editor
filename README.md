@@ -11,19 +11,19 @@ You can either get this from github packages or jitpack
 #### Step 1. Make sure you have jitpack repository in your build file
 
 ```groovy
-	allprojects {
-		repositories {
-			maven { url 'https://jitpack.io' }
-		}
-	}
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
 ```
 
 #### Step 2. Add the dependency
 
 ```groovy
-	dependencies {
-	        implementation 'com.github.timeline-notes:compose-code-editor:2.0.2'
-	}
+dependencies {
+    implementation 'com.github.timeline-notes:compose-code-editor:2.0.2'
+}
 ```
 
 ## Usage
