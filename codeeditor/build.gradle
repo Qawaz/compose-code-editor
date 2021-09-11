@@ -33,9 +33,9 @@ dependencies {
 }
 
 
-def versionName = "2.0.0"
+def versionName = "2.0.2"
 def artifactName = "codeeditor"
-//
+
 //def githubProperties = new Properties()
 //githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
 
