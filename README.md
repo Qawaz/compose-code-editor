@@ -2,7 +2,7 @@
 
 ## Description
 
-**Compose Code Editor** is a code highlighting / editing library for compose
+**Compose Code Editor** is a code highlighting / editing library for compose , it does not make use of web view so it renders fast
 
 ## Demo
 
