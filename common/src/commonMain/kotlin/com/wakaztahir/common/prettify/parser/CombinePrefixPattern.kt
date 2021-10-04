@@ -13,12 +13,7 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.parser
 
-import kotlin.jvm.JvmOverloads
-import kotlin.Throws
-import com.wakaztahir.common.prettify.parser.CombinePrefixPattern
 import com.wakaztahir.common.prettify.parser.Util.join
-import java.lang.Exception
-import java.lang.NumberFormatException
 import java.util.*
 import java.util.regex.Pattern
 
@@ -29,9 +24,18 @@ import java.util.regex.Pattern
  *
  * @author mikesamuel@gmail.com
  */
-class CombinePrefixPattern() {
-    protected var capturedGroupIndex = 0
-    protected var needToFoldCase = false
+class CombinePrefixPattern {
+    private var capturedGroupIndex = 0
+    private var needToFoldCase = false
+
+    private val escapeCharToCodeUnit: MutableMap<Char, Int> = HashMap<Char, Int>().apply {
+        this['b'] = 8
+        this['t'] = 9
+        this['n'] = 0xa
+        this['v'] = 0xb
+        this['f'] = 0xc
+        this['r'] = 0xf
+    }
 
     /**
      * Given a group of [java.util.regex.Pattern]s, returns a `RegExp` that globally
@@ -83,134 +87,119 @@ class CombinePrefixPattern() {
         )
     }
 
-    companion object {
-        protected val escapeCharToCodeUnit: MutableMap<Char, Int> = HashMap()
-        protected fun decodeEscape(charsetPart: String?): Int {
-            var cc0 = charsetPart!!.codePointAt(0)
-            if (cc0 != 92 /* \\ */) {
-                return cc0
-            }
-            val c1 = charsetPart[1]
-            cc0 = (escapeCharToCodeUnit[c1])!!
-            if (cc0 != null) {
-                return cc0
-            } else if ('0' <= c1 && c1 <= '7') {
-                return charsetPart.substring(1).toInt(8)
-            } else return if (c1 == 'u' || c1 == 'x') {
-                charsetPart.substring(2).toInt(16)
-            } else {
-                charsetPart.codePointAt(1)
-            }
+    internal fun decodeEscape(charsetPart: String): Int {
+        val cc0: Int = charsetPart.codePointAt(0)
+        if (cc0 != 92  /* \\ */) {
+            return cc0
         }
-
-        protected fun encodeEscape(charCode: Int): String {
-            if (charCode < 0x20) {
-                return (if (charCode < 0x10) "\\x0" else "\\x") + Integer.toString(charCode, 16)
-            }
-            val ch = String(Character.toChars(charCode))
-            return if (((charCode == '\\'.toInt()) || (charCode == '-'.toInt()) || (charCode == ']'.toInt()) || (charCode == '^'.toInt()))) "\\" + ch else ch
-        }
-
-        protected fun caseFoldCharset(charSet: String?): String {
-            val charsetParts = Util.match(
-                Pattern.compile(
-                    ("\\\\u[0-9A-Fa-f]{4}"
-                            + "|\\\\x[0-9A-Fa-f]{2}"
-                            + "|\\\\[0-3][0-7]{0,2}"
-                            + "|\\\\[0-7]{1,2}"
-                            + "|\\\\[\\s\\S]"
-                            + "|-"
-                            + "|[^-\\\\]")
-                ), charSet!!.substring(1, charSet.length - 1), true
-            )
-            val ranges: MutableList<MutableList<Int>> = ArrayList()
-            val inverse = charsetParts!![0] != null && (charsetParts[0] == "^")
-            val out: MutableList<String> = ArrayList(Arrays.asList("["))
-            if (inverse) {
-                out.add("^")
-            }
-            run {
-                var i: Int = if (inverse) 1 else 0
-                val n: Int = charsetParts.size
-                while (i < n) {
-                    val p: String = charsetParts[i]
-                    if (Util.test(
-                            Pattern.compile("\\\\[bdsw]", Pattern.CASE_INSENSITIVE),
-                            p
-                        )
-                    ) {  // Don't muck with named groups.
-                        out.add(p)
-                    } else {
-                        val start: Int = decodeEscape(p)
-                        var end: Int
-                        if (i + 2 < n && ("-" == charsetParts[i + 1])) {
-                            end = decodeEscape(charsetParts[i + 2])
-                            i += 2
-                        } else {
-                            end = start
-                        }
-                        ranges.add(Arrays.asList(start, end))
-                        // If the range might intersect letters, then expand it.
-                        // This case handling is too simplistic.
-                        // It does not deal with non-latin case folding.
-                        // It works for latin source code identifiers though.
-                        if (!(end < 65 || start > 122)) {
-                            if (!(end < 65 || start > 90)) {
-                                ranges.add(Arrays.asList(Math.max(65, start) or 32, Math.min(end, 90) or 32))
-                            }
-                            if (!(end < 97 || start > 122)) {
-                                ranges.add(
-                                    Arrays.asList(
-                                        Math.max(97, start) and 32.inv(), Math.min(end, 122) and 32.inv()
-                                    )
-                                )
-                            }
-                        }
-                    }
-                    ++i
-                }
-            }
-
-            // [[1, 10], [3, 4], [8, 12], [14, 14], [16, 16], [17, 17]]
-            // -> [[1, 12], [14, 14], [16, 17]]
-            Collections.sort(ranges, Comparator { a, b -> if (a[0] !== b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
-            val consolidatedRanges: MutableList<List<Int>> = ArrayList()
-            //        List<Integer> lastRange = Arrays.asList(new Integer[]{0, 0});
-            var lastRange: MutableList<Int> = ArrayList(Arrays.asList(0, 0))
-            for (i in ranges.indices) {
-                val range = ranges[i]
-                if (lastRange[1] != null && range[0] <= lastRange[1]!! + 1) {
-                    lastRange[1] = Math.max(lastRange[1]!!, range[1])
-                } else {
-                    // reference of lastRange is added
-                    consolidatedRanges.add(range.also { lastRange = it })
-                }
-            }
-            for (i in consolidatedRanges.indices) {
-                val range = consolidatedRanges[i]
-                out.add(encodeEscape(range[0]))
-                if (range[1] > range[0]) {
-                    if (range[1] + 1 > range[0]) {
-                        out.add("-")
-                    }
-                    out.add(encodeEscape(range[1]))
-                }
-            }
-            out.add("]")
-            return Util.join(out)
-        }
-
-        init {
-            escapeCharToCodeUnit['b'] = 8
-            escapeCharToCodeUnit['t'] = 9
-            escapeCharToCodeUnit['n'] = 0xa
-            escapeCharToCodeUnit['v'] = 0xb
-            escapeCharToCodeUnit['f'] = 0xc
-            escapeCharToCodeUnit['r'] = 0xf
+        val c1 = charsetPart[1]
+        val charCode = escapeCharToCodeUnit[c1]
+        return when {
+            charCode != null -> charCode
+            c1 in '0'..'7' -> charsetPart.substring(1).toInt(8)
+            c1 == 'u' || c1 == 'x' -> charsetPart.substring(2).toInt(16)
+            else -> charsetPart.codePointAt(1)
         }
     }
 
-    protected fun allowAnywhereFoldCaseAndRenumberGroups(regex: Pattern): String {
+    internal fun encodeEscape(charCode: Int): String {
+        if (charCode < 0x20) {
+            return (if (charCode < 0x10) "\\x0" else "\\x") + Integer.toString(charCode, 16)
+        }
+        val ch = String(Character.toChars(charCode))
+        return if (((charCode == '\\'.toInt()) || (charCode == '-'.toInt()) || (charCode == ']'.toInt()) || (charCode == '^'.toInt()))) "\\" + ch else ch
+    }
+
+    internal fun caseFoldCharset(charSet: String?): String {
+        val charsetParts = Util.match(
+            Pattern.compile(
+                ("\\\\u[0-9A-Fa-f]{4}"
+                        + "|\\\\x[0-9A-Fa-f]{2}"
+                        + "|\\\\[0-3][0-7]{0,2}"
+                        + "|\\\\[0-7]{1,2}"
+                        + "|\\\\[\\s\\S]"
+                        + "|-"
+                        + "|[^-\\\\]")
+            ), charSet!!.substring(1, charSet.length - 1), true
+        )
+        val ranges: MutableList<MutableList<Int>> = ArrayList()
+        val inverse = charsetParts!![0] != null && (charsetParts[0] == "^")
+        val out: MutableList<String> = ArrayList(Arrays.asList("["))
+        if (inverse) {
+            out.add("^")
+        }
+        run {
+            var i: Int = if (inverse) 1 else 0
+            val n: Int = charsetParts.size
+            while (i < n) {
+                val p: String = charsetParts[i]
+                if (Util.test(
+                        Pattern.compile("\\\\[bdsw]", Pattern.CASE_INSENSITIVE),
+                        p
+                    )
+                ) {  // Don't muck with named groups.
+                    out.add(p)
+                } else {
+                    val start: Int = decodeEscape(p)
+                    var end: Int
+                    if (i + 2 < n && ("-" == charsetParts[i + 1])) {
+                        end = decodeEscape(charsetParts[i + 2])
+                        i += 2
+                    } else {
+                        end = start
+                    }
+                    ranges.add(Arrays.asList(start, end))
+                    // If the range might intersect letters, then expand it.
+                    // This case handling is too simplistic.
+                    // It does not deal with non-latin case folding.
+                    // It works for latin source code identifiers though.
+                    if (!(end < 65 || start > 122)) {
+                        if (!(end < 65 || start > 90)) {
+                            ranges.add(Arrays.asList(Math.max(65, start) or 32, Math.min(end, 90) or 32))
+                        }
+                        if (!(end < 97 || start > 122)) {
+                            ranges.add(
+                                Arrays.asList(
+                                    Math.max(97, start) and 32.inv(), Math.min(end, 122) and 32.inv()
+                                )
+                            )
+                        }
+                    }
+                }
+                ++i
+            }
+        }
+
+        // [[1, 10], [3, 4], [8, 12], [14, 14], [16, 16], [17, 17]]
+        // -> [[1, 12], [14, 14], [16, 17]]
+        Collections.sort(ranges, Comparator { a, b -> if (a[0] !== b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
+        val consolidatedRanges: MutableList<List<Int>> = ArrayList()
+        //        List<Integer> lastRange = Arrays.asList(new Integer[]{0, 0});
+        var lastRange: MutableList<Int> = ArrayList(Arrays.asList(0, 0))
+        for (i in ranges.indices) {
+            val range = ranges[i]
+            if (lastRange[1] != null && range[0] <= lastRange[1]!! + 1) {
+                lastRange[1] = Math.max(lastRange[1]!!, range[1])
+            } else {
+                // reference of lastRange is added
+                consolidatedRanges.add(range.also { lastRange = it })
+            }
+        }
+        for (i in consolidatedRanges.indices) {
+            val range = consolidatedRanges[i]
+            out.add(encodeEscape(range[0]))
+            if (range[1] > range[0]) {
+                if (range[1] + 1 > range[0]) {
+                    out.add("-")
+                }
+                out.add(encodeEscape(range[1]))
+            }
+        }
+        out.add("]")
+        return Util.join(out)
+    }
+
+    internal fun allowAnywhereFoldCaseAndRenumberGroups(regex: Pattern): String {
         // Split into character sets, escape sequences, punctuation strings
         // like ('(', '(?:', ')', '^'), and runs of characters that do not
         // include any of the above.

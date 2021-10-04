@@ -810,10 +810,8 @@ class Prettify {
             decorateSourceMap["multiLineStrings"] = true
             decorateSourceMap["regexLiterals"] = true
             registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("default-code"))
-            var shortcutStylePatterns: MutableList<List<Any?>>
-            var fallthroughStylePatterns: MutableList<List<Any?>>
-            shortcutStylePatterns = ArrayList()
-            fallthroughStylePatterns = ArrayList()
+            var shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+            var fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
             fallthroughStylePatterns.add(Arrays.asList(PR_PLAIN, Pattern.compile("^[^<?]+")))
             fallthroughStylePatterns.add(
                 listOf(
@@ -873,12 +871,10 @@ class Prettify {
             fallthroughStylePatterns = ArrayList()
             shortcutStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_PLAIN,
-                        Pattern.compile("^[\\s]+"),
-                        null,
-                        " \t\r\n"
-                    )
+                    PR_PLAIN,
+                    Pattern.compile("^[\\s]+"),
+                    null,
+                    " \t\r\n"
                 )
             )
             shortcutStylePatterns.add(
