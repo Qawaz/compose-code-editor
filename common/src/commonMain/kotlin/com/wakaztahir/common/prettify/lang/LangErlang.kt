@@ -13,16 +13,7 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -45,55 +36,46 @@ import java.util.regex.Pattern
 class LangErlang : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("erlang", "erl"))
+            get() = Arrays.asList("erlang", "erl")
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
         // Whitespace
         // whitechar    ->    newline | vertab | space | tab | uniWhite
         // newline      ->    return linefeed | return | linefeed | formfeed
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_PLAIN, Pattern.compile("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + Character.toString(
-                        0x0B.toChar()
-                    ) + Character.toString(0x0C.toChar()) + "\r "
-                )
+                Prettify.PR_PLAIN, Pattern.compile("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + Character.toString(
+                    0x0B.toChar()
+                ) + Character.toString(0x0C.toChar()) + "\r "
             )
         )
         // Single line double-quoted strings.
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
-                    null,
-                    "\""
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
+                null,
+                "\""
             )
         )
 
         // Handle atoms
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^[a-z][a-zA-Z0-9_]*")
-                )
+                Prettify.PR_LITERAL, Pattern.compile("^[a-z][a-zA-Z0-9_]*")
             )
         )
         // Handle single quoted atoms
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])+\\'?"),
-                    null,
-                    "'"
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])+\\'?"),
+                null,
+                "'"
             )
         )
 
@@ -102,12 +84,10 @@ class LangErlang : Lang() {
         // all the terminal elements
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^\\?[^ \\t\\n({]+"),
-                    null,
-                    "?"
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile("^\\?[^ \\t\\n({]+"),
+                null,
+                "?"
             )
         )
 
@@ -122,15 +102,13 @@ class LangErlang : Lang() {
         // exponent     ->    (e | E) [+ | -] decimal
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile(
-                        "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
-                        Pattern.CASE_INSENSITIVE
-                    ),
-                    null,
-                    "0123456789"
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile(
+                    "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
+                    Pattern.CASE_INSENSITIVE
+                ),
+                null,
+                "0123456789"
             )
         )
 
@@ -140,10 +118,7 @@ class LangErlang : Lang() {
         // Comments in erlang are started with % and go till a newline
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^%[^\\n\\r]*")
-                )
+                Prettify.PR_COMMENT, Pattern.compile("^%[^\\n\\r]*")
             )
         )
 
@@ -157,31 +132,31 @@ class LangErlang : Lang() {
          */
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile("^(?:module|attributes|do|let|in|letrec|apply|call|primop|case|of|end|when|fun|try|catch|receive|after|char|integer|float,atom,string,var)\\b")
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile("^(?:module|attributes|do|let|in|letrec|apply|call|primop|case|of|end|when|fun|try|catch|receive|after|char|integer|float,atom,string,var)\\b")
             )
         )
         /**
          * Catch definitions (usually defined at the top of the file)
          * Anything that starts -something
          */
-        _fallthroughStylePatterns.add(Arrays.asList(*arrayOf<Any>(Prettify.PR_KEYWORD, Pattern.compile("^-[a-z_]+"))))
+        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_KEYWORD, Pattern.compile("^-[a-z_]+")))
 
         // Catch variables
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_TYPE,
-                    Pattern.compile("^[A-Z_][a-zA-Z0-9_]*")
-                )
+                Prettify.PR_TYPE,
+                Pattern.compile("^[A-Z_][a-zA-Z0-9_]*")
             )
         )
 
         // matches the symbol production
-        _fallthroughStylePatterns.add(Arrays.asList(*arrayOf<Any>(Prettify.PR_PUNCTUATION, Pattern.compile("^[.,;]"))))
+        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_PUNCTUATION, Pattern.compile("^[.,;]")))
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

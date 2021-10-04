@@ -13,16 +13,7 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -55,12 +46,12 @@ import java.util.regex.Pattern
 class LangMumps : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("mumps"))
+            get() = Arrays.asList("mumps")
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
         val commands = "B|BREAK|" +
                 "C|CLOSE|" +
                 "D|DO|" +
@@ -134,85 +125,73 @@ class LangMumps : Lang() {
         // Whitespace
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + Character.toString(
-                        0xA0.toChar()
-                    )
+                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + Character.toString(
+                    0xA0.toChar()
                 )
             )
         )
         // A double or single quoted, possibly multi-line, string.
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^(?:\"(?:[^\"]|\\\\.)*\")"),
-                    null,
-                    "\""
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^(?:\"(?:[^\"]|\\\\.)*\")"),
+                null,
+                "\""
             )
         )
 
         // A line comment that starts with ;
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^;[^\\r\\n]*"),
-                    null,
-                    ";"
-                )
+                Prettify.PR_COMMENT,
+                Pattern.compile("^;[^\\r\\n]*"),
+                null,
+                ";"
             )
         )
         // Add intrinsic variables and functions as declarations, there not really but it mean
         // they will hilighted differently from commands.
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_DECLARATION, Pattern.compile(
-                        "^(?:\\$(?:$intrinsic))\\b", Pattern.CASE_INSENSITIVE
-                    ), null
-                )
+                Prettify.PR_DECLARATION, Pattern.compile(
+                    "^(?:\\$(?:$intrinsic))\\b", Pattern.CASE_INSENSITIVE
+                ), null
             )
         )
         // Add commands as keywords
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_KEYWORD, Pattern.compile(
-                        "^(?:[^\\$]$commands)\\b", Pattern.CASE_INSENSITIVE
-                    ), null
-                )
+                Prettify.PR_KEYWORD, Pattern.compile(
+                    "^(?:[^\\$]$commands)\\b", Pattern.CASE_INSENSITIVE
+                ), null
             )
         )
         // A number is a decimal real literal or in scientific notation.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^[+-]?(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:E[+\\-]?\\d+)?)", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile("^[+-]?(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:E[+\\-]?\\d+)?)", Pattern.CASE_INSENSITIVE)
             )
         )
         // An identifier
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PLAIN,
-                    Pattern.compile("^[a-z][a-zA-Z0-9]*", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_PLAIN,
+                Pattern.compile("^[a-z][a-zA-Z0-9]*", Pattern.CASE_INSENSITIVE)
             )
         )
         // Exclude $ % and ^
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^[^\\w\\t\\n\\r\\xA0\\\"\\$;%\\^]|_")
-                )
+                Prettify.PR_PUNCTUATION,
+                Pattern.compile("^[^\\w\\t\\n\\r\\xA0\\\"\\$;%\\^]|_")
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

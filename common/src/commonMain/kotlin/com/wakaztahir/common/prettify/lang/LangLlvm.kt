@@ -13,16 +13,7 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -50,93 +41,77 @@ import java.util.regex.Pattern
 class LangLlvm : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("llvm", "ll"))
+            get() = Arrays.asList("llvm", "ll")
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
         // Whitespace
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + Character.toString(
-                        0xA0.toChar()
-                    )
+                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + Character.toString(
+                    0xA0.toChar()
                 )
             )
         )
         // A double quoted, possibly multi-line, string.
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^!?\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
-                    null,
-                    "\""
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^!?\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
+                null,
+                "\""
             )
         )
         // comment.llvm
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^;[^\r\n]*"),
-                    null,
-                    ";"
-                )
+                Prettify.PR_COMMENT,
+                Pattern.compile("^;[^\r\n]*"),
+                null,
+                ";"
             )
         )
         // variable.llvm
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PLAIN,
-                    Pattern.compile("^[%@!](?:[-a-zA-Z$._][-a-zA-Z$._0-9]*|\\d+)")
-                )
+                Prettify.PR_PLAIN, Pattern.compile("^[%@!](?:[-a-zA-Z$._][-a-zA-Z$._0-9]*|\\d+)")
             )
         )
         // According to http://llvm.org/docs/LangRef.html#well-formedness
         // These reserved words cannot conflict with variable names, because none of them start with a prefix character ('%' or '@').
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile("^[A-Za-z_][0-9A-Za-z_]*"),
-                    null
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile("^[A-Za-z_][0-9A-Za-z_]*"),
+                null
             )
         )
         // constant.numeric.float.llvm
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^\\d+\\.\\d+")
-                )
+                Prettify.PR_LITERAL, Pattern.compile("^\\d+\\.\\d+")
             )
         )
         // constant.numeric.integer.llvm
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^(?:\\d+|0[xX][a-fA-F0-9]+)")
-                )
+                Prettify.PR_LITERAL, Pattern.compile("^(?:\\d+|0[xX][a-fA-F0-9]+)")
             )
         )
         // punctuation
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^[()\\[\\]{},=*<>:]|\\.\\.\\.$")
-                )
+                Prettify.PR_PUNCTUATION, Pattern.compile("^[()\\[\\]{},=*<>:]|\\.\\.\\.$")
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

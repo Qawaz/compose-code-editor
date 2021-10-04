@@ -13,16 +13,7 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -45,74 +36,66 @@ import java.util.regex.Pattern
 class LangRd : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("Rd", "rd"))
+            get() = Arrays.asList("Rd", "rd")
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>?> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
         // whitespace
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + Character.toString(
-                        0xA0.toChar()
-                    )
+                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + Character.toString(
+                    0xA0.toChar()
                 )
             )
         )
         // all comments begin with '%'
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^%[^\\r\\n]*"),
-                    null,
-                    "%"
-                )
+                Prettify.PR_COMMENT,
+                Pattern.compile("^%[^\\r\\n]*"),
+                null,
+                "%"
             )
         )
 
         // special macros with no args
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^\\\\(?:cr|l?dots|R|tab)\\b")
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile("^\\\\(?:cr|l?dots|R|tab)\\b")
             )
         )
         // macros
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile("^\\\\[a-zA-Z@]+")
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile("^\\\\[a-zA-Z@]+")
             )
         )
         // highlighted as macros, since technically they are
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile("^#(?:ifn?def|endif)")
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile("^#(?:ifn?def|endif)")
             )
         )
         // catch escaped brackets
-        _fallthroughStylePatterns.add(Arrays.asList(*arrayOf<Any>(Prettify.PR_PLAIN, Pattern.compile("^\\\\[{}]"))))
+        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_PLAIN, Pattern.compile("^\\\\[{}]")))
         // punctuation
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^[{}()\\[\\]]+")
-                )
+                Prettify.PR_PUNCTUATION,
+                Pattern.compile("^[{}()\\[\\]]+")
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

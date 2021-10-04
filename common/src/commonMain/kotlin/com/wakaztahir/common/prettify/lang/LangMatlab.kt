@@ -19,16 +19,7 @@
 // THE SOFTWARE.
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -50,12 +41,12 @@ class LangMatlab : Lang() {
     protected class LangMatlabIdentifier : Lang() {
         companion object {
             val fileExtensions: List<String>
-                get() = Arrays.asList(*arrayOf("matlab-identifiers"))
+                get() = Arrays.asList(("matlab-identifiers"))
         }
 
         init {
-            val _shortcutStylePatterns: List<List<Any>?> = ArrayList()
-            val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
+            val _shortcutStylePatterns: List<List<Any?>> = ArrayList()
+            val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
             // Refer to: http://www.mathworks.com/help/matlab/functionlist-alpha.html
             val coreFunctions =
@@ -70,82 +61,70 @@ class LangMatlab : Lang() {
             // list of keywords (`iskeyword`)
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        Prettify.PR_KEYWORD,
-                        Pattern.compile("^\\b(?:break|case|catch|classdef|continue|else|elseif|end|for|function|global|if|otherwise|parfor|persistent|return|spmd|switch|try|while)\\b"),
-                        null
-                    )
+                    Prettify.PR_KEYWORD,
+                    Pattern.compile("^\\b(?:break|case|catch|classdef|continue|else|elseif|end|for|function|global|if|otherwise|parfor|persistent|return|spmd|switch|try|while)\\b"),
+                    null
                 )
             )
             // some specials variables/constants
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_CONSTANT,
-                        Pattern.compile("^\\b(?:true|false|inf|Inf|nan|NaN|eps|pi|ans|nargin|nargout|varargin|varargout)\\b"),
-                        null
-                    )
+                    PR_CONSTANT,
+                    Pattern.compile("^\\b(?:true|false|inf|Inf|nan|NaN|eps|pi|ans|nargin|nargout|varargin|varargout)\\b"),
+                    null
                 )
             )
             // some data types
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        Prettify.PR_TYPE,
-                        Pattern.compile("^\\b(?:cell|struct|char|double|single|logical|u?int(?:8|16|32|64)|sparse)\\b"),
-                        null
-                    )
+                    Prettify.PR_TYPE,
+                    Pattern.compile("^\\b(?:cell|struct|char|double|single|logical|u?int(?:8|16|32|64)|sparse)\\b"),
+                    null
                 )
             )
             // commonly used builtin functions from core MATLAB and a few popular toolboxes
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_FUNCTION, Pattern.compile(
-                            "^\\b(?:$coreFunctions)\\b"
-                        ), null
-                    )
+                    PR_FUNCTION, Pattern.compile(
+                        "^\\b(?:$coreFunctions)\\b"
+                    ), null
                 )
             )
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_FUNCTION_TOOLBOX, Pattern.compile(
-                            "^\\b(?:$statsFunctions)\\b"
-                        ), null
-                    )
+                    PR_FUNCTION_TOOLBOX, Pattern.compile(
+                        "^\\b(?:$statsFunctions)\\b"
+                    ), null
                 )
             )
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_FUNCTION_TOOLBOX, Pattern.compile(
-                            "^\\b(?:$imageFunctions)\\b"
-                        ), null
-                    )
+                    PR_FUNCTION_TOOLBOX, Pattern.compile(
+                        "^\\b(?:$imageFunctions)\\b"
+                    ), null
                 )
             )
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_FUNCTION_TOOLBOX, Pattern.compile(
-                            "^\\b(?:$optimFunctions)\\b"
-                        ), null
-                    )
+                    PR_FUNCTION_TOOLBOX, Pattern.compile(
+                        "^\\b(?:$optimFunctions)\\b"
+                    ), null
                 )
             )
             // plain identifier (user-defined variable/function name)
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_IDENTIFIER,
-                        Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*"),
-                        null
-                    )
+                    PR_IDENTIFIER,
+                    Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*"),
+                    null
                 )
             )
             setShortcutStylePatterns(_shortcutStylePatterns)
             setFallthroughStylePatterns(_fallthroughStylePatterns)
+        }
+
+        override fun getFileExtensions(): List<String> {
+            return fileExtensions
         }
     }
 
@@ -156,43 +135,41 @@ class LangMatlab : Lang() {
         }
 
         init {
-            val _shortcutStylePatterns: List<List<Any>?> = ArrayList()
-            val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
+            val _shortcutStylePatterns: List<List<Any?>> = ArrayList()
+            val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
             // forward to identifiers to match
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        "lang-matlab-identifiers",
-                        Pattern.compile("^([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*)"),
-                        null
-                    )
+                    "lang-matlab-identifiers",
+                    Pattern.compile("^([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*)"),
+                    null
                 )
             )
             // parentheses, braces, brackets
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        Prettify.PR_TAG,
-                        Pattern.compile("^(?:\\{|\\}|\\(|\\)|\\[|\\])"),
-                        null
-                    )
+                    Prettify.PR_TAG,
+                    Pattern.compile("^(?:\\{|\\}|\\(|\\)|\\[|\\])"),
+                    null
                 )
             ) // "{}()[]"
             // other operators
             _fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        Prettify.PR_PUNCTUATION,
-                        Pattern.compile("^(?:<|>|=|~|@|&|;|,|:|!|\\-|\\+|\\*|\\^|\\.|\\||\\\\|\\/)"),
-                        null
-                    )
+                    Prettify.PR_PUNCTUATION,
+                    Pattern.compile("^(?:<|>|=|~|@|&|;|,|:|!|\\-|\\+|\\*|\\^|\\.|\\||\\\\|\\/)"),
+                    null
                 )
             )
             // transpose operators
-            _fallthroughStylePatterns.add(listOf(listOf(PR_TRANSPOSE, Pattern.compile("^'"), null)))
+            _fallthroughStylePatterns.add(listOf(PR_TRANSPOSE, Pattern.compile("^'"), null))
             setShortcutStylePatterns(_shortcutStylePatterns)
             setFallthroughStylePatterns(_fallthroughStylePatterns)
+        }
+
+        override fun getFileExtensions(): List<String> {
+            return fileExtensions
         }
     }
 
@@ -212,8 +189,8 @@ class LangMatlab : Lang() {
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>?> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
         // identifiers: variable/function name, or a chain of variable names joined by dots (obj.method, struct.field1.field2, etc..)
         // valid variable names (start with letter, and contains letters, digits, and underscores).
@@ -225,14 +202,12 @@ class LangMatlab : Lang() {
         // whitespaces: space, tab, carriage return, line feed, line tab, form-feed, non-break space
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_PLAIN,
-                    Pattern.compile("^[ \\t\\r\\n\\v\\f\\xA0]+"),
-                    null,
-                    " \t\n\r" + Character.toString(
-                        0x0B.toChar()
-                    ) + Character.toString(0x0C.toChar()) + Character.toString(0xA0.toChar())
-                )
+                Prettify.PR_PLAIN,
+                Pattern.compile("^[ \\t\\r\\n\\v\\f\\xA0]+"),
+                null,
+                " \t\n\r" + Character.toString(
+                    0x0B.toChar()
+                ) + Character.toString(0x0C.toChar()) + Character.toString(0xA0.toChar())
             )
         )
         // block comments
@@ -241,143 +216,124 @@ class LangMatlab : Lang() {
         //[PR.PR_COMMENT, /^%(?:[^\{].*|\{(?:%|%*[^\}%])*(?:\}+%?)?)/, null],
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^%\\{[^%]*%+(?:[^\\}%][^%]*%+)*\\}"),
-                    null
-                )
+
+                Prettify.PR_COMMENT,
+                Pattern.compile("^%\\{[^%]*%+(?:[^\\}%][^%]*%+)*\\}"),
+                null
             )
+
         )
         // single-line comments
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^%[^\\r\\n]*"),
-                    null,
-                    "%"
-                )
+
+                Prettify.PR_COMMENT,
+                Pattern.compile("^%[^\\r\\n]*"),
+                null,
+                "%"
             )
         )
         // system commands
-        _shortcutStylePatterns.add(Arrays.asList(*arrayOf<Any?>(PR_SYSCMD, Pattern.compile("^![^\\r\\n]*"), null, "!")))
+        _shortcutStylePatterns.add(Arrays.asList(PR_SYSCMD, Pattern.compile("^![^\\r\\n]*"), null, "!"))
 
         // patterns that will be tried in order if the shortcut ones fail. May have shortcuts.
         // line continuation
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    PR_LINE_CONTINUATION,
-                    Pattern.compile("^\\.\\.\\.\\s*[\\r\\n]"),
-                    null
-                )
+                PR_LINE_CONTINUATION,
+                Pattern.compile("^\\.\\.\\.\\s*[\\r\\n]"),
+                null
             )
         )
         // error message
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    PR_ERROR,
-                    Pattern.compile("^\\?\\?\\? [^\\r\\n]*"),
-                    null
-                )
+                PR_ERROR,
+                Pattern.compile("^\\?\\?\\? [^\\r\\n]*"),
+                null
             )
         )
         // warning message
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    PR_WARNING,
-                    Pattern.compile("^Warning: [^\\r\\n]*"),
-                    null
-                )
+                PR_WARNING,
+                Pattern.compile("^Warning: [^\\r\\n]*"),
+                null
             )
         )
         // command prompt/output
         //[PR_CODE_OUTPUT, /^>>\s+[^\r\n]*[\r\n]{1,2}[^=]*=[^\r\n]*[\r\n]{1,2}[^\r\n]*/, null],    // full command output (both loose/compact format): `>> EXP\nVAR =\n VAL`
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    PR_CODE_OUTPUT,
-                    Pattern.compile("^>>\\s+"),
-                    null
-                )
+                PR_CODE_OUTPUT,
+                Pattern.compile("^>>\\s+"),
+                null
             )
         ) // only the command prompt `>> `
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    PR_CODE_OUTPUT,
-                    Pattern.compile("^octave:\\d+>\\s+"),
-                    null
-                )
+                PR_CODE_OUTPUT,
+                Pattern.compile("^octave:\\d+>\\s+"),
+                null
             )
         ) // Octave command prompt `octave:1> `
         // identifier (chain) or closing-parenthesis/brace/bracket, and IS followed by transpose operator
         // this way we dont misdetect the transpose operator ' as the start of a string
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    "lang-matlab-operators",
-                    Pattern.compile("^((?:[a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*|\\)|\\]|\\}|\\.)')"),
-                    null
-                )
+                "lang-matlab-operators",
+                Pattern.compile("^((?:[a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*|\\)|\\]|\\}|\\.)')"),
+                null
             )
         )
         // identifier (chain), and NOT followed by transpose operator
         // this must come AFTER the "is followed by transpose" step (otherwise it chops the last char of identifier)
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    "lang-matlab-identifiers",
-                    Pattern.compile("^([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*)(?!')"),
-                    null
-                )
+                "lang-matlab-identifiers",
+                Pattern.compile("^([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*)(?!')"),
+                null
             )
         )
         // single-quoted strings: allow for escaping with '', no multilines
         //[PR.PR_STRING, /(?:(?<=(?:\(|\[|\{|\s|=|;|,|:))|^)'(?:[^']|'')*'(?=(?:\)|\]|\}|\s|=|;|,|:|~|<|>|&|-|\+|\*|\.|\^|\|))/, null],  // string vs. transpose (check before/after context using negative/positive lookbehind/lookahead)
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^'(?:[^']|'')*'"),
-                    null
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^'(?:[^']|'')*'"),
+                null
             )
         ) // "'"
         // floating point numbers: 1, 1.0, 1i, -1.1E-1
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^[+\\-]?\\.?\\d+(?:\\.\\d*)?(?:[Ee][+\\-]?\\d+)?[ij]?"),
-                    null
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile("^[+\\-]?\\.?\\d+(?:\\.\\d*)?(?:[Ee][+\\-]?\\d+)?[ij]?"),
+                null
             )
         )
         // parentheses, braces, brackets
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_TAG,
-                    Pattern.compile("^(?:\\{|\\}|\\(|\\)|\\[|\\])"),
-                    null
-                )
+                Prettify.PR_TAG,
+                Pattern.compile("^(?:\\{|\\}|\\(|\\)|\\[|\\])"),
+                null
             )
         ) // "{}()[]"
         // other operators
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^(?:<|>|=|~|@|&|;|,|:|!|\\-|\\+|\\*|\\^|\\.|\\||\\\\|\\/)"),
-                    null
-                )
+                Prettify.PR_PUNCTUATION,
+                Pattern.compile("^(?:<|>|=|~|@|&|;|,|:|!|\\-|\\+|\\*|\\^|\\.|\\||\\\\|\\/)"),
+                null
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
         setExtendedLangs(Arrays.asList(*arrayOf(LangMatlabIdentifier(), LangMatlabOperator())))
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

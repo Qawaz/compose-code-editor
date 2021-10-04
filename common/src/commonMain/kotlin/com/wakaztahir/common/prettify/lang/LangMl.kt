@@ -13,16 +13,7 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -43,20 +34,18 @@ import java.util.regex.Pattern
 class LangMl : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("fs", "ml"))
+            get() = Arrays.asList("fs", "ml")
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
         // Whitespace is made up of spaces, tabs and newline characters.
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + Character.toString(
-                        0xA0.toChar()
-                    )
+                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + Character.toString(
+                    0xA0.toChar()
                 )
             )
         )
@@ -64,27 +53,23 @@ class LangMl : Lang() {
         // sections
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile(
-                        "^#(?:if[\\t\\n\\r \\xA0]+(?:[a-z_$][\\w\\']*|``[^\\r\\n\\t`]*(?:``|$))|else|endif|light)",
-                        Pattern.CASE_INSENSITIVE
-                    ),
-                    null,
-                    "#"
-                )
+                Prettify.PR_COMMENT,
+                Pattern.compile(
+                    "^#(?:if[\\t\\n\\r \\xA0]+(?:[a-z_$][\\w\\']*|``[^\\r\\n\\t`]*(?:``|$))|else|endif|light)",
+                    Pattern.CASE_INSENSITIVE
+                ),
+                null,
+                "#"
             )
         )
         // A double or single quoted, possibly multi-line, string.
         // F# allows escaped newlines in strings.
         _shortcutStylePatterns.add(
             Arrays.asList(
-                listOf(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])(?:\\'|$))"),
-                    null,
-                    "\"'"
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])(?:\\'|$))"),
+                null,
+                "\"'"
             )
         )
         // Block comments are delimited by (* and *) and may be
@@ -93,51 +78,42 @@ class LangMl : Lang() {
         // TODO: (*...*) comments can be nested.  This does not handle that.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^(?:\\/\\/[^\\r\\n]*|\\(\\*[\\s\\S]*?\\*\\))")
-                )
+                Prettify.PR_COMMENT, Pattern.compile("^(?:\\/\\/[^\\r\\n]*|\\(\\*[\\s\\S]*?\\*\\))")
             )
         )
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile("^(?:abstract|and|as|assert|begin|class|default|delegate|do|done|downcast|downto|elif|else|end|exception|extern|false|finally|for|fun|function|if|in|inherit|inline|interface|internal|lazy|let|match|member|module|mutable|namespace|new|null|of|open|or|override|private|public|rec|return|static|struct|then|to|true|try|type|upcast|use|val|void|when|while|with|yield|asr|land|lor|lsl|lsr|lxor|mod|sig|atomic|break|checked|component|const|constraint|constructor|continue|eager|event|external|fixed|functor|global|include|method|mixin|object|parallel|process|protected|pure|sealed|trait|virtual|volatile)\\b")
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile("^(?:abstract|and|as|assert|begin|class|default|delegate|do|done|downcast|downto|elif|else|end|exception|extern|false|finally|for|fun|function|if|in|inherit|inline|interface|internal|lazy|let|match|member|module|mutable|namespace|new|null|of|open|or|override|private|public|rec|return|static|struct|then|to|true|try|type|upcast|use|val|void|when|while|with|yield|asr|land|lor|lsl|lsr|lxor|mod|sig|atomic|break|checked|component|const|constraint|constructor|continue|eager|event|external|fixed|functor|global|include|method|mixin|object|parallel|process|protected|pure|sealed|trait|virtual|volatile)\\b")
             )
         )
         // A number is a hex integer literal, a decimal real literal, or in
         // scientific notation.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile(
-                        "^[+\\-]?(?:0x[\\da-f]+|(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:e[+\\-]?\\d+)?))",
-                        Pattern.CASE_INSENSITIVE
-                    )
+                Prettify.PR_LITERAL, Pattern.compile(
+                    "^[+\\-]?(?:0x[\\da-f]+|(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:e[+\\-]?\\d+)?))",
+                    Pattern.CASE_INSENSITIVE
                 )
             )
         )
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PLAIN,
-                    Pattern.compile("^(?:[a-z_][\\w']*[!?#]?|``[^\\r\\n\\t`]*(?:``|$))", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_PLAIN,
+                Pattern.compile("^(?:[a-z_][\\w']*[!?#]?|``[^\\r\\n\\t`]*(?:``|$))", Pattern.CASE_INSENSITIVE)
             )
         )
         // A printable non-space non-special character
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^[^\\t\\n\\r \\xA0\\\"\\'\\w]+")
-                )
+                Prettify.PR_PUNCTUATION, Pattern.compile("^[^\\t\\n\\r \\xA0\\\"\\'\\w]+")
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

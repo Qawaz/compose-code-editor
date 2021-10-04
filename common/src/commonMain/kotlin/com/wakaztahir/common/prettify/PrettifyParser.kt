@@ -32,7 +32,7 @@ class PrettifyParser : Parser {
                 returnList.add(
                     ParseResult(
                         startPos, endPos - startPos, Arrays.asList(
-                            *arrayOf(
+                            (
                                 decorations[i + 1] as String
                             )
                         )

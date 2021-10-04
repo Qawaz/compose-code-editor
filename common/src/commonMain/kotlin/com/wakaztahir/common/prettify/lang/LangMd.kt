@@ -1,15 +1,6 @@
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -21,29 +12,29 @@ import java.util.regex.Pattern
 class LangMd : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("md", "markdown"))
+            get() = Arrays.asList("md", "markdown")
     }
 
     init {
-        val _shortcutStylePatterns: List<List<Any>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
+        val _shortcutStylePatterns: List<List<Any>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any>> = ArrayList()
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_DECLARATION,
-                    Pattern.compile("^#.*?[\\n\\r]")
-                )
+                Prettify.PR_DECLARATION,
+                Pattern.compile("^#.*?[\\n\\r]")
             )
         )
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^```[\\s\\S]*?(?:```|$)")
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^```[\\s\\S]*?(?:```|$)")
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

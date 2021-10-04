@@ -15,16 +15,7 @@
  */
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -49,196 +40,162 @@ import java.util.regex.Pattern
 class LangDart : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("dart"))
+            get() = Arrays.asList(("dart"))
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
         // Whitespace.
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + Character.toString(
-                        0xA0.toChar()
-                    )
+                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + Character.toString(
+                    0xA0.toChar()
                 )
             )
         )
 
         // Script tag.
-        _fallthroughStylePatterns.add(Arrays.asList(*arrayOf<Any>(Prettify.PR_COMMENT, Pattern.compile("^#!(?:.*)"))))
+        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_COMMENT, Pattern.compile("^#!(?:.*)")))
         // `import`, `library`, `part of`, `part`, `as`, `show`, and `hide`
         // keywords.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile("^\\b(?:import|library|part of|part|as|show|hide)\\b", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile("^\\b(?:import|library|part of|part|as|show|hide)\\b", Pattern.CASE_INSENSITIVE)
             )
         )
         // Single-line comments.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^\\/\\/(?:.*)")
-                )
+                Prettify.PR_COMMENT,
+                Pattern.compile("^\\/\\/(?:.*)")
             )
         )
         // Multiline comments.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
-                )
+                Prettify.PR_COMMENT,
+                Pattern.compile("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
             )
         )
         // `class` and `interface` keywords.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile("^\\b(?:class|interface)\\b", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile("^\\b(?:class|interface)\\b", Pattern.CASE_INSENSITIVE)
             )
         )
         // General keywords.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile(
-                        "^\\b(?:assert|break|case|catch|continue|default|do|else|finally|for|if|in|is|new|return|super|switch|this|throw|try|while)\\b",
-                        Pattern.CASE_INSENSITIVE
-                    )
+                Prettify.PR_KEYWORD,
+                Pattern.compile(
+                    "^\\b(?:assert|break|case|catch|continue|default|do|else|finally|for|if|in|is|new|return|super|switch|this|throw|try|while)\\b",
+                    Pattern.CASE_INSENSITIVE
                 )
             )
         )
         // Declaration keywords.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile(
-                        "^\\b(?:abstract|const|extends|factory|final|get|implements|native|operator|set|static|typedef|var)\\b",
-                        Pattern.CASE_INSENSITIVE
-                    )
+                Prettify.PR_KEYWORD,
+                Pattern.compile(
+                    "^\\b(?:abstract|const|extends|factory|final|get|implements|native|operator|set|static|typedef|var)\\b",
+                    Pattern.CASE_INSENSITIVE
                 )
             )
         )
         // Keywords for types.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_TYPE,
-                    Pattern.compile(
-                        "^\\b(?:bool|double|Dynamic|int|num|Object|String|void)\\b",
-                        Pattern.CASE_INSENSITIVE
-                    )
+                Prettify.PR_TYPE,
+                Pattern.compile(
+                    "^\\b(?:bool|double|Dynamic|int|num|Object|String|void)\\b",
+                    Pattern.CASE_INSENSITIVE
                 )
             )
         )
         // Keywords for constants.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile("\\b(?:false|null|true)\\b", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile("\\b(?:false|null|true)\\b", Pattern.CASE_INSENSITIVE)
             )
         )
         // Multiline strings, single- and double-quoted.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^r?[\\']{3}[\\s|\\S]*?[^\\\\][\\']{3}")
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^r?[\\']{3}[\\s|\\S]*?[^\\\\][\\']{3}")
             )
         )
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^r?[\\\"]{3}[\\s|\\S]*?[^\\\\][\\\"]{3}")
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^r?[\\\"]{3}[\\s|\\S]*?[^\\\\][\\\"]{3}")
             )
         )
         // Normal and raw strings, single- and double-quoted.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^r?\\'(\\'|(?:[^\\n\\r\\f])*?[^\\\\]\\')")
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^r?\\'(\\'|(?:[^\\n\\r\\f])*?[^\\\\]\\')")
             )
         )
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^r?\\\"(\\\"|(?:[^\\n\\r\\f])*?[^\\\\]\\\")")
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^r?\\\"(\\\"|(?:[^\\n\\r\\f])*?[^\\\\]\\\")")
             )
         )
         // Identifiers.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PLAIN,
-                    Pattern.compile("^[a-z_$][a-z0-9_]*", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_PLAIN,
+                Pattern.compile("^[a-z_$][a-z0-9_]*", Pattern.CASE_INSENSITIVE)
             )
         )
         // Operators.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^[~!%^&*+=|?:<>/-]")
-                )
+                Prettify.PR_PUNCTUATION,
+                Pattern.compile("^[~!%^&*+=|?:<>/-]")
             )
         )
         // Hex numbers.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^\\b0x[0-9a-f]+", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile("^\\b0x[0-9a-f]+", Pattern.CASE_INSENSITIVE)
             )
         )
         // Decimal numbers.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^\\b\\d+(?:\\.\\d*)?(?:e[+-]?\\d+)?", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile("^\\b\\d+(?:\\.\\d*)?(?:e[+-]?\\d+)?", Pattern.CASE_INSENSITIVE)
             )
         )
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^\\b\\.\\d+(?:e[+-]?\\d+)?", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile("^\\b\\.\\d+(?:e[+-]?\\d+)?", Pattern.CASE_INSENSITIVE)
             )
         )
         // Punctuation.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^[(){}\\[\\],.;]")
-                )
+                Prettify.PR_PUNCTUATION,
+                Pattern.compile("^[(){}\\[\\],.;]")
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

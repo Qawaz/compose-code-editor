@@ -13,16 +13,7 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -48,31 +39,27 @@ import java.util.regex.Pattern
 class LangPascal : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("pascal"))
+            get() = Arrays.asList(("pascal"))
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
         // 'single-line-string'
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*(?:\\'|$))"),
-                    null,
-                    "'"
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*(?:\\'|$))"),
+                null,
+                "'"
             )
         )
         // Whitespace
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_PLAIN, Pattern.compile("^\\s+"), null, " \r\n\t" + Character.toString(
-                        0xA0.toChar()
-                    )
+                Prettify.PR_PLAIN, Pattern.compile("^\\s+"), null, " \r\n\t" + Character.toString(
+                    0xA0.toChar()
                 )
             )
         )
@@ -80,67 +67,59 @@ class LangPascal : Lang() {
         // A cStyleComments comment (* *) or {}
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^\\(\\*[\\s\\S]*?(?:\\*\\)|$)|^\\{[\\s\\S]*?(?:\\}|$)"),
-                    null
-                )
+                Prettify.PR_COMMENT,
+                Pattern.compile("^\\(\\*[\\s\\S]*?(?:\\*\\)|$)|^\\{[\\s\\S]*?(?:\\}|$)"),
+                null
             )
         )
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile(
-                        "^(?:ABSOLUTE|AND|ARRAY|ASM|ASSEMBLER|BEGIN|CASE|CONST|CONSTRUCTOR|DESTRUCTOR|DIV|DO|DOWNTO|ELSE|END|EXTERNAL|FOR|FORWARD|FUNCTION|GOTO|IF|IMPLEMENTATION|IN|INLINE|INTERFACE|INTERRUPT|LABEL|MOD|NOT|OBJECT|OF|OR|PACKED|PROCEDURE|PROGRAM|RECORD|REPEAT|SET|SHL|SHR|THEN|TO|TYPE|UNIT|UNTIL|USES|VAR|VIRTUAL|WHILE|WITH|XOR)\\b",
-                        Pattern.CASE_INSENSITIVE
-                    ),
-                    null
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile(
+                    "^(?:ABSOLUTE|AND|ARRAY|ASM|ASSEMBLER|BEGIN|CASE|CONST|CONSTRUCTOR|DESTRUCTOR|DIV|DO|DOWNTO|ELSE|END|EXTERNAL|FOR|FORWARD|FUNCTION|GOTO|IF|IMPLEMENTATION|IN|INLINE|INTERFACE|INTERRUPT|LABEL|MOD|NOT|OBJECT|OF|OR|PACKED|PROCEDURE|PROGRAM|RECORD|REPEAT|SET|SHL|SHR|THEN|TO|TYPE|UNIT|UNTIL|USES|VAR|VIRTUAL|WHILE|WITH|XOR)\\b",
+                    Pattern.CASE_INSENSITIVE
+                ),
+                null
             )
         )
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^(?:true|false|self|nil)", Pattern.CASE_INSENSITIVE),
-                    null
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile("^(?:true|false|self|nil)", Pattern.CASE_INSENSITIVE),
+                null
             )
         )
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_PLAIN,
-                    Pattern.compile("^[a-z][a-z0-9]*", Pattern.CASE_INSENSITIVE),
-                    null
-                )
+                Prettify.PR_PLAIN,
+                Pattern.compile("^[a-z][a-z0-9]*", Pattern.CASE_INSENSITIVE),
+                null
             )
         )
         // Literals .0, 0, 0.0 0E13
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile(
-                        "^(?:\\$[a-f0-9]+|(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+\\-]?\\d+)?)",
-                        Pattern.CASE_INSENSITIVE
-                    ),
-                    null,
-                    "0123456789"
-                )
+                Prettify.PR_LITERAL,
+                Pattern.compile(
+                    "^(?:\\$[a-f0-9]+|(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+\\-]?\\d+)?)",
+                    Pattern.CASE_INSENSITIVE
+                ),
+                null,
+                "0123456789"
             )
         )
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^.[^\\s\\w\\.$@\\'\\/]*"),
-                    null
-                )
+                Prettify.PR_PUNCTUATION,
+                Pattern.compile("^.[^\\s\\w\\.$@\\'\\/]*"),
+                null
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

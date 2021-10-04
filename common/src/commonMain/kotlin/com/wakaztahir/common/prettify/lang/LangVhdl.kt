@@ -43,110 +43,85 @@ import java.util.regex.Pattern
 class LangVhdl : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("vhdl", "vhd"))
+            get() = Arrays.asList("vhdl", "vhd")
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>?> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
         // Whitespace
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + Character.toString(
-                        0xA0.toChar()
-                    )
+                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + Character.toString(
+                    0xA0.toChar()
                 )
             )
         )
         // String, character or bit string
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^(?:[BOX]?\"(?:[^\\\"]|\"\")*\"|'.')", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_STRING, Pattern.compile("^(?:[BOX]?\"(?:[^\\\"]|\"\")*\"|'.')", Pattern.CASE_INSENSITIVE)
             )
         )
         // Comment, from two dashes until end of line.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^--[^\\r\\n]*")
-                )
+                Prettify.PR_COMMENT, Pattern.compile("^--[^\\r\\n]*")
             )
         )
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile(
-                        "^(?:abs|access|after|alias|all|and|architecture|array|assert|attribute|begin|block|body|buffer|bus|case|component|configuration|constant|disconnect|downto|else|elsif|end|entity|exit|file|for|function|generate|generic|group|guarded|if|impure|in|inertial|inout|is|label|library|linkage|literal|loop|map|mod|nand|new|next|nor|not|null|of|on|open|or|others|out|package|port|postponed|procedure|process|pure|range|record|register|reject|rem|report|return|rol|ror|select|severity|shared|signal|sla|sll|sra|srl|subtype|then|to|transport|type|unaffected|units|until|use|variable|wait|when|while|with|xnor|xor)(?=[^\\w-]|$)",
-                        Pattern.CASE_INSENSITIVE
-                    ),
-                    null
-                )
+                Prettify.PR_KEYWORD, Pattern.compile(
+                    "^(?:abs|access|after|alias|all|and|architecture|array|assert|attribute|begin|block|body|buffer|bus|case|component|configuration|constant|disconnect|downto|else|elsif|end|entity|exit|file|for|function|generate|generic|group|guarded|if|impure|in|inertial|inout|is|label|library|linkage|literal|loop|map|mod|nand|new|next|nor|not|null|of|on|open|or|others|out|package|port|postponed|procedure|process|pure|range|record|register|reject|rem|report|return|rol|ror|select|severity|shared|signal|sla|sll|sra|srl|subtype|then|to|transport|type|unaffected|units|until|use|variable|wait|when|while|with|xnor|xor)(?=[^\\w-]|$)",
+                    Pattern.CASE_INSENSITIVE
+                ), null
             )
         )
         // Type, predefined or standard
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_TYPE,
-                    Pattern.compile(
-                        "^(?:bit|bit_vector|character|boolean|integer|real|time|string|severity_level|positive|natural|signed|unsigned|line|text|std_u?logic(?:_vector)?)(?=[^\\w-]|$)",
-                        Pattern.CASE_INSENSITIVE
-                    ),
-                    null
-                )
+                Prettify.PR_TYPE, Pattern.compile(
+                    "^(?:bit|bit_vector|character|boolean|integer|real|time|string|severity_level|positive|natural|signed|unsigned|line|text|std_u?logic(?:_vector)?)(?=[^\\w-]|$)",
+                    Pattern.CASE_INSENSITIVE
+                ), null
             )
         )
         // Predefined attributes
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_TYPE,
-                    Pattern.compile(
-                        "^\\'(?:ACTIVE|ASCENDING|BASE|DELAYED|DRIVING|DRIVING_VALUE|EVENT|HIGH|IMAGE|INSTANCE_NAME|LAST_ACTIVE|LAST_EVENT|LAST_VALUE|LEFT|LEFTOF|LENGTH|LOW|PATH_NAME|POS|PRED|QUIET|RANGE|REVERSE_RANGE|RIGHT|RIGHTOF|SIMPLE_NAME|STABLE|SUCC|TRANSACTION|VAL|VALUE)(?=[^\\w-]|$)",
-                        Pattern.CASE_INSENSITIVE
-                    ),
-                    null
-                )
+                Prettify.PR_TYPE, Pattern.compile(
+                    "^\\'(?:ACTIVE|ASCENDING|BASE|DELAYED|DRIVING|DRIVING_VALUE|EVENT|HIGH|IMAGE|INSTANCE_NAME|LAST_ACTIVE|LAST_EVENT|LAST_VALUE|LEFT|LEFTOF|LENGTH|LOW|PATH_NAME|POS|PRED|QUIET|RANGE|REVERSE_RANGE|RIGHT|RIGHTOF|SIMPLE_NAME|STABLE|SUCC|TRANSACTION|VAL|VALUE)(?=[^\\w-]|$)",
+                    Pattern.CASE_INSENSITIVE
+                ), null
             )
         )
         // Number, decimal or based literal
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile(
-                        "^\\d+(?:_\\d+)*(?:#[\\w\\\\.]+#(?:[+\\-]?\\d+(?:_\\d+)*)?|(?:\\.\\d+(?:_\\d+)*)?(?:E[+\\-]?\\d+(?:_\\d+)*)?)",
-                        Pattern.CASE_INSENSITIVE
-                    )
+                Prettify.PR_LITERAL, Pattern.compile(
+                    "^\\d+(?:_\\d+)*(?:#[\\w\\\\.]+#(?:[+\\-]?\\d+(?:_\\d+)*)?|(?:\\.\\d+(?:_\\d+)*)?(?:E[+\\-]?\\d+(?:_\\d+)*)?)",
+                    Pattern.CASE_INSENSITIVE
                 )
             )
         )
         // Identifier, basic or extended
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PLAIN,
-                    Pattern.compile("^(?:[a-z]\\w*|\\\\[^\\\\]*\\\\)", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_PLAIN, Pattern.compile("^(?:[a-z]\\w*|\\\\[^\\\\]*\\\\)", Pattern.CASE_INSENSITIVE)
             )
         )
         // Punctuation
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^[^\\w\\t\\n\\r \\xA0\\\"\\'][^\\w\\t\\n\\r \\xA0\\-\\\"\\']*")
-                )
+                Prettify.PR_PUNCTUATION, Pattern.compile("^[^\\w\\t\\n\\r \\xA0\\\"\\'][^\\w\\t\\n\\r \\xA0\\-\\\"\\']*")
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

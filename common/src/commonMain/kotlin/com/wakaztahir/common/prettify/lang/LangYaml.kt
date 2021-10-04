@@ -13,16 +13,7 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -40,111 +31,95 @@ import java.util.regex.Pattern
 class LangYaml : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("yaml", "yml"))
+            get() = Arrays.asList("yaml", "yml")
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>?> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^[:|>?]+"),
-                    null,
-                    ":|>?"
-                )
+                Prettify.PR_PUNCTUATION,
+                Pattern.compile("^[:|>?]+"),
+                null,
+                ":|>?"
             )
         )
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_DECLARATION,
-                    Pattern.compile("^%(?:YAML|TAG)[^#\\r\\n]+"),
-                    null,
-                    "%"
-                )
+                Prettify.PR_DECLARATION,
+                Pattern.compile("^%(?:YAML|TAG)[^#\\r\\n]+"),
+                null,
+                "%"
             )
         )
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_TYPE,
-                    Pattern.compile("^[&]\\S+"),
-                    null,
-                    "&"
-                )
+                Prettify.PR_TYPE,
+                Pattern.compile("^[&]\\S+"),
+                null,
+                "&"
             )
         )
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_TYPE,
-                    Pattern.compile("^!\\S*"),
-                    null,
-                    "!"
-                )
+                Prettify.PR_TYPE,
+                Pattern.compile("^!\\S*"),
+                null,
+                "!"
             )
         )
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^\"(?:[^\\\\\"]|\\\\.)*(?:\"|$)"),
-                    null,
-                    "\""
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^\"(?:[^\\\\\"]|\\\\.)*(?:\"|$)"),
+                null,
+                "\""
             )
         )
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^'(?:[^']|'')*(?:'|$)"),
-                    null,
-                    "'"
-                )
+                Prettify.PR_STRING,
+                Pattern.compile("^'(?:[^']|'')*(?:'|$)"),
+                null,
+                "'"
             )
         )
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^#[^\\r\\n]*"),
-                    null,
-                    "#"
-                )
+                Prettify.PR_COMMENT,
+                Pattern.compile("^#[^\\r\\n]*"),
+                null,
+                "#"
             )
         )
         _shortcutStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any?>(
-                    Prettify.PR_PLAIN,
-                    Pattern.compile("^\\s+"),
-                    null,
-                    " \t\r\n"
-                )
+                Prettify.PR_PLAIN,
+                Pattern.compile("^\\s+"),
+                null,
+                " \t\r\n"
             )
         )
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_DECLARATION,
-                    Pattern.compile("^(?:---|\\.\\.\\.)(?:[\\r\\n]|$)")
-                )
+                Prettify.PR_DECLARATION,
+                Pattern.compile("^(?:---|\\.\\.\\.)(?:[\\r\\n]|$)")
             )
         )
-        _fallthroughStylePatterns.add(Arrays.asList(*arrayOf<Any>(Prettify.PR_PUNCTUATION, Pattern.compile("^-"))))
+        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_PUNCTUATION, Pattern.compile("^-")))
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile("^\\w+:[ \\r\\n]")
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile("^\\w+:[ \\r\\n]")
             )
         )
-        _fallthroughStylePatterns.add(Arrays.asList(*arrayOf<Any>(Prettify.PR_PLAIN, Pattern.compile("^\\w+"))))
+        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_PLAIN, Pattern.compile("^\\w+")))
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

@@ -10,7 +10,7 @@ plugins {
     id("kotlin-android-extensions")
 }
 
-group = "com.wakaztahir.draggable-list"
+group = "com.wakaztahir.codeeditor"
 version = "1.0.3"
 
 kotlin {
@@ -56,8 +56,6 @@ kotlin {
     }
 }
 
-val artifactName = "my-library"
-
 val githubProperties = Properties()
 githubProperties.load(FileInputStream(rootProject.file("github.properties")))
 
@@ -69,7 +67,7 @@ afterEvaluate {
                 /** Configure path of your package repository on Github
                  *  Replace GITHUB_USERID with your/organisation Github userID and REPOSITORY with the repository name on GitHub
                  */
-                url = uri("https://maven.pkg.github.com/USERNAME/REPO")
+                url = uri("https://maven.pkg.github.com/timeline-notes/compose-code-editor")
 
                 credentials {
                     /**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/

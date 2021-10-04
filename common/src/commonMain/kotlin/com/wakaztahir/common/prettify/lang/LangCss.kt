@@ -13,16 +13,7 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -50,180 +41,164 @@ class LangCss : Lang() {
     protected class LangCssKeyword : Lang() {
         companion object {
             val fileExtensions: List<String>
-                get() = Arrays.asList(*arrayOf("css-kw"))
+                get() = Arrays.asList(("css-kw"))
         }
 
         init {
-            val _shortcutStylePatterns: List<List<Any>?> = ArrayList()
-            val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
+            val _shortcutStylePatterns: List<List<Any>> = ArrayList()
+            val _fallthroughStylePatterns: MutableList<List<Any>> = ArrayList()
             _fallthroughStylePatterns.add(
-                listOf(
-                    listOf(
-                        Prettify.PR_KEYWORD,
-                        Pattern.compile(
-                            "^-?(?:[_a-z]|(?:\\\\[\\da-f]+ ?))(?:[_a-z\\d\\-]|\\\\(?:\\\\[\\da-f]+ ?))*",
-                            Pattern.CASE_INSENSITIVE
-                        )
-                    )
-                )
-            )
-            setShortcutStylePatterns(_shortcutStylePatterns)
-            setFallthroughStylePatterns(_fallthroughStylePatterns)
-        }
-    }
-
-    protected class LangCssString : Lang() {
-        companion object {
-            val fileExtensions: List<String>
-                get() = Arrays.asList(*arrayOf("css-str"))
-        }
-
-        init {
-            val _shortcutStylePatterns: List<List<Any>?> = ArrayList()
-            val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
-            _fallthroughStylePatterns.add(
-                listOf(
-                    listOf(
-                        Prettify.PR_STRING,
-                        Pattern.compile("^[^\\)\\\"\\']+")
-                    )
-                )
-            )
-            setShortcutStylePatterns(_shortcutStylePatterns)
-            setFallthroughStylePatterns(_fallthroughStylePatterns)
-        }
-    }
-
-    companion object {
-        val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("css"))
-    }
-
-    init {
-        val _shortcutStylePatterns: MutableList<List<Any>?> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any>?> = ArrayList()
-
-        // The space production <s>
-        _shortcutStylePatterns.add(
-            listOf(
-                listOf(
-                    Prettify.PR_PLAIN,
-                    Pattern.compile("^[ \t\r\n\\f]+"),
-                    null,
-                    " \t\r\n\\f"
-                )
-            )
-        )
-        // Quoted strings.  <string1> and <string2>
-        _fallthroughStylePatterns.add(
-            listOf(
-                listOf(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^\\\"(?:[^\n\r\\f\\\\\\\"]|\\\\(?:\r\n?|\n|\\f)|\\\\[\\s\\S])*\\\""),
-                    null
-                )
-            )
-        )
-        _fallthroughStylePatterns.add(
-            listOf(
-                listOf(
-                    Prettify.PR_STRING,
-                    Pattern.compile("^\\'(?:[^\n\r\\f\\\\\\']|\\\\(?:\r\n?|\n|\\f)|\\\\[\\s\\S])*\\'"),
-                    null
-                )
-            )
-        )
-        _fallthroughStylePatterns.add(
-            listOf(
-                listOf(
-                    "lang-css-str",
-                    Pattern.compile("^url\\(([^\\)\\\"\\']+)\\)", Pattern.CASE_INSENSITIVE)
-                )
-            )
-        )
-        _fallthroughStylePatterns.add(
-            listOf(
                 listOf(
                     Prettify.PR_KEYWORD,
-                    Pattern.compile(
-                        "^(?:url|rgb|\\!important|@import|@page|@media|@charset|inherit)(?=[^\\-\\w]|$)",
-                        Pattern.CASE_INSENSITIVE
-                    ),
-                    null
-                )
-            )
-        )
-        // A property name -- an identifier followed by a colon.
-        _fallthroughStylePatterns.add(
-            Arrays.asList(
-                *arrayOf<Any>(
-                    "lang-css-kw",
-                    Pattern.compile(
-                        "^(-?(?:[_a-z]|(?:\\\\[0-9a-f]+ ?))(?:[_a-z0-9\\-]|\\\\(?:\\\\[0-9a-f]+ ?))*)\\s*:",
-                        Pattern.CASE_INSENSITIVE
-                    )
-                )
-            )
-        )
-        // A C style block comment.  The <comment> production.
-        _fallthroughStylePatterns.add(
-            Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
-                )
-            )
-        )
-        // Escaping text spans
-        _fallthroughStylePatterns.add(
-            Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^(?:<!--|-->)")
-                )
-            )
-        )
-        // A number possibly containing a suffix.
-        _fallthroughStylePatterns.add(
-            Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^(?:\\d+|\\d*\\.\\d+)(?:%|[a-z]+)?", Pattern.CASE_INSENSITIVE)
-                )
-            )
-        )
-        // A hex color
-        _fallthroughStylePatterns.add(
-            Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_LITERAL,
-                    Pattern.compile("^#(?:[0-9a-f]{3}){1,2}\\b", Pattern.CASE_INSENSITIVE)
-                )
-            )
-        )
-        // An identifier
-        _fallthroughStylePatterns.add(
-            Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PLAIN,
                     Pattern.compile(
                         "^-?(?:[_a-z]|(?:\\\\[\\da-f]+ ?))(?:[_a-z\\d\\-]|\\\\(?:\\\\[\\da-f]+ ?))*",
                         Pattern.CASE_INSENSITIVE
                     )
                 )
             )
+            setShortcutStylePatterns(_shortcutStylePatterns)
+            setFallthroughStylePatterns(_fallthroughStylePatterns)
+        }
+
+        override fun getFileExtensions(): List<String> {
+            return fileExtensions
+        }
+    }
+
+    protected class LangCssString : Lang() {
+        companion object {
+            val fileExtensions: List<String>
+                get() = Arrays.asList(("css-str"))
+        }
+
+        init {
+            val _shortcutStylePatterns: List<List<Any>> = ArrayList()
+            val _fallthroughStylePatterns: MutableList<List<Any>> = ArrayList()
+            _fallthroughStylePatterns.add(
+                listOf(
+                    Prettify.PR_STRING,
+                    Pattern.compile("^[^\\)\\\"\\']+")
+                )
+            )
+            setShortcutStylePatterns(_shortcutStylePatterns)
+            setFallthroughStylePatterns(_fallthroughStylePatterns)
+        }
+
+        override fun getFileExtensions(): List<String> {
+            return fileExtensions
+        }
+    }
+
+    companion object {
+        val fileExtensions: List<String>
+            get() = Arrays.asList(("css"))
+    }
+
+    init {
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
+
+        // The space production <s>
+        _shortcutStylePatterns.add(
+            listOf(
+                Prettify.PR_PLAIN,
+                Pattern.compile("^[ \t\r\n\\f]+"),
+                null,
+                " \t\r\n\\f"
+            )
+        )
+        // Quoted strings.  <string1> and <string2>
+        _fallthroughStylePatterns.add(
+            listOf(
+                Prettify.PR_STRING,
+                Pattern.compile("^\\\"(?:[^\n\r\\f\\\\\\\"]|\\\\(?:\r\n?|\n|\\f)|\\\\[\\s\\S])*\\\""),
+                null
+            )
+        )
+        _fallthroughStylePatterns.add(
+            listOf(
+                Prettify.PR_STRING,
+                Pattern.compile("^\\'(?:[^\n\r\\f\\\\\\']|\\\\(?:\r\n?|\n|\\f)|\\\\[\\s\\S])*\\'"),
+                null
+            )
+        )
+        _fallthroughStylePatterns.add(
+            listOf(
+                "lang-css-str",
+                Pattern.compile("^url\\(([^\\)\\\"\\']+)\\)", Pattern.CASE_INSENSITIVE)
+            )
+        )
+        _fallthroughStylePatterns.add(
+            listOf(
+                Prettify.PR_KEYWORD,
+                Pattern.compile(
+                    "^(?:url|rgb|\\!important|@import|@page|@media|@charset|inherit)(?=[^\\-\\w]|$)",
+                    Pattern.CASE_INSENSITIVE
+                ),
+                null
+            )
+        )
+        // A property name -- an identifier followed by a colon.
+        _fallthroughStylePatterns.add(
+            Arrays.asList(
+                "lang-css-kw",
+                Pattern.compile(
+                    "^(-?(?:[_a-z]|(?:\\\\[0-9a-f]+ ?))(?:[_a-z0-9\\-]|\\\\(?:\\\\[0-9a-f]+ ?))*)\\s*:",
+                    Pattern.CASE_INSENSITIVE
+                )
+            )
+        )
+        // A C style block comment.  The <comment> production.
+        _fallthroughStylePatterns.add(
+            Arrays.asList(
+                Prettify.PR_COMMENT,
+                Pattern.compile("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
+            )
+        )
+        // Escaping text spans
+        _fallthroughStylePatterns.add(
+            Arrays.asList(
+                Prettify.PR_COMMENT,
+                Pattern.compile("^(?:<!--|-->)")
+            )
+        )
+        // A number possibly containing a suffix.
+        _fallthroughStylePatterns.add(
+            Arrays.asList(
+                Prettify.PR_LITERAL,
+                Pattern.compile("^(?:\\d+|\\d*\\.\\d+)(?:%|[a-z]+)?", Pattern.CASE_INSENSITIVE)
+            )
+        )
+        // A hex color
+        _fallthroughStylePatterns.add(
+            Arrays.asList(
+                Prettify.PR_LITERAL,
+                Pattern.compile("^#(?:[0-9a-f]{3}){1,2}\\b", Pattern.CASE_INSENSITIVE)
+            )
+        )
+        // An identifier
+        _fallthroughStylePatterns.add(
+            Arrays.asList(
+                Prettify.PR_PLAIN,
+                Pattern.compile(
+                    "^-?(?:[_a-z]|(?:\\\\[\\da-f]+ ?))(?:[_a-z\\d\\-]|\\\\(?:\\\\[\\da-f]+ ?))*",
+                    Pattern.CASE_INSENSITIVE
+                )
+            )
         )
         // A run of punctuation
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^[^\\s\\w\\'\\\"]+", Pattern.CASE_INSENSITIVE)
-                )
+                Prettify.PR_PUNCTUATION,
+                Pattern.compile("^[^\\s\\w\\'\\\"]+", Pattern.CASE_INSENSITIVE)
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
-        setExtendedLangs(Arrays.asList(*arrayOf(LangCssKeyword(), LangCssString())))
+        setExtendedLangs(Arrays.asList(LangCssKeyword(), LangCssString()))
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

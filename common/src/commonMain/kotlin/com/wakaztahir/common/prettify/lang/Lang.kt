@@ -55,11 +55,7 @@ abstract class Lang {
         return returnList
     }
 
-    fun setShortcutStylePatterns(shortcutStylePatterns: List<List<Any?>?>?) {
-        if (shortcutStylePatterns == null) {
-            this.shortcutStylePatterns = ArrayList()
-            return
-        }
+    fun setShortcutStylePatterns(shortcutStylePatterns: List<List<Any?>>) {
         val cloneList: MutableList<List<Any?>> = ArrayList()
         for (shortcutStylePattern in shortcutStylePatterns) {
             cloneList.add(ArrayList(shortcutStylePattern))
@@ -75,11 +71,7 @@ abstract class Lang {
         return returnList
     }
 
-    fun setFallthroughStylePatterns(fallthroughStylePatterns: List<List<Any?>?>?) {
-        if (fallthroughStylePatterns == null) {
-            this.fallthroughStylePatterns = ArrayList()
-            return
-        }
+    fun setFallthroughStylePatterns(fallthroughStylePatterns: List<List<Any?>>) {
         val cloneList: MutableList<List<Any?>> = ArrayList()
         for (fallthroughStylePattern in fallthroughStylePatterns) {
             cloneList.add(ArrayList(fallthroughStylePattern))
@@ -117,6 +109,8 @@ abstract class Lang {
         val fileExtensions: List<String>
             get() = ArrayList()
     }
+
+    abstract fun getFileExtensions() : List<String>
 
     /**
      * Constructor.

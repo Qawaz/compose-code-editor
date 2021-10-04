@@ -13,16 +13,7 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.lang
 
-import com.wakaztahir.common.prettify.lang.Lang
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssKeyword
-import com.wakaztahir.common.prettify.lang.LangCss.LangCssString
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabIdentifier
-import com.wakaztahir.common.prettify.lang.LangMatlab.LangMatlabOperator
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangWiki.LangWikiMeta
-import com.wakaztahir.common.prettify.lang.LangXq
 import java.util.*
 import java.util.regex.Pattern
 
@@ -49,33 +40,32 @@ import java.util.regex.Pattern
 class LangVb : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("vb", "vbs"))
+            get() = Arrays.asList("vb", "vbs")
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any>> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any>> = ArrayList()
+        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
 
         // Whitespace
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0\\u2028\\u2029]+"), null, "\t\n\r " + Character.toString(
-                        0xA0.toChar()
-                    ) + "\u2028\u2029"
-                )
+                Prettify.PR_PLAIN,
+                Pattern.compile("^[\\t\\n\\r \\xA0\\u2028\\u2029]+"),
+                null,
+                "\t\n\r " + Character.toString(
+                    0xA0.toChar()
+                ) + "\u2028\u2029"
             )
         )
         // A double quoted string with quotes escaped by doubling them.
         // A single character can be suffixed with C.
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_STRING, Pattern.compile(
-                        "^(?:[\\\"\\u201C\\u201D](?:[^\\\"\\u201C\\u201D]|[\\\"\\u201C\\u201D]{2})(?:[\\\"\\u201C\\u201D]c|$)|[\\\"\\u201C\\u201D](?:[^\\\"\\u201C\\u201D]|[\\\"\\u201C\\u201D]{2})*(?:[\\\"\\u201C\\u201D]|$))",
-                        Pattern.CASE_INSENSITIVE
-                    ), null, "\"\u201C\u201D"
-                )
+                Prettify.PR_STRING, Pattern.compile(
+                    "^(?:[\\\"\\u201C\\u201D](?:[^\\\"\\u201C\\u201D]|[\\\"\\u201C\\u201D]{2})(?:[\\\"\\u201C\\u201D]c|$)|[\\\"\\u201C\\u201D](?:[^\\\"\\u201C\\u201D]|[\\\"\\u201C\\u201D]{2})*(?:[\\\"\\u201C\\u201D]|$))",
+                    Pattern.CASE_INSENSITIVE
+                ), null, "\"\u201C\u201D"
             )
         )
         // A comment starts with a single quote and runs until the end of the line.
@@ -84,24 +74,20 @@ class LangVb : Lang() {
         // http://meta.stackoverflow.com/q/121497/137403
         _shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_COMMENT,
-                    Pattern.compile("^[\\'\\u2018\\u2019](?:_(?:\r\n?|[^\r]?)|[^\\r\\n_\\u2028\\u2029])*"),
-                    null,
-                    "'\u2018\u2019"
-                )
+                Prettify.PR_COMMENT,
+                Pattern.compile("^[\\'\\u2018\\u2019](?:_(?:\r\n?|[^\r]?)|[^\\r\\n_\\u2028\\u2029])*"),
+                null,
+                "'\u2018\u2019"
             )
         )
         _fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile(
-                        "^(?:AddHandler|AddressOf|Alias|And|AndAlso|Ansi|As|Assembly|Auto|Boolean|ByRef|Byte|ByVal|Call|Case|Catch|CBool|CByte|CChar|CDate|CDbl|CDec|Char|CInt|Class|CLng|CObj|Const|CShort|CSng|CStr|CType|Date|Decimal|Declare|Default|Delegate|Dim|DirectCast|Do|Double|Each|Else|ElseIf|End|EndIf|Enum|Erase|Error|Event|Exit|Finally|For|Friend|Function|Get|GetType|GoSub|GoTo|Handles|If|Implements|Imports|In|Inherits|Integer|Interface|Is|Let|Lib|Like|Long|Loop|Me|Mod|Module|MustInherit|MustOverride|MyBase|MyClass|Namespace|New|Next|Not|NotInheritable|NotOverridable|Object|On|Option|Optional|Or|OrElse|Overloads|Overridable|Overrides|ParamArray|Preserve|Private|Property|Protected|Public|RaiseEvent|ReadOnly|ReDim|RemoveHandler|Resume|Return|Select|Set|Shadows|Shared|Short|Single|Static|Step|Stop|String|Structure|Sub|SyncLock|Then|Throw|To|Try|TypeOf|Unicode|Until|Variant|Wend|When|While|With|WithEvents|WriteOnly|Xor|EndIf|GoSub|Let|Variant|Wend)\\b",
-                        Pattern.CASE_INSENSITIVE
-                    ),
-                    null
-                )
+                Prettify.PR_KEYWORD,
+                Pattern.compile(
+                    "^(?:AddHandler|AddressOf|Alias|And|AndAlso|Ansi|As|Assembly|Auto|Boolean|ByRef|Byte|ByVal|Call|Case|Catch|CBool|CByte|CChar|CDate|CDbl|CDec|Char|CInt|Class|CLng|CObj|Const|CShort|CSng|CStr|CType|Date|Decimal|Declare|Default|Delegate|Dim|DirectCast|Do|Double|Each|Else|ElseIf|End|EndIf|Enum|Erase|Error|Event|Exit|Finally|For|Friend|Function|Get|GetType|GoSub|GoTo|Handles|If|Implements|Imports|In|Inherits|Integer|Interface|Is|Let|Lib|Like|Long|Loop|Me|Mod|Module|MustInherit|MustOverride|MyBase|MyClass|Namespace|New|Next|Not|NotInheritable|NotOverridable|Object|On|Option|Optional|Or|OrElse|Overloads|Overridable|Overrides|ParamArray|Preserve|Private|Property|Protected|Public|RaiseEvent|ReadOnly|ReDim|RemoveHandler|Resume|Return|Select|Set|Shadows|Shared|Short|Single|Static|Step|Stop|String|Structure|Sub|SyncLock|Then|Throw|To|Try|TypeOf|Unicode|Until|Variant|Wend|When|While|With|WithEvents|WriteOnly|Xor|EndIf|GoSub|Let|Variant|Wend)\\b",
+                    Pattern.CASE_INSENSITIVE
+                ),
+                null
             )
         )
         // A second comment form
@@ -130,34 +116,30 @@ class LangVb : Lang() {
         // characters after a normal identifier in square brackets.
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PLAIN,
-                    Pattern.compile(
-                        "^(?:(?:[a-z]|_\\w)\\w*(?:\\[[%&@!#]+\\])?|\\[(?:[a-z]|_\\w)\\w*\\])",
-                        Pattern.CASE_INSENSITIVE
-                    )
+                Prettify.PR_PLAIN, Pattern.compile(
+                    "^(?:(?:[a-z]|_\\w)\\w*(?:\\[[%&@!#]+\\])?|\\[(?:[a-z]|_\\w)\\w*\\])",
+                    Pattern.CASE_INSENSITIVE
                 )
             )
         )
         // A run of punctuation
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^[^\\w\\t\\n\\r \\\"\\'\\[\\]\\xA0\\u2018\\u2019\\u201C\\u201D\\u2028\\u2029]+")
-                )
+                Prettify.PR_PUNCTUATION,
+                Pattern.compile("^[^\\w\\t\\n\\r \\\"\\'\\[\\]\\xA0\\u2018\\u2019\\u201C\\u201D\\u2028\\u2029]+")
             )
         )
         // Square brackets
         _fallthroughStylePatterns.add(
             Arrays.asList(
-                *arrayOf<Any>(
-                    Prettify.PR_PUNCTUATION,
-                    Pattern.compile("^(?:\\[|\\])")
-                )
+                Prettify.PR_PUNCTUATION, Pattern.compile("^(?:\\[|\\])")
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
+    }
+
+    override fun getFileExtensions(): List<String> {
+        return fileExtensions
     }
 }

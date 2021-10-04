@@ -13,41 +13,8 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.parser
 
+import com.wakaztahir.common.prettify.lang.*
 import com.wakaztahir.common.prettify.parser.Prettify
-import com.wakaztahir.common.prettify.parser.CombinePrefixPattern
-import kotlin.Throws
-import com.wakaztahir.common.prettify.parser.Prettify.CreateSimpleLexer
-import com.wakaztahir.common.prettify.lang.Lang
-import com.wakaztahir.common.prettify.lang.LangAppollo
-import com.wakaztahir.common.prettify.lang.LangBasic
-import com.wakaztahir.common.prettify.lang.LangClj
-import com.wakaztahir.common.prettify.lang.LangCss
-import com.wakaztahir.common.prettify.lang.LangDart
-import com.wakaztahir.common.prettify.lang.LangErlang
-import com.wakaztahir.common.prettify.lang.LangGo
-import com.wakaztahir.common.prettify.lang.LangHs
-import com.wakaztahir.common.prettify.lang.LangLisp
-import com.wakaztahir.common.prettify.lang.LangLlvm
-import com.wakaztahir.common.prettify.lang.LangLua
-import com.wakaztahir.common.prettify.lang.LangMatlab
-import com.wakaztahir.common.prettify.lang.LangMd
-import com.wakaztahir.common.prettify.lang.LangMl
-import com.wakaztahir.common.prettify.lang.LangMumps
-import com.wakaztahir.common.prettify.lang.LangN
-import com.wakaztahir.common.prettify.lang.LangPascal
-import com.wakaztahir.common.prettify.lang.LangR
-import com.wakaztahir.common.prettify.lang.LangRd
-import com.wakaztahir.common.prettify.lang.LangScala
-import com.wakaztahir.common.prettify.lang.LangSql
-import com.wakaztahir.common.prettify.lang.LangTex
-import com.wakaztahir.common.prettify.lang.LangVb
-import com.wakaztahir.common.prettify.lang.LangVhdl
-import com.wakaztahir.common.prettify.lang.LangTcl
-import com.wakaztahir.common.prettify.lang.LangWiki
-import com.wakaztahir.common.prettify.lang.LangXq
-import com.wakaztahir.common.prettify.lang.LangYaml
-import java.lang.Exception
-import java.lang.NullPointerException
 import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -100,8 +67,9 @@ import java.util.regex.Pattern
 </blockquote> *
  */
 class Prettify {
+
     inner class CreateSimpleLexer(
-        shortcutStylePatterns: List<List<Any?>>?,
+        shortcutStylePatterns: List<List<Any?>>,
         private var fallthroughStylePatterns: List<List<Any?>>
     ) {
         private var shortcuts: MutableMap<Char, List<Any?>> = HashMap()
@@ -128,7 +96,7 @@ class Prettify {
              * the end.
              * @type {Array.<number></number>|string>}
              */
-            val decorations: MutableList<Any> = ArrayList(listOf(listOf(basePos, PR_PLAIN)))
+            val decorations: MutableList<Any> = ArrayList(listOf(basePos, PR_PLAIN))
             var pos = 0 // index into sourceCode
             val tokens = Util.match(tokenizer, sourceCode, true)
             val styleCache: MutableMap<String, String?> = HashMap()
@@ -260,10 +228,7 @@ class Prettify {
             allPatterns.addAll(fallthroughStylePatterns)
             val allRegexs: MutableList<Pattern> = ArrayList()
             val regexKeys: MutableMap<String, Any?> = HashMap()
-            var i = 0
-            val n = allPatterns.size
-            while (i < n) {
-                val patternParts = allPatterns[i]
+            allPatterns.forEach { patternParts ->
                 val shortcutChars = if (patternParts.size > 3) patternParts[3] as String else null
                 if (shortcutChars != null) {
                     var c = shortcutChars.length
@@ -272,14 +237,31 @@ class Prettify {
                     }
                 }
                 val regex = patternParts[1] as Pattern
-                print(regex)
                 val k = regex.pattern()
                 if (regexKeys[k] == null) {
                     allRegexs.add(regex)
                     regexKeys[k] = Any()
                 }
-                ++i
             }
+//            var i = 0
+//            val n = allPatterns.size
+//            while (i < n) {
+//                val patternParts = allPatterns[i]
+//                val shortcutChars = if (patternParts.size > 3) patternParts[3] as String else null
+//                if (shortcutChars != null) {
+//                    var c = shortcutChars.length
+//                    while (--c >= 0) {
+//                        shortcuts[shortcutChars[c]] = patternParts
+//                    }
+//                }
+//                val regex = patternParts[1] as Pattern
+//                val k = regex.pattern()
+//                if (regexKeys[k] == null) {
+//                    allRegexs.add(regex)
+//                    regexKeys[k] = Any()
+//                }
+//                ++i
+//            }
             allRegexs.add(Pattern.compile("[\u0000-\\uffff]"))
             tokenizer = CombinePrefixPattern().combinePrefixPattern(allRegexs)
             nPatterns = fallthroughStylePatterns.size
@@ -303,42 +285,36 @@ class Prettify {
      */
     @Throws(Exception::class)
     internal fun sourceDecorator(options: Map<String?, Any?>): CreateSimpleLexer {
-        val shortcutStylePatterns: MutableList<List<Any>> = ArrayList()
-        val fallthroughStylePatterns: MutableList<List<Any>> = ArrayList()
+        val shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
         if (Util.getVariableValueAsBoolean(options["tripleQuotedStrings"])) {
             // '''multi-line-string''', 'single-line-string', and double-quoted
             shortcutStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_STRING,
-                        Pattern.compile("^(?:\\'\\'\\'(?:[^\\'\\\\]|\\\\[\\s\\S]|\\'{1,2}(?=[^\\']))*(?:\\'\\'\\'|$)|\\\"\\\"\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S]|\\\"{1,2}(?=[^\\\"]))*(?:\\\"\\\"\\\"|$)|\\'(?:[^\\\\\\']|\\\\[\\s\\S])*(?:\\'|$)|\\\"(?:[^\\\\\\\"]|\\\\[\\s\\S])*(?:\\\"|$))"),
-                        null,
-                        "'\""
-                    )
+                    PR_STRING,
+                    Pattern.compile("^(?:\\'\\'\\'(?:[^\\'\\\\]|\\\\[\\s\\S]|\\'{1,2}(?=[^\\']))*(?:\\'\\'\\'|$)|\\\"\\\"\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S]|\\\"{1,2}(?=[^\\\"]))*(?:\\\"\\\"\\\"|$)|\\'(?:[^\\\\\\']|\\\\[\\s\\S])*(?:\\'|$)|\\\"(?:[^\\\\\\\"]|\\\\[\\s\\S])*(?:\\\"|$))"),
+                    null,
+                    "'\""
                 )
             )
         } else if (Util.getVariableValueAsBoolean(options["multiLineStrings"])) {
             // 'multi-line-string', "multi-line-string"
             shortcutStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_STRING,
-                        Pattern.compile("^(?:\\'(?:[^\\\\\\']|\\\\[\\s\\S])*(?:\\'|$)|\\\"(?:[^\\\\\\\"]|\\\\[\\s\\S])*(?:\\\"|$)|\\`(?:[^\\\\\\`]|\\\\[\\s\\S])*(?:\\`|$))"),
-                        null,
-                        "'\"`"
-                    )
+                    PR_STRING,
+                    Pattern.compile("^(?:\\'(?:[^\\\\\\']|\\\\[\\s\\S])*(?:\\'|$)|\\\"(?:[^\\\\\\\"]|\\\\[\\s\\S])*(?:\\\"|$)|\\`(?:[^\\\\\\`]|\\\\[\\s\\S])*(?:\\`|$))"),
+                    null,
+                    "'\"`"
                 )
             )
         } else {
             // 'single-line-string', "single-line-string"
             shortcutStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_STRING,
-                        Pattern.compile("^(?:\\'(?:[^\\\\\\'\r\n]|\\\\.)*(?:\\'|$)|\\\"(?:[^\\\\\\\"\r\n]|\\\\.)*(?:\\\"|$))"),
-                        null,
-                        "\"'"
-                    )
+                    PR_STRING,
+                    Pattern.compile("^(?:\\'(?:[^\\\\\\'\r\n]|\\\\.)*(?:\\'|$)|\\\"(?:[^\\\\\\\"\r\n]|\\\\.)*(?:\\\"|$))"),
+                    null,
+                    "\"'"
                 )
             )
         }
@@ -346,11 +322,9 @@ class Prettify {
             // verbatim-string-literal production from the C# grammar.  See issue 93.
             fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_STRING,
-                        Pattern.compile("^@\\\"(?:[^\\\"]|\\\"\\\")*(?:\\\"|$)"),
-                        null
-                    )
+                    PR_STRING,
+                    Pattern.compile("^@\\\"(?:[^\\\"]|\\\"\\\")*(?:\\\"|$)"),
+                    null
                 )
             )
         }
@@ -360,46 +334,38 @@ class Prettify {
                 if (hc is Int && hc > 1) {  // multiline hash comments
                     shortcutStylePatterns.add(
                         listOf(
-                            listOf(
-                                PR_COMMENT,
-                                Pattern.compile("^#(?:##(?:[^#]|#(?!##))*(?:###|$)|.*)"),
-                                null,
-                                "#"
-                            )
+                            PR_COMMENT,
+                            Pattern.compile("^#(?:##(?:[^#]|#(?!##))*(?:###|$)|.*)"),
+                            null,
+                            "#"
                         )
                     )
                 } else {
                     // Stop C preprocessor declarations at an unclosed open comment
                     shortcutStylePatterns.add(
                         listOf(
-                            listOf(
-                                PR_COMMENT,
-                                Pattern.compile("^#(?:(?:define|e(?:l|nd)if|else|error|ifn?def|include|line|pragma|undef|warning)\\b|[^\r\n]*)"),
-                                null,
-                                "#"
-                            )
+                            PR_COMMENT,
+                            Pattern.compile("^#(?:(?:define|e(?:l|nd)if|else|error|ifn?def|include|line|pragma|undef|warning)\\b|[^\r\n]*)"),
+                            null,
+                            "#"
                         )
                     )
                 }
                 // #include <stdio.h>
                 fallthroughStylePatterns.add(
                     listOf(
-                        listOf(
-                            PR_STRING,
-                            Pattern.compile("^<(?:(?:(?:\\.\\.\\/)*|\\/?)(?:[\\w-]+(?:\\/[\\w-]+)+)?[\\w-]+\\.h(?:h|pp|\\+\\+)?|[a-z]\\w*)>"),
-                            null
-                        )
+                        PR_STRING,
+                        Pattern.compile("^<(?:(?:(?:\\.\\.\\/)*|\\/?)(?:[\\w-]+(?:\\/[\\w-]+)+)?[\\w-]+\\.h(?:h|pp|\\+\\+)?|[a-z]\\w*)>"),
+                        null
                     )
                 )
             } else {
                 shortcutStylePatterns.add(
                     listOf(
-                        listOf(
-                            PR_COMMENT,
-                            Pattern.compile("^#[^\r\n]*"),
-                            null,
-                            "#"
-                        )
+                        PR_COMMENT,
+                        Pattern.compile("^#[^\r\n]*"),
+                        null,
+                        "#"
                     )
                 )
             }
@@ -407,20 +373,16 @@ class Prettify {
         if (Util.getVariableValueAsBoolean(options["cStyleComments"])) {
             fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_COMMENT,
-                        Pattern.compile("^\\/\\/[^\r\n]*"),
-                        null
-                    )
+                    PR_COMMENT,
+                    Pattern.compile("^\\/\\/[^\r\n]*"),
+                    null
                 )
             )
             fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_COMMENT,
-                        Pattern.compile("^\\/\\*[\\s\\S]*?(?:\\*\\/|$)"),
-                        null
-                    )
+                    PR_COMMENT,
+                    Pattern.compile("^\\/\\*[\\s\\S]*?(?:\\*\\/|$)"),
+                    null
                 )
             )
         }
@@ -452,16 +414,14 @@ class Prettify {
                         + "/")
             fallthroughStylePatterns.add(
                 listOf(
-                    listOf(
-                        "lang-regex",
-                        Pattern.compile("^$REGEXP_PRECEDER_PATTERN($REGEX_LITERAL)")
-                    )
+                    "lang-regex",
+                    Pattern.compile("^$REGEXP_PRECEDER_PATTERN($REGEX_LITERAL)")
                 )
             )
         }
         val types = options["types"] as Pattern?
-        if (Util.getVariableValueAsBoolean(types) == true) {
-            fallthroughStylePatterns.add(listOf(listOf(PR_TYPE, types)))
+        if (Util.getVariableValueAsBoolean(types)) {
+            fallthroughStylePatterns.add(listOf(PR_TYPE, types))
         }
         var keywords = options["keywords"] as String?
         if (keywords != null) {
@@ -469,81 +429,67 @@ class Prettify {
             if (keywords.isNotEmpty()) {
                 fallthroughStylePatterns.add(
                     listOf(
-                        listOf(
-                            PR_KEYWORD,
-                            Pattern.compile("^(?:" + keywords.replace("[\\s,]+".toRegex(), "|") + ")\\b"),
-                            null
-                        )
+                        PR_KEYWORD,
+                        Pattern.compile("^(?:" + keywords.replace("[\\s,]+".toRegex(), "|") + ")\\b"),
+                        null
                     )
                 )
             }
         }
         shortcutStylePatterns.add(
             listOf(
-                listOf(
-                    PR_PLAIN,
-                    Pattern.compile("^\\s+"),
-                    null,
-                    """ 
+                PR_PLAIN,
+                Pattern.compile("^\\s+"),
+                null,
+                """ 
 	${Character.toString(0xA0.toChar())}"""
-                )
             )
         )
 
         // TODO(mikesamuel): recognize non-latin letters and numerals in idents
         fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    PR_LITERAL,
-                    Pattern.compile("^@[a-z_$][a-z_$@0-9]*", Pattern.CASE_INSENSITIVE),
-                    null
-                )
+                PR_LITERAL,
+                Pattern.compile("^@[a-z_$][a-z_$@0-9]*", Pattern.CASE_INSENSITIVE),
+                null
             )
         )
         fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    PR_TYPE,
-                    Pattern.compile("^(?:[@_]?[A-Z]+[a-z][A-Za-z_$@0-9]*|\\w+_t\\b)"),
-                    null
-                )
+                PR_TYPE,
+                Pattern.compile("^(?:[@_]?[A-Z]+[a-z][A-Za-z_$@0-9]*|\\w+_t\\b)"),
+                null
             )
         )
         fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    PR_PLAIN,
-                    Pattern.compile("^[a-z_$][a-z_$@0-9]*", Pattern.CASE_INSENSITIVE),
-                    null
-                )
+                PR_PLAIN,
+                Pattern.compile("^[a-z_$][a-z_$@0-9]*", Pattern.CASE_INSENSITIVE),
+                null
             )
         )
         fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    PR_LITERAL,
-                    Pattern.compile(
-                        "^(?:" // A hex number
-                                + "0x[a-f0-9]+" // or an octal or decimal number,
-                                + "|(?:\\d(?:_\\d+)*\\d*(?:\\.\\d*)?|\\.\\d\\+)" // possibly in scientific notation
-                                + "(?:e[+\\-]?\\d+)?"
-                                + ')' // with an optional modifier like UL for unsigned long
-                                + "[a-z]*", Pattern.CASE_INSENSITIVE
-                    ),
-                    null,
-                    "0123456789"
-                )
+                PR_LITERAL,
+                Pattern.compile(
+                    "^(?:" // A hex number
+                            + "0x[a-f0-9]+" // or an octal or decimal number,
+                            + "|(?:\\d(?:_\\d+)*\\d*(?:\\.\\d*)?|\\.\\d\\+)" // possibly in scientific notation
+                            + "(?:e[+\\-]?\\d+)?"
+                            + ')' // with an optional modifier like UL for unsigned long
+                            + "[a-z]*", Pattern.CASE_INSENSITIVE
+                ),
+                null,
+                "0123456789"
             )
         )
         // Don't treat escaped quotes in bash as starting strings.
         // See issue 144.
         fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    PR_PLAIN,
-                    Pattern.compile("^\\\\[\\s\\S]?"),
-                    null
-                )
+                PR_PLAIN,
+                Pattern.compile("^\\\\[\\s\\S]?"),
+                null
             )
         )
 
@@ -588,11 +534,9 @@ class Prettify {
         }
         fallthroughStylePatterns.add(
             listOf(
-                listOf(
-                    PR_PUNCTUATION,
-                    Pattern.compile(punctuation),
-                    null
-                )
+                PR_PUNCTUATION,
+                Pattern.compile(punctuation),
+                null
             )
         )
         return CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns)
@@ -637,25 +581,18 @@ class Prettify {
      * or language handler with specified extension exist already
      */
     @Throws(Exception::class)
-    fun register(clazz: Class<out Lang?>?) {
-        if (clazz == null) {
-            throw NullPointerException("argument 'clazz' cannot be null")
-        }
+    fun register(clazz: Class<out Lang>) {
         val fileExtensions = getFileExtensionsFromClass(clazz)
         var i = fileExtensions.size
         while (--i >= 0) {
             val ext = fileExtensions[i]
-            if (langHandlerRegistry[ext] == null) {
-                langHandlerRegistry[ext] = clazz
-            } else {
-                throw Exception("cannot override language handler $ext")
-            }
+            langHandlerRegistry[ext] = clazz
         }
     }
 
     @Throws(Exception::class)
     internal fun getFileExtensionsFromClass(clazz: Class<out Lang>): List<String> {
-        val getExtensionsMethod = clazz!!.getMethod("getFileExtensions", null as Class<*>?)
+        val getExtensionsMethod = clazz.getMethod("getFileExtensions", null)
         return getExtensionsMethod.invoke(null, null) as List<String>
     }
 
@@ -872,90 +809,65 @@ class Prettify {
             decorateSourceMap["cStyleComments"] = true
             decorateSourceMap["multiLineStrings"] = true
             decorateSourceMap["regexLiterals"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("default-code")))
-            var shortcutStylePatterns: MutableList<List<Any>>
-            var fallthroughStylePatterns: MutableList<List<Any>>
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("default-code"))
+            var shortcutStylePatterns: MutableList<List<Any?>>
+            var fallthroughStylePatterns: MutableList<List<Any?>>
             shortcutStylePatterns = ArrayList()
             fallthroughStylePatterns = ArrayList()
-            fallthroughStylePatterns.add(Arrays.asList(*arrayOf<Any>(PR_PLAIN, Pattern.compile("^[^<?]+"))))
+            fallthroughStylePatterns.add(Arrays.asList(PR_PLAIN, Pattern.compile("^[^<?]+")))
             fallthroughStylePatterns.add(
-                Arrays.asList(
-                    *arrayOf<Any>(
-                        PR_DECLARATION,
-                        Pattern.compile("^<!\\w[^>]*(?:>|$)")
-                    )
+                listOf(
+                    PR_DECLARATION, Pattern.compile("^<!\\w[^>]*(?:>|$)")
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
-                    *arrayOf<Any>(
-                        PR_COMMENT,
-                        Pattern.compile("^<\\!--[\\s\\S]*?(?:-\\->|$)")
-                    )
+                listOf(
+                    PR_COMMENT, Pattern.compile("^<\\!--[\\s\\S]*?(?:-\\->|$)")
                 )
             )
             // Unescaped content in an unknown language
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-",
-                        Pattern.compile("^<\\?([\\s\\S]+?)(?:\\?>|$)")
-                    )
+                    "lang-", Pattern.compile("^<\\?([\\s\\S]+?)(?:\\?>|$)")
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-",
-                        Pattern.compile("^<%([\\s\\S]+?)(?:%>|$)")
-                    )
+                    "lang-", Pattern.compile("^<%([\\s\\S]+?)(?:%>|$)")
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        PR_PUNCTUATION,
-                        Pattern.compile("^(?:<[%?]|[%?]>)")
-                    )
+                    PR_PUNCTUATION, Pattern.compile("^(?:<[%?]|[%?]>)")
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-",
-                        Pattern.compile("^<xmp\\b[^>]*>([\\s\\S]+?)<\\/xmp\\b[^>]*>", Pattern.CASE_INSENSITIVE)
-                    )
+                    "lang-", Pattern.compile("^<xmp\\b[^>]*>([\\s\\S]+?)<\\/xmp\\b[^>]*>", Pattern.CASE_INSENSITIVE)
                 )
             )
             // Unescaped content in javascript.  (Or possibly vbscript).
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-js",
-                        Pattern.compile("^<script\\b[^>]*>([\\s\\S]*?)(<\\/script\\b[^>]*>)", Pattern.CASE_INSENSITIVE)
-                    )
+                    "lang-js",
+                    Pattern.compile("^<script\\b[^>]*>([\\s\\S]*?)(<\\/script\\b[^>]*>)", Pattern.CASE_INSENSITIVE)
                 )
             )
             // Contains unescaped stylesheet content
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-css",
-                        Pattern.compile("^<style\\b[^>]*>([\\s\\S]*?)(<\\/style\\b[^>]*>)", Pattern.CASE_INSENSITIVE)
-                    )
+                    "lang-css",
+                    Pattern.compile("^<style\\b[^>]*>([\\s\\S]*?)(<\\/style\\b[^>]*>)", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-in.tag",
-                        Pattern.compile("^(<\\/?[a-z][^<>]*>)", Pattern.CASE_INSENSITIVE)
-                    )
+                    "lang-in.tag", Pattern.compile("^(<\\/?[a-z][^<>]*>)", Pattern.CASE_INSENSITIVE)
                 )
             )
             registerLangHandler(
                 CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns),
-                Arrays.asList(*arrayOf("default-markup", "htm", "html", "mxml", "xhtml", "xml", "xsl"))
+                Arrays.asList("default-markup", "htm", "html", "mxml", "xhtml", "xml", "xsl")
             )
             shortcutStylePatterns = ArrayList()
             fallthroughStylePatterns = ArrayList()
@@ -971,100 +883,72 @@ class Prettify {
             )
             shortcutStylePatterns.add(
                 listOf(
-                    listOf(
-                        PR_ATTRIB_VALUE,
-                        Pattern.compile("^(?:\\\"[^\\\"]*\\\"?|\\'[^\\']*\\'?)"),
-                        null,
-                        "\"'"
-                    )
+                    PR_ATTRIB_VALUE,
+                    Pattern.compile("^(?:\\\"[^\\\"]*\\\"?|\\'[^\\']*\\'?)"),
+                    null,
+                    "\"'"
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        PR_TAG,
-                        Pattern.compile("^^<\\/?[a-z](?:[\\w.:-]*\\w)?|\\/?>$", Pattern.CASE_INSENSITIVE)
-                    )
+                    PR_TAG, Pattern.compile("^^<\\/?[a-z](?:[\\w.:-]*\\w)?|\\/?>$", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        PR_ATTRIB_NAME,
-                        Pattern.compile("^(?!style[\\s=]|on)[a-z](?:[\\w:-]*\\w)?", Pattern.CASE_INSENSITIVE)
-                    )
+                    PR_ATTRIB_NAME,
+                    Pattern.compile("^(?!style[\\s=]|on)[a-z](?:[\\w:-]*\\w)?", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-uq.val",
-                        Pattern.compile(
-                            "^=\\s*([^>\\'\\\"\\s]*(?:[^>\\'\\\"\\s\\/]|\\/(?=\\s)))",
-                            Pattern.CASE_INSENSITIVE
-                        )
+                    "lang-uq.val", Pattern.compile(
+                        "^=\\s*([^>\\'\\\"\\s]*(?:[^>\\'\\\"\\s\\/]|\\/(?=\\s)))",
+                        Pattern.CASE_INSENSITIVE
                     )
                 )
             )
-            fallthroughStylePatterns.add(Arrays.asList(*arrayOf<Any>(PR_PUNCTUATION, Pattern.compile("^[=<>\\/]+"))))
+            fallthroughStylePatterns.add(Arrays.asList(PR_PUNCTUATION, Pattern.compile("^[=<>\\/]+")))
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-js",
-                        Pattern.compile("^on\\w+\\s*=\\s*\\\"([^\\\"]+)\\\"", Pattern.CASE_INSENSITIVE)
-                    )
+                    "lang-js", Pattern.compile("^on\\w+\\s*=\\s*\\\"([^\\\"]+)\\\"", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-js",
-                        Pattern.compile("^on\\w+\\s*=\\s*\\'([^\\']+)\\'", Pattern.CASE_INSENSITIVE)
-                    )
+                    "lang-js", Pattern.compile("^on\\w+\\s*=\\s*\\'([^\\']+)\\'", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-js",
-                        Pattern.compile("^on\\w+\\s*=\\s*([^\\\"\\'>\\s]+)", Pattern.CASE_INSENSITIVE)
-                    )
+                    "lang-js", Pattern.compile("^on\\w+\\s*=\\s*([^\\\"\\'>\\s]+)", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-css",
-                        Pattern.compile("^style\\s*=\\s*\\\"([^\\\"]+)\\\"", Pattern.CASE_INSENSITIVE)
-                    )
+                    "lang-css", Pattern.compile("^style\\s*=\\s*\\\"([^\\\"]+)\\\"", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-css",
-                        Pattern.compile("^style\\s*=\\s*\\'([^\\']+)\\'", Pattern.CASE_INSENSITIVE)
-                    )
+                    "lang-css", Pattern.compile("^style\\s*=\\s*\\'([^\\']+)\\'", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
                 Arrays.asList(
-                    *arrayOf<Any>(
-                        "lang-css",
-                        Pattern.compile("^style\\s*=\\s\\*([^\\\"\\'>\\s]+)", Pattern.CASE_INSENSITIVE)
-                    )
+                    "lang-css", Pattern.compile("^style\\s*=\\s\\*([^\\\"\\'>\\s]+)", Pattern.CASE_INSENSITIVE)
                 )
             )
             registerLangHandler(
                 CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns),
-                Arrays.asList(*arrayOf("in.tag"))
+                Arrays.asList("in.tag")
             )
             shortcutStylePatterns = ArrayList()
             fallthroughStylePatterns = ArrayList()
-            fallthroughStylePatterns.add(Arrays.asList(*arrayOf<Any>(PR_ATTRIB_VALUE, Pattern.compile("^[\\s\\S]+"))))
+            fallthroughStylePatterns.add(Arrays.asList(PR_ATTRIB_VALUE, Pattern.compile("^[\\s\\S]+")))
             registerLangHandler(
                 CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns),
-                Arrays.asList(*arrayOf("uq.val"))
+                Arrays.asList("uq.val")
             )
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = CPP_KEYWORDS
@@ -1073,50 +957,50 @@ class Prettify {
             decorateSourceMap["types"] = C_TYPES
             registerLangHandler(
                 sourceDecorator(decorateSourceMap),
-                Arrays.asList(*arrayOf("c", "cc", "cpp", "cxx", "cyc", "m"))
+                Arrays.asList("c", "cc", "cpp", "cxx", "cyc", "m")
             )
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = "null,true,false"
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("json")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("json"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = CSHARP_KEYWORDS
             decorateSourceMap["hashComments"] = true
             decorateSourceMap["cStyleComments"] = true
             decorateSourceMap["verbatimStrings"] = true
             decorateSourceMap["types"] = C_TYPES
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("cs")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("cs"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = JAVA_KEYWORDS
             decorateSourceMap["cStyleComments"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("java")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("java"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = SH_KEYWORDS
             decorateSourceMap["hashComments"] = true
             decorateSourceMap["multiLineStrings"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("bash", "bsh", "csh", "sh")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("bash", "bsh", "csh", "sh"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = PYTHON_KEYWORDS
             decorateSourceMap["hashComments"] = true
             decorateSourceMap["multiLineStrings"] = true
             decorateSourceMap["tripleQuotedStrings"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("cv", "py", "python")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("cv", "py", "python"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = PERL_KEYWORDS
             decorateSourceMap["hashComments"] = true
             decorateSourceMap["multiLineStrings"] = true
             decorateSourceMap["regexLiterals"] = 2 // multiline regex literals
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("perl", "pl", "pm")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("perl", "pl", "pm"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = RUBY_KEYWORDS
             decorateSourceMap["hashComments"] = true
             decorateSourceMap["multiLineStrings"] = true
             decorateSourceMap["regexLiterals"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("rb", "ruby")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("rb", "ruby"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = JSCRIPT_KEYWORDS
             decorateSourceMap["cStyleComments"] = true
             decorateSourceMap["regexLiterals"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("javascript", "js")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("javascript", "js"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = COFFEE_KEYWORDS
             decorateSourceMap["hashComments"] = 3 // ### style block comments
@@ -1124,18 +1008,18 @@ class Prettify {
             decorateSourceMap["multilineStrings"] = true
             decorateSourceMap["tripleQuotedStrings"] = true
             decorateSourceMap["regexLiterals"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("coffee")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("coffee"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = RUST_KEYWORDS
             decorateSourceMap["cStyleComments"] = true
             decorateSourceMap["multilineStrings"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("rc", "rs", "rust")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("rc", "rs", "rust"))
             shortcutStylePatterns = ArrayList()
             fallthroughStylePatterns = ArrayList()
-            fallthroughStylePatterns.add(Arrays.asList(*arrayOf<Any>(PR_STRING, Pattern.compile("^[\\s\\S]+"))))
+            fallthroughStylePatterns.add(Arrays.asList(PR_STRING, Pattern.compile("^[\\s\\S]+")))
             registerLangHandler(
                 CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns),
-                Arrays.asList(*arrayOf("regex"))
+                Arrays.asList("regex")
             )
             /**
              * Registers a language handler for Protocol Buffers as described at
@@ -1153,7 +1037,7 @@ class Prettify {
                     + "syntax,to,true")
             decorateSourceMap["types"] = Pattern.compile("^(bool|(double|s?fixed|[su]?int)(32|64)|float|string)\\b")
             decorateSourceMap["cStyleComments"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList(*arrayOf("proto")))
+            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("proto"))
             register(LangAppollo::class.java)
             register(LangBasic::class.java)
             register(LangClj::class.java)
