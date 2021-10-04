@@ -14,7 +14,6 @@
 package com.wakaztahir.common.prettify.parser
 
 import com.wakaztahir.common.prettify.lang.*
-import com.wakaztahir.common.prettify.parser.Prettify
 import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -590,6 +589,7 @@ class Prettify {
         }
     }
 
+    //todo this does not work
     @Throws(Exception::class)
     internal fun getFileExtensionsFromClass(clazz: Class<out Lang>): List<String> {
         val getExtensionsMethod = clazz.getMethod("getFileExtensions", null)

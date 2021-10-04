@@ -13,12 +13,6 @@
 // limitations under the License.
 package com.wakaztahir.common.prettify.parser
 
-import kotlin.jvm.JvmOverloads
-import kotlin.Throws
-import com.wakaztahir.common.prettify.parser.CombinePrefixPattern
-import java.lang.IllegalArgumentException
-import java.lang.NullPointerException
-import java.lang.StringBuilder
 import java.util.*
 import java.util.regex.Pattern
 
