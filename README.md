@@ -26,7 +26,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.timeline-notes:compose-code-editor:2.0.3'
+    implementation 'com.github.timeline-notes:compose-code-editor:2.0.2'
 }
 ```
 

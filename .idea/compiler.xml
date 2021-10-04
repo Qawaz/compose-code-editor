@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="11">
+      <module name="ComposeKMPGP.common.commonMain" target="11" />
+      <module name="ComposeKMPGP.common.commonTest" target="11" />
+      <module name="ComposeKMPGP.common.desktopMain" target="11" />
+      <module name="ComposeKMPGP.common.desktopTest" target="11" />
+      <module name="ComposeKMPGP.desktop.commonMain" target="11" />
+      <module name="ComposeKMPGP.desktop.commonTest" target="11" />
+      <module name="ComposeKMPGP.desktop.jvmMain" target="11" />
+      <module name="ComposeKMPGP.desktop.jvmTest" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
