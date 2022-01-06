@@ -4,6 +4,10 @@
 
 **Compose Code Editor** is a code highlighting / editing library for compose , it does not make use of web view so it renders fast
 
+Its also supports kotlin multiplatform and supports Android & JVM at the moment , It will be better if you could get it from
+github packages since I use that and post latest versions there and Jitpack might not support multiplatform
+The version 2.0.2 is only for Android , Its 2.1.0 and afterwards for multiplatform
+
 ## Demo
 
 ![Screen Recording (9-11-2021 4-29-35 PM)](https://user-images.githubusercontent.com/42442700/132946529-c0c76bf4-b055-4be9-b89a-48c1b3295f89.gif)
@@ -44,7 +48,7 @@ val code = """
 """.trimIndent()
 
 // Step 2. Create Parser & Theme
-val parser = remember { PrettifyParser() }
+val parser = remember { PrettifyParser() } // try getting from LocalPrettifyParser.current
 var themeState by remember { mutableStateOf(CodeThemeType.Monokai) }
 val theme = remember(themeState) { themeState.theme() }
 ```

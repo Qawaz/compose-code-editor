@@ -10,8 +10,8 @@ pluginManagement {
 }
 rootProject.name = "ComposeCodeEditor"
 
-
 include(":android")
 include(":desktop")
 include(":common")
+include(":code-editor")
 
