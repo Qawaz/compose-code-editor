@@ -15,8 +15,6 @@ package com.wakaztahir.codeeditor.prettify.parser
 
 import com.wakaztahir.codeeditor.prettify.lang.*
 
-import java.util.logging.Level
-import java.util.logging.Logger
 import java.util.regex.Pattern
 
 /**
@@ -625,7 +623,7 @@ class Prettify {
                     langHandlerRegistry[_extension] = _simpleLexer
                 }
             } catch (ex: Exception) {
-                LOG.log(Level.SEVERE, null, ex)
+                throw ex
                 return null
             }
             _simpleLexer
@@ -633,7 +631,6 @@ class Prettify {
     }
 
     companion object {
-        private val LOG = Logger.getLogger(Prettify::class.java.name)
 
         // Keyword lists for various languages.
         const val FLOW_CONTROL_KEYWORDS = "break,continue,do,else,for,if,return,while"
@@ -1062,7 +1059,7 @@ class Prettify {
             register(LangXq::class.java,fileExtensions = LangXq.fileExtensions)
             register(LangYaml::class.java,fileExtensions = LangYaml.fileExtensions)
         } catch (ex: Exception) {
-            LOG.log(Level.SEVERE, null, ex)
+            throw ex
         }
     }
 }
