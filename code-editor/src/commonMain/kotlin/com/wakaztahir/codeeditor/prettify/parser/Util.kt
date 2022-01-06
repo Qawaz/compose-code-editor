@@ -89,8 +89,8 @@ object Util {
         while (matcher.find()) {
             matchesList.add(matcher.group(0))
             if (!isGlobal) {
-                var i = 1
-                val iEnd = matcher.groupCount()
+                var i : Int = 1
+                val iEnd : Int = matcher.groupCount()
                 while (i <= iEnd) {
                     matchesList.add(matcher.group(i))
                     i++

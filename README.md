@@ -120,7 +120,7 @@ Text(parsedCode)
 
 ## List of available languages & their extensions
 
-C/C++/Objective-C (```"c"```, ```"cc"```, ```"cpp"```, ```"cxx"```, ```"cyc"```, ```"m"```),
+Default (```"default-code"```), HTML (```"default-markup"```) , C/C++/Objective-C (```"c"```, ```"cc"```, ```"cpp"```, ```"cxx"```, ```"cyc"```, ```"m"```),
 C# (```"cs"```), Java (```"java"```), Bash (```"bash"```, ```"bsh"```, ```"csh"```, ```"sh"```),
 Python (```"cv"```, ```"py"```, ```"python"```), Perl (```"perl"```, ```"pl"```, ```"pm"```),
 Ruby (```"rb"```, ```"ruby"```), JavaScript (```"javascript"```, ```"js"```),
