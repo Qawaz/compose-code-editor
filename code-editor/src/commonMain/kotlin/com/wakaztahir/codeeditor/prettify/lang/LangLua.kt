@@ -17,8 +17,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 /**
  * This is similar to the lang-lua.js in JavaScript Prettify.
  *
@@ -53,48 +51,48 @@ class LangLua : Lang() {
 
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double or single quoted, possibly multi-line, string.
         _shortcutStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])*(?:\\'|$))"),
-                null,
-                "\"'"
+            Prettify.PR_STRING,
+            Regex("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])*(?:\\'|$))"),
+            null,
+            "\"'"
         )
         // A comment is either a line comment that starts with two dashes, or
         // two dashes preceding a long bracketed block.
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT, Regex("^--(?:\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)|[^\\r\\n]*)")
+            Prettify.PR_COMMENT, Regex("^--(?:\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)|[^\\r\\n]*)")
         )
         // A long bracketed block not preceded by -- is a string.
         _fallthroughStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)")
+            Prettify.PR_STRING,
+            Regex("^\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)")
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD,
-                Regex("^(?:and|break|do|else|elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\\b"),
-                null
+            Prettify.PR_KEYWORD,
+            Regex("^(?:and|break|do|else|elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\\b"),
+            null
         )
         // A number is a hex integer literal, a decimal real literal, or in
         // scientific notation.
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex(
-                    "^[+-]?(?:0x[\\da-f]+|(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:e[+\\-]?\\d+)?))",
-                    RegexOption.IGNORE_CASE
-                )
+            Prettify.PR_LITERAL,
+            Regex(
+                "^[+-]?(?:0x[\\da-f]+|(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:e[+\\-]?\\d+)?))",
+                RegexOption.IGNORE_CASE
+            )
         )
         // An identifier
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN,
-                Regex("^[a-z_]\\w*", RegexOption.IGNORE_CASE)
+            Prettify.PR_PLAIN,
+            Regex("^[a-z_]\\w*", RegexOption.IGNORE_CASE)
         )
         // A run of punctuation
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION,
-                Regex("^[^\\w\\t\\n\\r \\xA0][^\\w\\n\\r \\xA0\\\"\\'\\-\\+=]*")
+            Prettify.PR_PUNCTUATION,
+            Regex("^[^\\w\\t\\n\\r \\xA0][^\\w\\n\\r \\xA0\\\"\\'\\-\\+=]*")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

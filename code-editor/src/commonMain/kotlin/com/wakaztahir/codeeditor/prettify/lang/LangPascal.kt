@@ -17,8 +17,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 /**
  * This is similar to the lang-appollo.js in JavaScript Prettify.
  *
@@ -50,54 +48,54 @@ class LangPascal : Lang() {
 
         // 'single-line-string'
         _shortcutStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*(?:\\'|$))"),
-                null,
-                "'"
+            Prettify.PR_STRING,
+            Regex("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*(?:\\'|$))"),
+            null,
+            "'"
         )
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Regex("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
-            )
+            Prettify.PR_PLAIN, Regex("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
+        )
 
         // A cStyleComments comment (* *) or {}
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT,
-                Regex("^\\(\\*[\\s\\S]*?(?:\\*\\)|$)|^\\{[\\s\\S]*?(?:\\}|$)"),
-                null
+            Prettify.PR_COMMENT,
+            Regex("^\\(\\*[\\s\\S]*?(?:\\*\\)|$)|^\\{[\\s\\S]*?(?:\\}|$)"),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD,
-                Regex(
-                    "^(?:ABSOLUTE|AND|ARRAY|ASM|ASSEMBLER|BEGIN|CASE|CONST|CONSTRUCTOR|DESTRUCTOR|DIV|DO|DOWNTO|ELSE|END|EXTERNAL|FOR|FORWARD|FUNCTION|GOTO|IF|IMPLEMENTATION|IN|INLINE|INTERFACE|INTERRUPT|LABEL|MOD|NOT|OBJECT|OF|OR|PACKED|PROCEDURE|PROGRAM|RECORD|REPEAT|SET|SHL|SHR|THEN|TO|TYPE|UNIT|UNTIL|USES|VAR|VIRTUAL|WHILE|WITH|XOR)\\b",
-                    RegexOption.IGNORE_CASE
-                ),
-                null
+            Prettify.PR_KEYWORD,
+            Regex(
+                "^(?:ABSOLUTE|AND|ARRAY|ASM|ASSEMBLER|BEGIN|CASE|CONST|CONSTRUCTOR|DESTRUCTOR|DIV|DO|DOWNTO|ELSE|END|EXTERNAL|FOR|FORWARD|FUNCTION|GOTO|IF|IMPLEMENTATION|IN|INLINE|INTERFACE|INTERRUPT|LABEL|MOD|NOT|OBJECT|OF|OR|PACKED|PROCEDURE|PROGRAM|RECORD|REPEAT|SET|SHL|SHR|THEN|TO|TYPE|UNIT|UNTIL|USES|VAR|VIRTUAL|WHILE|WITH|XOR)\\b",
+                RegexOption.IGNORE_CASE
+            ),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex("^(?:true|false|self|nil)", RegexOption.IGNORE_CASE),
-                null
+            Prettify.PR_LITERAL,
+            Regex("^(?:true|false|self|nil)", RegexOption.IGNORE_CASE),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN,
-                Regex("^[a-z][a-z0-9]*", RegexOption.IGNORE_CASE),
-                null
+            Prettify.PR_PLAIN,
+            Regex("^[a-z][a-z0-9]*", RegexOption.IGNORE_CASE),
+            null
         )
         // Literals .0, 0, 0.0 0E13
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex(
-                    "^(?:\\$[a-f0-9]+|(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+\\-]?\\d+)?)",
-                    RegexOption.IGNORE_CASE
-                ),
-                null,
-                "0123456789"
+            Prettify.PR_LITERAL,
+            Regex(
+                "^(?:\\$[a-f0-9]+|(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+\\-]?\\d+)?)",
+                RegexOption.IGNORE_CASE
+            ),
+            null,
+            "0123456789"
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION,
-                Regex("^.[^\\s\\w\\.$@\\'\\/]*"),
-                null
+            Prettify.PR_PUNCTUATION,
+            Regex("^.[^\\s\\w\\.$@\\'\\/]*"),
+            null
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

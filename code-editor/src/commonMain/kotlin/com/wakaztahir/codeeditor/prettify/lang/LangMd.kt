@@ -4,8 +4,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 /**
  * Registers a language handler for markdown.
  *
@@ -21,12 +19,12 @@ class LangMd : Lang() {
         val _shortcutStylePatterns: List<StylePattern> = ArrayList()
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
         _fallthroughStylePatterns.new(
-                Prettify.PR_DECLARATION,
-                Regex("^#.*?[\\n\\r]")
+            Prettify.PR_DECLARATION,
+            Regex("^#.*?[\\n\\r]")
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^```[\\s\\S]*?(?:```|$)")
+            Prettify.PR_STRING,
+            Regex("^```[\\s\\S]*?(?:```|$)")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

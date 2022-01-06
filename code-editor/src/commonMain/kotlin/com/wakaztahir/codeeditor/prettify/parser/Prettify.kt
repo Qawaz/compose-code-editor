@@ -16,8 +16,6 @@ package com.wakaztahir.codeeditor.prettify.parser
 import com.wakaztahir.codeeditor.prettify.lang.*
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 open class StylePattern(
     val tokenStyle: String,
     val regExp: Regex,
@@ -219,7 +217,7 @@ class Prettify {
                     }
                 } else {  // Treat group 1 as an embedded block of source code.
                     val embeddedSource = match!![1]
-                    var embeddedSourceStart = token.indexOf(embeddedSource!!)
+                    var embeddedSourceStart = token.indexOf(embeddedSource)
                     var embeddedSourceEnd = embeddedSourceStart + embeddedSource.length
                     if (match.size > 2) {
                         // If embeddedSource can be blank, then it would match at the
@@ -322,26 +320,26 @@ class Prettify {
         } else if (Util.getVariableValueAsBoolean(options["multiLineStrings"])) {
             // 'multi-line-string', "multi-line-string"
             shortcutStylePatterns.new(
-                    PR_STRING,
-                    Regex("^(?:\\'(?:[^\\\\\\']|\\\\[\\s\\S])*(?:\\'|$)|\\\"(?:[^\\\\\\\"]|\\\\[\\s\\S])*(?:\\\"|$)|\\`(?:[^\\\\\\`]|\\\\[\\s\\S])*(?:\\`|$))"),
-                    null,
-                    "'\"`"
+                PR_STRING,
+                Regex("^(?:\\'(?:[^\\\\\\']|\\\\[\\s\\S])*(?:\\'|$)|\\\"(?:[^\\\\\\\"]|\\\\[\\s\\S])*(?:\\\"|$)|\\`(?:[^\\\\\\`]|\\\\[\\s\\S])*(?:\\`|$))"),
+                null,
+                "'\"`"
             )
         } else {
             // 'single-line-string', "single-line-string"
             shortcutStylePatterns.new(
-                    PR_STRING,
-                    Regex("^(?:\\'(?:[^\\\\\\'\r\n]|\\\\.)*(?:\\'|$)|\\\"(?:[^\\\\\\\"\r\n]|\\\\.)*(?:\\\"|$))"),
-                    null,
-                    "\"'"
+                PR_STRING,
+                Regex("^(?:\\'(?:[^\\\\\\'\r\n]|\\\\.)*(?:\\'|$)|\\\"(?:[^\\\\\\\"\r\n]|\\\\.)*(?:\\\"|$))"),
+                null,
+                "\"'"
             )
         }
         if (Util.getVariableValueAsBoolean(options["verbatimStrings"])) {
             // verbatim-string-literal production from the C# grammar.  See issue 93.
             fallthroughStylePatterns.new(
-                    PR_STRING,
-                    Regex("^@\\\"(?:[^\\\"]|\\\"\\\")*(?:\\\"|$)"),
-                    null
+                PR_STRING,
+                Regex("^@\\\"(?:[^\\\"]|\\\"\\\")*(?:\\\"|$)"),
+                null
             )
         }
         val hc = options["hashComments"]
@@ -349,45 +347,45 @@ class Prettify {
             if (Util.getVariableValueAsBoolean(options["cStyleComments"])) {
                 if (hc is Int && hc > 1) {  // multiline hash comments
                     shortcutStylePatterns.new(
-                            PR_COMMENT,
-                            Regex("^#(?:##(?:[^#]|#(?!##))*(?:###|$)|.*)"),
-                            null,
-                            "#"
+                        PR_COMMENT,
+                        Regex("^#(?:##(?:[^#]|#(?!##))*(?:###|$)|.*)"),
+                        null,
+                        "#"
                     )
                 } else {
                     // Stop C preprocessor declarations at an unclosed open comment
                     shortcutStylePatterns.new(
-                            PR_COMMENT,
-                            Regex("^#(?:(?:define|e(?:l|nd)if|else|error|ifn?def|include|line|pragma|undef|warning)\\b|[^\r\n]*)"),
-                            null,
-                            "#"
+                        PR_COMMENT,
+                        Regex("^#(?:(?:define|e(?:l|nd)if|else|error|ifn?def|include|line|pragma|undef|warning)\\b|[^\r\n]*)"),
+                        null,
+                        "#"
                     )
                 }
                 // #include <stdio.h>
                 fallthroughStylePatterns.new(
-                        PR_STRING,
-                        Regex("^<(?:(?:(?:\\.\\.\\/)*|\\/?)(?:[\\w-]+(?:\\/[\\w-]+)+)?[\\w-]+\\.h(?:h|pp|\\+\\+)?|[a-z]\\w*)>"),
-                        null
+                    PR_STRING,
+                    Regex("^<(?:(?:(?:\\.\\.\\/)*|\\/?)(?:[\\w-]+(?:\\/[\\w-]+)+)?[\\w-]+\\.h(?:h|pp|\\+\\+)?|[a-z]\\w*)>"),
+                    null
                 )
             } else {
                 shortcutStylePatterns.new(
-                        PR_COMMENT,
-                        Regex("^#[^\r\n]*"),
-                        null,
-                        "#"
+                    PR_COMMENT,
+                    Regex("^#[^\r\n]*"),
+                    null,
+                    "#"
                 )
             }
         }
         if (Util.getVariableValueAsBoolean(options["cStyleComments"])) {
             fallthroughStylePatterns.new(
-                    PR_COMMENT,
-                    Regex("^\\/\\/[^\r\n]*"),
-                    null
+                PR_COMMENT,
+                Regex("^\\/\\/[^\r\n]*"),
+                null
             )
             fallthroughStylePatterns.new(
-                    PR_COMMENT,
-                    Regex("^\\/\\*[\\s\\S]*?(?:\\*\\/|$)"),
-                    null
+                PR_COMMENT,
+                Regex("^\\/\\*[\\s\\S]*?(?:\\*\\/|$)"),
+                null
             )
         }
         val regexLiterals = options["regexLiterals"]
@@ -417,12 +415,12 @@ class Prettify {
                         + "|\\x5C" + regexAny + ")*(?:\\x5D|$))+" // finally closed by a /.
                         + "/")
             fallthroughStylePatterns.new(
-                    "lang-regex",
-                    Regex("^$REGEXP_PRECEDER_PATTERN($REGEX_LITERAL)")
+                "lang-regex",
+                Regex("^$REGEXP_PRECEDER_PATTERN($REGEX_LITERAL)")
             )
         }
         val types = options["types"] as? Regex
-        if (Util.getVariableValueAsBoolean(types) && types!=null) {
+        if (Util.getVariableValueAsBoolean(types) && types != null) {
             fallthroughStylePatterns.new(PR_TYPE, types)
         }
         var keywords = options["keywords"] as String?
@@ -430,18 +428,18 @@ class Prettify {
             keywords = keywords.replace("^ | $".toRegex(), "")
             if (keywords.isNotEmpty()) {
                 fallthroughStylePatterns.new(
-                        PR_KEYWORD,
-                        Regex("^(?:" + keywords.replace("[\\s,]+".toRegex(), "|") + ")\\b"),
-                        null
+                    PR_KEYWORD,
+                    Regex("^(?:" + keywords.replace("[\\s,]+".toRegex(), "|") + ")\\b"),
+                    null
                 )
             }
         }
 
         shortcutStylePatterns.new(
-                PR_PLAIN,
-                Regex("^\\s+"),
-                null,
-                """ 
+            PR_PLAIN,
+            Regex("^\\s+"),
+            null,
+            """ 
 	${0xA0.toChar()}"""
         )
 

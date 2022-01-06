@@ -17,8 +17,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 /**
  * This is similar to the lang-lisp.js in JavaScript Prettify.
  *
@@ -87,53 +85,53 @@ class LangLisp : Lang() {
         _shortcutStylePatterns.new("clo", Regex("^\\)+"), null, ")")
         // A line comment that starts with ;
         _shortcutStylePatterns.new(
-                Prettify.PR_COMMENT,
-                Regex("^;[^\r\n]*"),
-                null,
-                ";"
+            Prettify.PR_COMMENT,
+            Regex("^;[^\r\n]*"),
+            null,
+            ";"
         )
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double quoted, possibly multi-line, string.
         _shortcutStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
-                null,
-                "\""
+            Prettify.PR_STRING,
+            Regex("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
+            null,
+            "\""
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD,
-                Regex(
-                    "^(?:block|c[ad]+r|catch|con[ds]|def(?:ine|un)|do|eq|eql|equal|equalp|eval-when|flet|format|go|if|labels|lambda|let|load-time-value|locally|macrolet|multiple-value-call|nil|progn|progv|quote|require|return-from|setq|symbol-macrolet|t|tagbody|the|throw|unwind)\\b",
-                    RegexOption.IGNORE_CASE
-                ),
-                null
+            Prettify.PR_KEYWORD,
+            Regex(
+                "^(?:block|c[ad]+r|catch|con[ds]|def(?:ine|un)|do|eq|eql|equal|equalp|eval-when|flet|format|go|if|labels|lambda|let|load-time-value|locally|macrolet|multiple-value-call|nil|progn|progv|quote|require|return-from|setq|symbol-macrolet|t|tagbody|the|throw|unwind)\\b",
+                RegexOption.IGNORE_CASE
+            ),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Regex(
-                    "^[+\\-]?(?:[0#]x[0-9a-f]+|\\d+\\/\\d+|(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:[ed][+\\-]?\\d+)?)",
-                    RegexOption.IGNORE_CASE
-                )
+            Prettify.PR_LITERAL, Regex(
+                "^[+\\-]?(?:[0#]x[0-9a-f]+|\\d+\\/\\d+|(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:[ed][+\\-]?\\d+)?)",
+                RegexOption.IGNORE_CASE
+            )
         )
         // A single quote possibly followed by a word that optionally ends with
         // = ! or ?.
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex("^\\'(?:-*(?:\\w|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?)?")
-            )
+            Prettify.PR_LITERAL,
+            Regex("^\\'(?:-*(?:\\w|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?)?")
+        )
         // A word that optionally ends with = ! or ?.
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN, Regex(
-                    "^-*(?:[a-z_]|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?",
-                    RegexOption.IGNORE_CASE
+            Prettify.PR_PLAIN, Regex(
+                "^-*(?:[a-z_]|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?",
+                RegexOption.IGNORE_CASE
             )
         )
         // A printable non-space non-special character
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION, Regex("^[^\\w\\t\\n\\r \\xA0()\\\"\\\\\\';]+")
-            )
+            Prettify.PR_PUNCTUATION, Regex("^[^\\w\\t\\n\\r \\xA0()\\\"\\\\\\';]+")
+        )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
     }

@@ -17,8 +17,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 /**
  * This is similar to the lang-go.js in JavaScript Prettify.
  *
@@ -64,22 +62,22 @@ class LangGo : Lang() {
 
         // Whitespace is made up of spaces, tabs and newline characters.
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // Not escaped as a string.  See note on minimalism above.
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN,
-                Regex("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])+(?:\\'|$)|`[^`]*(?:`|$))"),
-                null,
-                "\"'"
+            Prettify.PR_PLAIN,
+            Regex("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])+(?:\\'|$)|`[^`]*(?:`|$))"),
+            null,
+            "\"'"
         )
         // Block comments are delimited by /* and */.
         // Single-line comments begin with // and extend to the end of a line.
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT, Regex("^(?:\\/\\/[^\\r\\n]*|\\/\\*[\\s\\S]*?\\*\\/)")
+            Prettify.PR_COMMENT, Regex("^(?:\\/\\/[^\\r\\n]*|\\/\\*[\\s\\S]*?\\*\\/)")
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN, Regex("^(?:[^\\/\\\"\\'`]|\\/(?![\\/\\*]))+", RegexOption.IGNORE_CASE)
+            Prettify.PR_PLAIN, Regex("^(?:[^\\/\\\"\\'`]|\\/(?![\\/\\*]))+", RegexOption.IGNORE_CASE)
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

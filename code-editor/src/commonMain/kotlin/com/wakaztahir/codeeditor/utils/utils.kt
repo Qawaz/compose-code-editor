@@ -6,7 +6,7 @@ fun MutableList<StylePattern>.new(
     tokenStyle: String,
     regExp: Regex,
     shortcutChars: String? = null,
-    unknownThing : String? = null,
+    unknownThing: String? = null,
 ) {
     this.add(
         StylePattern(

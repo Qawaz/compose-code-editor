@@ -17,8 +17,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 /**
  * This is similar to the lang-mumps.js in JavaScript Prettify.
  *
@@ -126,51 +124,51 @@ class LangMumps : Lang() {
 
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double or single quoted, possibly multi-line, string.
         _shortcutStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^(?:\"(?:[^\"]|\\\\.)*\")"),
-                null,
-                "\""
+            Prettify.PR_STRING,
+            Regex("^(?:\"(?:[^\"]|\\\\.)*\")"),
+            null,
+            "\""
         )
 
         // A line comment that starts with ;
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT,
-                Regex("^;[^\\r\\n]*"),
-                null,
-                ";"
+            Prettify.PR_COMMENT,
+            Regex("^;[^\\r\\n]*"),
+            null,
+            ";"
         )
         // Add intrinsic variables and functions as declarations, there not really but it mean
         // they will hilighted differently from commands.
         _fallthroughStylePatterns.new(
-                Prettify.PR_DECLARATION, Regex(
-                    "^(?:\\$(?:$intrinsic))\\b", RegexOption.IGNORE_CASE
-                ), null
+            Prettify.PR_DECLARATION, Regex(
+                "^(?:\\$(?:$intrinsic))\\b", RegexOption.IGNORE_CASE
+            ), null
         )
         // Add commands as keywords
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD, Regex(
-                    "^(?:[^\\$]$commands)\\b", RegexOption.IGNORE_CASE
-                ), null
+            Prettify.PR_KEYWORD, Regex(
+                "^(?:[^\\$]$commands)\\b", RegexOption.IGNORE_CASE
+            ), null
         )
         // A number is a decimal real literal or in scientific notation.
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex("^[+-]?(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:E[+\\-]?\\d+)?)", RegexOption.IGNORE_CASE)
+            Prettify.PR_LITERAL,
+            Regex("^[+-]?(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:E[+\\-]?\\d+)?)", RegexOption.IGNORE_CASE)
         )
         // An identifier
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN,
-                Regex("^[a-z][a-zA-Z0-9]*", RegexOption.IGNORE_CASE)
-            )
+            Prettify.PR_PLAIN,
+            Regex("^[a-z][a-zA-Z0-9]*", RegexOption.IGNORE_CASE)
+        )
         // Exclude $ % and ^
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION,
-                Regex("^[^\\w\\t\\n\\r\\xA0\\\"\\$;%\\^]|_")
-            )
+            Prettify.PR_PUNCTUATION,
+            Regex("^[^\\w\\t\\n\\r\\xA0\\\"\\$;%\\^]|_")
+        )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
     }

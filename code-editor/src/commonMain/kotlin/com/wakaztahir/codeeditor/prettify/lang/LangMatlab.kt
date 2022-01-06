@@ -23,8 +23,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 /**
  * This is similar to the lang-ml.js in JavaScript Prettify.
  *
@@ -62,48 +60,48 @@ class LangMatlab : Lang() {
 
             // list of keywords (`iskeyword`)
             _fallthroughStylePatterns.new(
-                    Prettify.PR_KEYWORD,
-                    Regex("^\\b(?:break|case|catch|classdef|continue|else|elseif|end|for|function|global|if|otherwise|parfor|persistent|return|spmd|switch|try|while)\\b"),
-                    null
+                Prettify.PR_KEYWORD,
+                Regex("^\\b(?:break|case|catch|classdef|continue|else|elseif|end|for|function|global|if|otherwise|parfor|persistent|return|spmd|switch|try|while)\\b"),
+                null
             )
             // some specials variables/constants
             _fallthroughStylePatterns.new(
-                    PR_CONSTANT,
-                    Regex("^\\b(?:true|false|inf|Inf|nan|NaN|eps|pi|ans|nargin|nargout|varargin|varargout)\\b"),
-                    null
+                PR_CONSTANT,
+                Regex("^\\b(?:true|false|inf|Inf|nan|NaN|eps|pi|ans|nargin|nargout|varargin|varargout)\\b"),
+                null
             )
             // some data types
             _fallthroughStylePatterns.new(
-                    Prettify.PR_TYPE,
-                    Regex("^\\b(?:cell|struct|char|double|single|logical|u?int(?:8|16|32|64)|sparse)\\b"),
-                    null
+                Prettify.PR_TYPE,
+                Regex("^\\b(?:cell|struct|char|double|single|logical|u?int(?:8|16|32|64)|sparse)\\b"),
+                null
             )
             // commonly used builtin functions from core MATLAB and a few popular toolboxes
             _fallthroughStylePatterns.new(
-                    PR_FUNCTION, Regex(
-                        "^\\b(?:$coreFunctions)\\b"
-                    ), null
+                PR_FUNCTION, Regex(
+                    "^\\b(?:$coreFunctions)\\b"
+                ), null
             )
             _fallthroughStylePatterns.new(
-                    PR_FUNCTION_TOOLBOX, Regex(
-                        "^\\b(?:$statsFunctions)\\b"
-                    ), null
+                PR_FUNCTION_TOOLBOX, Regex(
+                    "^\\b(?:$statsFunctions)\\b"
+                ), null
             )
             _fallthroughStylePatterns.new(
-                    PR_FUNCTION_TOOLBOX, Regex(
-                        "^\\b(?:$imageFunctions)\\b"
-                    ), null
+                PR_FUNCTION_TOOLBOX, Regex(
+                    "^\\b(?:$imageFunctions)\\b"
+                ), null
             )
             _fallthroughStylePatterns.new(
-                    PR_FUNCTION_TOOLBOX, Regex(
-                        "^\\b(?:$optimFunctions)\\b"
-                    ), null
+                PR_FUNCTION_TOOLBOX, Regex(
+                    "^\\b(?:$optimFunctions)\\b"
+                ), null
             )
             // plain identifier (user-defined variable/function name)
             _fallthroughStylePatterns.new(
-                    PR_IDENTIFIER,
-                    Regex("^[a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*"),
-                    null
+                PR_IDENTIFIER,
+                Regex("^[a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*"),
+                null
             )
             setShortcutStylePatterns(_shortcutStylePatterns)
             setFallthroughStylePatterns(_fallthroughStylePatterns)
@@ -126,21 +124,21 @@ class LangMatlab : Lang() {
 
             // forward to identifiers to match
             _fallthroughStylePatterns.new(
-                    "lang-matlab-identifiers",
-                    Regex("^([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*)"),
-                    null
+                "lang-matlab-identifiers",
+                Regex("^([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*)"),
+                null
             )
             // parentheses, braces, brackets
             _fallthroughStylePatterns.new(
-                    Prettify.PR_TAG,
-                    Regex("^(?:\\{|\\}|\\(|\\)|\\[|\\])"),
-                    null
+                Prettify.PR_TAG,
+                Regex("^(?:\\{|\\}|\\(|\\)|\\[|\\])"),
+                null
             ) // "{}()[]"
             // other operators
             _fallthroughStylePatterns.new(
-                    Prettify.PR_PUNCTUATION,
-                    Regex("^(?:<|>|=|~|@|&|;|,|:|!|\\-|\\+|\\*|\\^|\\.|\\||\\\\|\\/)"),
-                    null
+                Prettify.PR_PUNCTUATION,
+                Regex("^(?:<|>|=|~|@|&|;|,|:|!|\\-|\\+|\\*|\\^|\\.|\\||\\\\|\\/)"),
+                null
             )
             // transpose operators
             _fallthroughStylePatterns.new(PR_TRANSPOSE, Regex("^'"), null)
@@ -181,100 +179,100 @@ class LangMatlab : Lang() {
         // patterns that always start with a known character. Must have a shortcut string.
         // whitespaces: space, tab, carriage return, line feed, line tab, form-feed, non-break space
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN,
-                Regex("^[ \\t\\r\\n\\v\\f\\xA0]+"),
-                null,
-                " \t\n\r" + 0x0B.toChar().toString() + 0x0C.toChar().toString() + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN,
+            Regex("^[ \\t\\r\\n\\v\\f\\xA0]+"),
+            null,
+            " \t\n\r" + 0x0B.toChar().toString() + 0x0C.toChar().toString() + 0xA0.toChar().toString()
         )
         // block comments
         //TODO: chokes on nested block comments
         //TODO: false positives when the lines with %{ and %} contain non-spaces
         //[PR.PR_COMMENT, /^%(?:[^\{].*|\{(?:%|%*[^\}%])*(?:\}+%?)?)/, null],
         _shortcutStylePatterns.new(
-                Prettify.PR_COMMENT,
-                Regex("^%\\{[^%]*%+(?:[^\\}%][^%]*%+)*\\}"),
-                null
-            )
+            Prettify.PR_COMMENT,
+            Regex("^%\\{[^%]*%+(?:[^\\}%][^%]*%+)*\\}"),
+            null
+        )
 
         // single-line comments
         _shortcutStylePatterns.new(
-                Prettify.PR_COMMENT,
-                Regex("^%[^\\r\\n]*"),
-                null,
-                "%"
-            )
+            Prettify.PR_COMMENT,
+            Regex("^%[^\\r\\n]*"),
+            null,
+            "%"
+        )
         // system commands
         _shortcutStylePatterns.new(PR_SYSCMD, Regex("^![^\\r\\n]*"), null, "!")
 
         // patterns that will be tried in order if the shortcut ones fail. May have shortcuts.
         // line continuation
         _fallthroughStylePatterns.new(
-                PR_LINE_CONTINUATION,
-                Regex("^\\.\\.\\.\\s*[\\r\\n]"),
-                null
-            )
+            PR_LINE_CONTINUATION,
+            Regex("^\\.\\.\\.\\s*[\\r\\n]"),
+            null
+        )
         // error message
         _fallthroughStylePatterns.new(
-                PR_ERROR,
-                Regex("^\\?\\?\\? [^\\r\\n]*"),
-                null
+            PR_ERROR,
+            Regex("^\\?\\?\\? [^\\r\\n]*"),
+            null
         )
         // warning message
         _fallthroughStylePatterns.new(
-                PR_WARNING,
-                Regex("^Warning: [^\\r\\n]*"),
-                null
+            PR_WARNING,
+            Regex("^Warning: [^\\r\\n]*"),
+            null
         )
         // command prompt/output
         //[PR_CODE_OUTPUT, /^>>\s+[^\r\n]*[\r\n]{1,2}[^=]*=[^\r\n]*[\r\n]{1,2}[^\r\n]*/, null],    // full command output (both loose/compact format): `>> EXP\nVAR =\n VAL`
         _fallthroughStylePatterns.new(
-                PR_CODE_OUTPUT,
-                Regex("^>>\\s+"),
-                null
+            PR_CODE_OUTPUT,
+            Regex("^>>\\s+"),
+            null
         ) // only the command prompt `>> `
         _fallthroughStylePatterns.new(
-                PR_CODE_OUTPUT,
-                Regex("^octave:\\d+>\\s+"),
-                null
+            PR_CODE_OUTPUT,
+            Regex("^octave:\\d+>\\s+"),
+            null
         ) // Octave command prompt `octave:1> `
         // identifier (chain) or closing-parenthesis/brace/bracket, and IS followed by transpose operator
         // this way we dont misdetect the transpose operator ' as the start of a string
         _fallthroughStylePatterns.new(
-                "lang-matlab-operators",
-                Regex("^((?:[a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*|\\)|\\]|\\}|\\.)')"),
-                null
+            "lang-matlab-operators",
+            Regex("^((?:[a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*|\\)|\\]|\\}|\\.)')"),
+            null
         )
         // identifier (chain), and NOT followed by transpose operator
         // this must come AFTER the "is followed by transpose" step (otherwise it chops the last char of identifier)
         _fallthroughStylePatterns.new(
-                "lang-matlab-identifiers",
-                Regex("^([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*)(?!')"),
-                null
+            "lang-matlab-identifiers",
+            Regex("^([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*)(?!')"),
+            null
         )
         // single-quoted strings: allow for escaping with '', no multilines
         //[PR.PR_STRING, /(?:(?<=(?:\(|\[|\{|\s|=|;|,|:))|^)'(?:[^']|'')*'(?=(?:\)|\]|\}|\s|=|;|,|:|~|<|>|&|-|\+|\*|\.|\^|\|))/, null],  // string vs. transpose (check before/after context using negative/positive lookbehind/lookahead)
         _fallthroughStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^'(?:[^']|'')*'"),
-                null
+            Prettify.PR_STRING,
+            Regex("^'(?:[^']|'')*'"),
+            null
         ) // "'"
         // floating point numbers: 1, 1.0, 1i, -1.1E-1
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex("^[+\\-]?\\.?\\d+(?:\\.\\d*)?(?:[Ee][+\\-]?\\d+)?[ij]?"),
-                null
+            Prettify.PR_LITERAL,
+            Regex("^[+\\-]?\\.?\\d+(?:\\.\\d*)?(?:[Ee][+\\-]?\\d+)?[ij]?"),
+            null
         )
         // parentheses, braces, brackets
         _fallthroughStylePatterns.new(
-                Prettify.PR_TAG,
-                Regex("^(?:\\{|\\}|\\(|\\)|\\[|\\])"),
-                null
+            Prettify.PR_TAG,
+            Regex("^(?:\\{|\\}|\\(|\\)|\\[|\\])"),
+            null
         ) // "{}()[]"
         // other operators
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION,
-                Regex("^(?:<|>|=|~|@|&|;|,|:|!|\\-|\\+|\\*|\\^|\\.|\\||\\\\|\\/)"),
-                null
+            Prettify.PR_PUNCTUATION,
+            Regex("^(?:<|>|=|~|@|&|;|,|:|!|\\-|\\+|\\*|\\^|\\.|\\||\\\\|\\/)"),
+            null
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

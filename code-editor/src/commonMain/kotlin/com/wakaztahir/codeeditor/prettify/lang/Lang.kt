@@ -77,7 +77,7 @@ abstract class Lang {
             get() = ArrayList()
     }
 
-    abstract fun getFileExtensions() : List<String>
+    abstract fun getFileExtensions(): List<String>
 
     /**
      * Constructor.

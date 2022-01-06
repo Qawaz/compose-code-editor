@@ -17,8 +17,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 /**
  * This is similar to the lang-erlang.js in JavaScript Prettify.
  *
@@ -49,37 +47,37 @@ class LangErlang : Lang() {
         // whitechar    ->    newline | vertab | space | tab | uniWhite
         // newline      ->    return linefeed | return | linefeed | formfeed
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Regex("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar().toString() + 0x0C.toChar()
-                    .toString() + "\r "
-            )
+            Prettify.PR_PLAIN, Regex("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar().toString() + 0x0C.toChar()
+                .toString() + "\r "
+        )
         // Single line double-quoted strings.
         _shortcutStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
-                null,
-                "\""
+            Prettify.PR_STRING,
+            Regex("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
+            null,
+            "\""
         )
 
         // Handle atoms
         _shortcutStylePatterns.new(
-                Prettify.PR_LITERAL, Regex("^[a-z][a-zA-Z0-9_]*")
-            )
+            Prettify.PR_LITERAL, Regex("^[a-z][a-zA-Z0-9_]*")
+        )
         // Handle single quoted atoms
         _shortcutStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])+\\'?"),
-                null,
-                "'"
+            Prettify.PR_LITERAL,
+            Regex("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])+\\'?"),
+            null,
+            "'"
         )
 
         // Handle macros. Just to be extra clear on this one, it detects the ?
         // then uses the regexp to end it so be very careful about matching
         // all the terminal elements
         _shortcutStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex("^\\?[^ \\t\\n({]+"),
-                null,
-                "?"
+            Prettify.PR_LITERAL,
+            Regex("^\\?[^ \\t\\n({]+"),
+            null,
+            "?"
         )
 
         // decimal      ->    digit{digit}
@@ -92,21 +90,21 @@ class LangErlang : Lang() {
         //               |    decimal exponent
         // exponent     ->    (e | E) [+ | -] decimal
         _shortcutStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex(
-                    "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
-                    RegexOption.IGNORE_CASE
-                ),
-                null,
-                "0123456789"
-            )
+            Prettify.PR_LITERAL,
+            Regex(
+                "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
+                RegexOption.IGNORE_CASE
+            ),
+            null,
+            "0123456789"
+        )
 
 
         // TODO: catch @declarations inside comments
 
         // Comments in erlang are started with % and go till a newline
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT, Regex("^%[^\\n\\r]*")
+            Prettify.PR_COMMENT, Regex("^%[^\\n\\r]*")
         )
 
         // Catch macros
@@ -118,8 +116,8 @@ class LangErlang : Lang() {
          * 'case' 'of' 'end' 'when' 'fun' 'try' 'catch' 'receive' 'after'
          */
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD,
-                Regex("^(?:module|attributes|do|let|in|letrec|apply|call|primop|case|of|end|when|fun|try|catch|receive|after|char|integer|float,atom,string,var)\\b")
+            Prettify.PR_KEYWORD,
+            Regex("^(?:module|attributes|do|let|in|letrec|apply|call|primop|case|of|end|when|fun|try|catch|receive|after|char|integer|float,atom,string,var)\\b")
         )
         /**
          * Catch definitions (usually defined at the top of the file)
@@ -129,9 +127,9 @@ class LangErlang : Lang() {
 
         // Catch variables
         _fallthroughStylePatterns.new(
-                Prettify.PR_TYPE,
-                Regex("^[A-Z_][a-zA-Z0-9_]*")
-            )
+            Prettify.PR_TYPE,
+            Regex("^[A-Z_][a-zA-Z0-9_]*")
+        )
 
         // matches the symbol production
         _fallthroughStylePatterns.new(Prettify.PR_PUNCTUATION, Regex("^[.,;]"))

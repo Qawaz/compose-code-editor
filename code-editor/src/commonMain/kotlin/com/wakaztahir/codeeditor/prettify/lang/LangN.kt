@@ -17,8 +17,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 /**
  * This is similar to the lang-n.js in JavaScript Prettify.
  *
@@ -46,84 +44,84 @@ class LangN : Lang() {
         val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
         _shortcutStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*\\'|\\\"(?:[^\\\\\\\"\\r\\n]|\\\\.)*(?:\\\"|$))"),
-                null,
-                "\""
-            )
+            Prettify.PR_STRING,
+            Regex("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*\\'|\\\"(?:[^\\\\\\\"\\r\\n]|\\\\.)*(?:\\\"|$))"),
+            null,
+            "\""
+        )
         _shortcutStylePatterns.new(
-                Prettify.PR_COMMENT,
-                Regex("^#(?:(?:define|elif|else|endif|error|ifdef|include|ifndef|line|pragma|undef|warning)\\b|[^\\r\\n]*)"),
-                null,
-                "#"
-            )
+            Prettify.PR_COMMENT,
+            Regex("^#(?:(?:define|elif|else|endif|error|ifdef|include|ifndef|line|pragma|undef|warning)\\b|[^\\r\\n]*)"),
+            null,
+            "#"
+        )
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Regex("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
-            )
-        _fallthroughStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^@\\\"(?:[^\\\"]|\\\"\\\")*(?:\\\"|$)"),
-                null
-            )
-        _fallthroughStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^<#(?:[^#>])*(?:#>|$)"),
-                null
-            )
-        _fallthroughStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^<(?:(?:(?:\\.\\.\\/)*|\\/?)(?:[\\w-]+(?:\\/[\\w-]+)+)?[\\w-]+\\.h|[a-z]\\w*)>"),
-                null
+            Prettify.PR_PLAIN, Regex("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT,
-                Regex("^\\/\\/[^\\r\\n]*"),
-                null
+            Prettify.PR_STRING,
+            Regex("^@\\\"(?:[^\\\"]|\\\"\\\")*(?:\\\"|$)"),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT,
-                Regex("^\\/\\*[\\s\\S]*?(?:\\*\\/|$)"),
-                null
+            Prettify.PR_STRING,
+            Regex("^<#(?:[^#>])*(?:#>|$)"),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD,
-                Regex("^(?:" + keywords + ")\\\\b"),
-                null
+            Prettify.PR_STRING,
+            Regex("^<(?:(?:(?:\\.\\.\\/)*|\\/?)(?:[\\w-]+(?:\\/[\\w-]+)+)?[\\w-]+\\.h|[a-z]\\w*)>"),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_TYPE,
-                Regex("^(?:array|bool|byte|char|decimal|double|float|int|list|long|object|sbyte|short|string|ulong|uint|ufloat|ulong|ushort|void)\\b"),
-                null
+            Prettify.PR_COMMENT,
+            Regex("^\\/\\/[^\\r\\n]*"),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex("^@[a-z_$][a-z_$@0-9]*", RegexOption.IGNORE_CASE),
-                null
+            Prettify.PR_COMMENT,
+            Regex("^\\/\\*[\\s\\S]*?(?:\\*\\/|$)"),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_TYPE,
-                Regex("^@[A-Z]+[a-z][A-Za-z_$@0-9]*"),
-                null
+            Prettify.PR_KEYWORD,
+            Regex("^(?:" + keywords + ")\\\\b"),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN,
-                Regex("^'?[A-Za-z_$][a-z_$@0-9]*", RegexOption.IGNORE_CASE),
-                null
+            Prettify.PR_TYPE,
+            Regex("^(?:array|bool|byte|char|decimal|double|float|int|list|long|object|sbyte|short|string|ulong|uint|ufloat|ulong|ushort|void)\\b"),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Regex(
-                    "^(?:" // A hex number
-                            + "0x[a-f0-9]+" // or an octal or decimal number,
-                            + "|(?:\\\\d(?:_\\\\d+)*\\\\d*(?:\\\\.\\\\d*)?|\\\\.\\\\d\\\\+)" // possibly in scientific notation
-                            + "(?:e[+\\\\-]?\\\\d+)?"
-                            + ")" // with an optional modifier like UL for unsigned long
-                            + "[a-z]*", RegexOption.IGNORE_CASE
-                ), null, "0123456789"
+            Prettify.PR_LITERAL,
+            Regex("^@[a-z_$][a-z_$@0-9]*", RegexOption.IGNORE_CASE),
+            null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION,
-                Regex("^.[^\\s\\w\\.$@\\'\\\"\\`\\/\\#]*"),
-                null
+            Prettify.PR_TYPE,
+            Regex("^@[A-Z]+[a-z][A-Za-z_$@0-9]*"),
+            null
+        )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_PLAIN,
+            Regex("^'?[A-Za-z_$][a-z_$@0-9]*", RegexOption.IGNORE_CASE),
+            null
+        )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_LITERAL, Regex(
+                "^(?:" // A hex number
+                        + "0x[a-f0-9]+" // or an octal or decimal number,
+                        + "|(?:\\\\d(?:_\\\\d+)*\\\\d*(?:\\\\.\\\\d*)?|\\\\.\\\\d\\\\+)" // possibly in scientific notation
+                        + "(?:e[+\\\\-]?\\\\d+)?"
+                        + ")" // with an optional modifier like UL for unsigned long
+                        + "[a-z]*", RegexOption.IGNORE_CASE
+            ), null, "0123456789"
+        )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_PUNCTUATION,
+            Regex("^.[^\\s\\w\\.$@\\'\\\"\\`\\/\\#]*"),
+            null
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

@@ -14,7 +14,6 @@
 package com.wakaztahir.codeeditor.prettify.parser
 
 import com.wakaztahir.codeeditor.prettify.parser.Util.join
-import java.util.regex.Pattern
 import kotlin.Char.Companion.MIN_HIGH_SURROGATE
 import kotlin.Char.Companion.MIN_LOW_SURROGATE
 import kotlin.math.abs
@@ -60,8 +59,8 @@ class CombinePrefixPattern {
                 } else if (Util.test(
                         Regex("[a-z]", RegexOption.IGNORE_CASE),
                         regex.pattern.replace("\\\\[Uu][0-9A-Fa-f]{4}|\\\\[Xx][0-9A-Fa-f]{2}|\\\\[^UuXx]".toRegex(), "")
-                    ))
-                {
+                    )
+                ) {
                     needToFoldCase = true
                     ignoreCase = false
                     break
@@ -75,7 +74,7 @@ class CombinePrefixPattern {
         while (i < n) {
             val regex = regexs[i]
             if (regex.options.contains(RegexOption.MULTILINE)) {
-                throw Exception("Multiline Regex : "+regex.pattern)
+                throw Exception("Multiline Regex : " + regex.pattern)
             }
             rewritten.add("(?:" + allowAnywhereFoldCaseAndRenumberGroups(regex) + ")")
             ++i
@@ -191,8 +190,8 @@ class CombinePrefixPattern {
         var lastRange: MutableList<Int> = ArrayList(listOf(0, 0))
         for (i in ranges.indices) {
             val range = ranges[i]
-            if (lastRange[1] != null && range[0] <= lastRange[1]!! + 1) {
-                lastRange[1] = (lastRange[1]!!).coerceAtLeast(range[1])
+            if (lastRange[1] != null && range[0] <= lastRange[1] + 1) {
+                lastRange[1] = (lastRange[1]).coerceAtLeast(range[1])
             } else {
                 // reference of lastRange is added
                 consolidatedRanges.add(range.also { lastRange = it })
@@ -308,22 +307,56 @@ class CombinePrefixPattern {
         if (regex.options.contains(RegexOption.IGNORE_CASE) && needToFoldCase) {
             for (i in 0 until n) {
                 val p = parts[i]
-                val ch0: Char = if (p!!.length > 0) p[0] else '0'
+                val ch0: Char = if (p.length > 0) p[0] else '0'
                 if (p.length >= 2 && ch0 == '[') {
                     parts[i] = caseFoldCharset(p)
                 } else if (ch0 != '\\') {
                     // TODO: handle letters in numeric escapes.
-                    val sb = StringBuilder()
-                    val _matcher = Pattern.compile("[a-zA-Z]").matcher(p)
-                    while (_matcher.find()) {
-                        val cc = _matcher.group(0).codePointAt(0)
-                        _matcher.appendReplacement(sb, "")
-                        sb.append("[").append((cc and 32.inv()).toChar().toString()).append(
-                            (cc or 32).toChar().toString()
-                        ).append("]")
+
+
+//                    val sb = StringBuilder()
+//                    val _matcher = Pattern.compile("[a-zA-Z]").matcher(p)
+//                    while (_matcher.find()) {
+//                        val cc = _matcher.group(0).codePointAt(0)
+//                        _matcher.appendReplacement(sb, "")
+//                        sb.append("[").append((cc and 32.inv()).toChar().toString()).append(
+//                            (cc or 32).toChar().toString()
+//                        ).append("]")
+//                    }
+//                    _matcher.appendTail(sb)
+
+                    //This code replaces the above commented code
+                    val mySb = StringBuilder()
+                    val regEx = Regex("[a-zA-Z]")
+                    var startIndex = 0
+                    var matchResult = regEx.find(p, startIndex)
+                    if (matchResult == null) {
+                        mySb.append(p.substring(startIndex, p.length))
                     }
-                    _matcher.appendTail(sb)
-                    parts[i] = sb.toString()
+                    var appendIndex = 0
+                    while (matchResult != null) {
+                        val cc = matchResult.groups.get(0)?.value?.get(0)?.code
+                        mySb.append(p.substring(appendIndex,matchResult.range.first))
+                        appendIndex = matchResult.range.last
+                        if (cc != null) {
+                            mySb.append("[").append((cc and 32.inv()).toChar().toString()).append(
+                                (cc or 32).toChar().toString()
+                            ).append("]")
+                        }
+                        startIndex = matchResult.range.last + 1
+                        matchResult = regEx.find(p, startIndex)
+                        if (matchResult == null) {
+                            if (startIndex < p.length) {
+                                mySb.append(p.substring(startIndex, p.length))
+                            }
+                        }
+                    }
+
+//                    println("-----------------")
+//                    println("finding in : $p")
+//                    println("His String : $sb")
+//                    println("Myy String : $mySb")
+                    parts[i] = mySb.toString()
                 }
             }
         }

@@ -81,22 +81,6 @@ object Util {
      * @return all matches
      */
     fun match(regex: Regex, string: String, isGlobal: Boolean): MutableList<String> {
-        val matchesList = mutableListOf<String>()
-        var startIndex = 0
-        var matchResult = regex.find(string, startIndex)
-        while (matchResult != null) {
-            matchResult.groups[0]?.value?.let { matchesList.add(it) }
-            if (!isGlobal) {
-                var i = 1
-                while (i < matchResult.groups.size) {
-                    matchResult.groups[i]?.value?.let { matchesList.add(it) }
-                    i++
-                }
-            }
-            startIndex = matchResult.range.last + 1
-            matchResult = regex.find(string, startIndex)
-        }
-        // Old written with pattern
 //        val matcher = Pattern.compile(regex.pattern).matcher(string)
 //        val matchesList = mutableListOf<String>()
 //        while (matcher.find()) {
@@ -112,6 +96,23 @@ object Util {
 //        }
 //        println("His Matches : ${matchesList.joinToString(",")}")
 //        println("Myy Matches : ${myMatchesList.joinToString(",")}")
+
+        //This code replaces the above commented code
+        val matchesList = mutableListOf<String>()
+        var startIndex = 0
+        var matchResult = regex.find(string, startIndex)
+        while (matchResult != null) {
+            matchResult.groups[0]?.value?.let { matchesList.add(it) }
+            if (!isGlobal) {
+                var i = 1
+                while (i < matchResult.groups.size) {
+                    matchResult.groups[i]?.value?.let { matchesList.add(it) }
+                    i++
+                }
+            }
+            startIndex = matchResult.range.last + 1
+            matchResult = regex.find(string, startIndex)
+        }
         return matchesList
     }
 

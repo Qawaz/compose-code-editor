@@ -1,7 +1,7 @@
 package com.wakaztahir.codeeditor.model
 
 enum class CodeLang(val value: Array<String>) {
-    Default(arrayOf("default-code","default-markup")),
+    Default(arrayOf("default-code", "default-markup")),
     HTML(arrayOf("default-markup")),
     C(arrayOf("c")),
     CPP(arrayOf("cpp")),

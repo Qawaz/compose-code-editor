@@ -26,7 +26,7 @@ class PrettifyParser : Parser {
         var i = 0
         val iEnd = decorations.size
         while (i < iEnd) {
-            val endPos = if (i + 2 < iEnd) decorations[i + 2] as Int else content?.length
+            val endPos = if (i + 2 < iEnd) decorations[i + 2] as Int else content.length
             val startPos = decorations[i] as Int
             if (endPos != null) {
                 returnList.add(

@@ -17,8 +17,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 
-import java.util.regex.Pattern
-
 /**
  * This is similar to the lang-rd.js in JavaScript Prettify.
  *
@@ -47,37 +45,37 @@ class LangRd : Lang() {
 
         // whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
-            )
+            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+        )
         // all comments begin with '%'
         _shortcutStylePatterns.new(
-                Prettify.PR_COMMENT,
-                Regex("^%[^\\r\\n]*"),
-                null,
-                "%"
+            Prettify.PR_COMMENT,
+            Regex("^%[^\\r\\n]*"),
+            null,
+            "%"
         )
 
         // special macros with no args
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL,
-                Regex("^\\\\(?:cr|l?dots|R|tab)\\b")
-            )
+            Prettify.PR_LITERAL,
+            Regex("^\\\\(?:cr|l?dots|R|tab)\\b")
+        )
         // macros
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD,
-                Regex("^\\\\[a-zA-Z@]+")
-            )
+            Prettify.PR_KEYWORD,
+            Regex("^\\\\[a-zA-Z@]+")
+        )
         // highlighted as macros, since technically they are
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD,
-                Regex("^#(?:ifn?def|endif)")
+            Prettify.PR_KEYWORD,
+            Regex("^#(?:ifn?def|endif)")
         )
         // catch escaped brackets
         _fallthroughStylePatterns.new(Prettify.PR_PLAIN, Regex("^\\\\[{}]"))
         // punctuation
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION,
-                Regex("^[{}()\\[\\]]+")
+            Prettify.PR_PUNCTUATION,
+            Regex("^[{}()\\[\\]]+")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
