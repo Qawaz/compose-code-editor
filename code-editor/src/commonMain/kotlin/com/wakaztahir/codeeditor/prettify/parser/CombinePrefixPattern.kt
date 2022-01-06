@@ -14,7 +14,6 @@
 package com.wakaztahir.codeeditor.prettify.parser
 
 import com.wakaztahir.codeeditor.prettify.parser.Util.join
-
 import java.util.regex.Pattern
 
 /**
@@ -104,10 +103,25 @@ class CombinePrefixPattern {
 
     internal fun encodeEscape(charCode: Int): String {
         if (charCode < 0x20) {
-            return (if (charCode < 0x10) "\\x0" else "\\x") + Integer.toString(charCode, 16)
+            return (if (charCode < 0x10) "\\x0" else "\\x") + charCode.toString(16)
         }
-        val ch = String(Character.toChars(charCode))
-        return if (((charCode == '\\'.toInt()) || (charCode == '-'.toInt()) || (charCode == ']'.toInt()) || (charCode == '^'.toInt()))) "\\" + ch else ch
+//        val ch = String(Character.toChars(charCode))
+        val ch = toChars(charCode).joinToString("")
+        return if (((charCode == '\\'.code) || (charCode == '-'.code) || (charCode == ']'.code) || (charCode == '^'.code))) "\\" + ch else ch
+    }
+
+    internal fun toChars(codePoint: Int): CharArray {
+        return if (codePoint ushr 16 == 0) {
+            charArrayOf(codePoint.toChar())
+        } else if (codePoint ushr 16 < 0X10FFFF + 1 ushr 16) {
+            val charArray = CharArray(2)
+            charArray[1] = ((codePoint and 0x3ff) + '\uDC00'.code).toChar()
+            charArray[0] =
+                ((codePoint ushr 10) + (Character.MIN_HIGH_SURROGATE.code - (Character.MIN_SUPPLEMENTARY_CODE_POINT ushr 10))).toChar()
+            charArray
+        } else {
+            throw IllegalArgumentException("Not a valid unicode code point")
+        }
     }
 
     internal fun caseFoldCharset(charSet: String?): String {
@@ -123,7 +137,7 @@ class CombinePrefixPattern {
             ), charSet!!.substring(1, charSet.length - 1), true
         )
         val ranges: MutableList<MutableList<Int>> = ArrayList()
-        val inverse = charsetParts!![0] != null && (charsetParts[0] == "^")
+        val inverse = charsetParts[0] == "^"
         val out: MutableList<String> = ArrayList(listOf("["))
         if (inverse) {
             out.add("^")
