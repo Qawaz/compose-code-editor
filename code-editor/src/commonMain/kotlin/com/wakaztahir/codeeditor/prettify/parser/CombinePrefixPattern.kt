@@ -15,6 +15,8 @@ package com.wakaztahir.codeeditor.prettify.parser
 
 import com.wakaztahir.codeeditor.prettify.parser.Util.join
 import java.util.regex.Pattern
+import kotlin.Char.Companion.MIN_HIGH_SURROGATE
+import kotlin.Char.Companion.MIN_LOW_SURROGATE
 
 /**
  * This is similar to the combinePrefixPattern.js in JavaScript Prettify.
@@ -115,9 +117,9 @@ class CombinePrefixPattern {
             charArrayOf(codePoint.toChar())
         } else if (codePoint ushr 16 < 0X10FFFF + 1 ushr 16) {
             val charArray = CharArray(2)
-            charArray[1] = ((codePoint and 0x3ff) + '\uDC00'.code).toChar()
+            charArray[1] = ((codePoint and 0x3ff) + MIN_LOW_SURROGATE.code).toChar()
             charArray[0] =
-                ((codePoint ushr 10) + (Character.MIN_HIGH_SURROGATE.code - (Character.MIN_SUPPLEMENTARY_CODE_POINT ushr 10))).toChar()
+                ((codePoint ushr 10) + (MIN_HIGH_SURROGATE.code - (0x010000 ushr 10))).toChar()
             charArray
         } else {
             throw IllegalArgumentException("Not a valid unicode code point")
