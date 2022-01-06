@@ -13,8 +13,10 @@
 // limitations under the License.
 package com.wakaztahir.codeeditor.prettify.parser
 
+
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
 /**
  * Common Utilities.
@@ -210,7 +212,7 @@ object Util {
         val returnList: MutableList<Any> = ArrayList()
 
         // use TreeMap to remove entrys with same pos
-        val orderedMap: MutableMap<Int, Any> = TreeMap()
+        val orderedMap: MutableMap<Int, Any> = mutableMapOf()
         var i = 0
         val iEnd = decorations.size
         while (i < iEnd) {

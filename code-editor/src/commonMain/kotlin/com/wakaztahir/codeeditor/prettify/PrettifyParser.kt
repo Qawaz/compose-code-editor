@@ -4,7 +4,7 @@ import com.wakaztahir.codeeditor.parser.ParseResult
 import com.wakaztahir.codeeditor.parser.Parser
 import com.wakaztahir.codeeditor.prettify.parser.Job
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
-import java.util.*
+
 
 /**
  * The prettify parser for syntax highlight.

@@ -14,7 +14,7 @@
 package com.wakaztahir.codeeditor.prettify.parser
 
 import com.wakaztahir.codeeditor.prettify.lang.*
-import java.util.*
+
 import java.util.logging.Level
 import java.util.logging.Logger
 import java.util.regex.Pattern

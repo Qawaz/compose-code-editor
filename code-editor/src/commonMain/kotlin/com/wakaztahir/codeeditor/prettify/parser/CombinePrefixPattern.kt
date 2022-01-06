@@ -14,7 +14,7 @@
 package com.wakaztahir.codeeditor.prettify.parser
 
 import com.wakaztahir.codeeditor.prettify.parser.Util.join
-import java.util.*
+
 import java.util.regex.Pattern
 
 /**
@@ -172,7 +172,8 @@ class CombinePrefixPattern {
 
         // [[1, 10], [3, 4], [8, 12], [14, 14], [16, 16], [17, 17]]
         // -> [[1, 12], [14, 14], [16, 17]]
-        Collections.sort(ranges, Comparator { a, b -> if (a[0] !== b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
+        ranges.sortWith(Comparator { a, b -> if (a[0] != b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
+//        Collections.sort(ranges, Comparator { a, b -> if (a[0] !== b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
         val consolidatedRanges: MutableList<List<Int>> = ArrayList()
         //        List<Integer> lastRange = listOf(new Integer[]{0, 0});
         var lastRange: MutableList<Int> = ArrayList(listOf(0, 0))

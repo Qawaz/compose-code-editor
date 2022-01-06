@@ -16,7 +16,7 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
-import java.util.*
+
 import java.util.regex.Pattern
 
 /**
