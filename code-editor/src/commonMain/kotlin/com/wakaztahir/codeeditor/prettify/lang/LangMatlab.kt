@@ -205,9 +205,7 @@ class LangMatlab : Lang() {
                 Prettify.PR_PLAIN,
                 Pattern.compile("^[ \\t\\r\\n\\v\\f\\xA0]+"),
                 null,
-                " \t\n\r" + Character.toString(
-                    0x0B.toChar()
-                ) + Character.toString(0x0C.toChar()) + Character.toString(0xA0.toChar())
+                " \t\n\r" + 0x0B.toChar().toString() + 0x0C.toChar().toString() + 0xA0.toChar().toString()
             )
         )
         // block comments

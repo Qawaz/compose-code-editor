@@ -69,9 +69,7 @@ class LangWiki : Lang() {
         // Whitespace
         _shortcutStylePatterns.add(
             listOf(
-                Prettify.PR_PLAIN, Pattern.compile("^[\\t \\xA0a-gi-z0-9]+"), null, "\t " + Character.toString(
-                    0xA0.toChar()
-                ) + "abcdefgijklmnopqrstuvwxyz0123456789"
+                Prettify.PR_PLAIN, Pattern.compile("^[\\t \\xA0a-gi-z0-9]+"), null, "\t " + 0xA0.toChar().toString() + "abcdefgijklmnopqrstuvwxyz0123456789"
             )
         )
         // Wiki formatting

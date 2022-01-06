@@ -53,9 +53,7 @@ class LangVb : Lang() {
                 Prettify.PR_PLAIN,
                 Pattern.compile("^[\\t\\n\\r \\xA0\\u2028\\u2029]+"),
                 null,
-                "\t\n\r " + Character.toString(
-                    0xA0.toChar()
-                ) + "\u2028\u2029"
+                "\t\n\r " + 0xA0.toChar().toString() + "\u2028\u2029"
             )
         )
         // A double quoted string with quotes escaped by doubling them.

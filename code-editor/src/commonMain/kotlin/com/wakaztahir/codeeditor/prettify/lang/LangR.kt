@@ -47,9 +47,7 @@ class LangR : Lang() {
         val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
         _shortcutStylePatterns.add(
             listOf(
-                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + Character.toString(
-                    0xA0.toChar()
-                )
+                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
             )
         )
         _shortcutStylePatterns.add(

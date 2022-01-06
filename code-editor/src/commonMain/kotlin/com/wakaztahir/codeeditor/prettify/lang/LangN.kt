@@ -61,9 +61,7 @@ class LangN : Lang() {
         )
         _shortcutStylePatterns.add(
             listOf(
-                Prettify.PR_PLAIN, Pattern.compile("^\\s+"), null, " \r\n\t" + Character.toString(
-                    0xA0.toChar()
-                )
+                Prettify.PR_PLAIN, Pattern.compile("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
             )
         )
         _fallthroughStylePatterns.add(

@@ -48,9 +48,8 @@ class LangErlang : Lang() {
         // newline      ->    return linefeed | return | linefeed | formfeed
         _shortcutStylePatterns.add(
             listOf(
-                Prettify.PR_PLAIN, Pattern.compile("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + Character.toString(
-                    0x0B.toChar()
-                ) + Character.toString(0x0C.toChar()) + "\r "
+                Prettify.PR_PLAIN, Pattern.compile("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar().toString() + 0x0C.toChar()
+                    .toString() + "\r "
             )
         )
         // Single line double-quoted strings.

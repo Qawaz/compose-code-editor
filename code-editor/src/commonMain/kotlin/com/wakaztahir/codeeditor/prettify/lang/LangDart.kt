@@ -50,9 +50,7 @@ class LangDart : Lang() {
         // Whitespace.
         _shortcutStylePatterns.add(
             listOf(
-                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + Character.toString(
-                    0xA0.toChar()
-                )
+                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
             )
         )
 

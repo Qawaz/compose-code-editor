@@ -14,7 +14,6 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.lang.Lang
-import java.util.ArrayList
 
 /**
  * Lang class for Java Prettify.
@@ -85,8 +84,8 @@ abstract class Lang {
      *
      * @param extendedLangs the list of [prettify.lang.Lang]s
      */
-    fun setExtendedLangs(extendedLangs: List<Lang>?) {
-        this.extendedLangs = ArrayList(extendedLangs)
+    fun setExtendedLangs(extendedLangs: List<Lang>) {
+        this.extendedLangs = extendedLangs
     }
 
     companion object {
