@@ -439,7 +439,7 @@ class Prettify {
                 Pattern.compile("^\\s+"),
                 null,
                 """ 
-	${Character.toString(0xA0.toChar())}"""
+	${0xA0.toChar().toString()}"""
             )
         )
 

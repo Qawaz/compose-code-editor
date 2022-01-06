@@ -17,6 +17,7 @@ import com.wakaztahir.codeeditor.prettify.parser.Util.join
 import java.util.regex.Pattern
 import kotlin.Char.Companion.MIN_HIGH_SURROGATE
 import kotlin.Char.Companion.MIN_LOW_SURROGATE
+import kotlin.math.abs
 
 /**
  * This is similar to the combinePrefixPattern.js in JavaScript Prettify.
@@ -89,7 +90,7 @@ class CombinePrefixPattern {
     }
 
     internal fun decodeEscape(charsetPart: String): Int {
-        val cc0: Int = charsetPart.codePointAt(0)
+        val cc0: Int = charsetPart[0].code
         if (cc0 != 92  /* \\ */) {
             return cc0
         }
@@ -99,7 +100,7 @@ class CombinePrefixPattern {
             charCode != null -> charCode
             c1 in '0'..'7' -> charsetPart.substring(1).toInt(8)
             c1 == 'u' || c1 == 'x' -> charsetPart.substring(2).toInt(16)
-            else -> charsetPart.codePointAt(1)
+            else -> charsetPart[1].code
         }
     }
 
@@ -171,12 +172,12 @@ class CombinePrefixPattern {
                     // It works for latin source code identifiers though.
                     if (!(end < 65 || start > 122)) {
                         if (!(end < 65 || start > 90)) {
-                            ranges.add(mutableListOf(Math.max(65, start) or 32, Math.min(end, 90) or 32))
+                            ranges.add(mutableListOf(65.coerceAtLeast(start) or 32, end.coerceAtMost(90) or 32))
                         }
                         if (!(end < 97 || start > 122)) {
                             ranges.add(
                                 mutableListOf(
-                                    Math.max(97, start) and 32.inv(), Math.min(end, 122) and 32.inv()
+                                    97.coerceAtLeast(start) and 32.inv(), end.coerceAtMost(122) and 32.inv()
                                 )
                             )
                         }
@@ -196,7 +197,7 @@ class CombinePrefixPattern {
         for (i in ranges.indices) {
             val range = ranges[i]
             if (lastRange[1] != null && range[0] <= lastRange[1]!! + 1) {
-                lastRange[1] = Math.max(lastRange[1]!!, range[1])
+                lastRange[1] = (lastRange[1]!!).coerceAtLeast(range[1])
             } else {
                 // reference of lastRange is added
                 consolidatedRanges.add(range.also { lastRange = it })
@@ -251,11 +252,11 @@ class CombinePrefixPattern {
                 if ((p == "(")) {
                     // groups are 1-indexed, so max group index is count of '('
                     ++groupIndex
-                } else if ('\\' == p!!.get(0)) {
+                } else if ('\\' == p!![0]) {
                     try {
-                        val decimalValue: Int = Math.abs(p.substring(1).toInt())
+                        val decimalValue: Int = abs(p.substring(1).toInt())
                         if (decimalValue <= groupIndex) {
-                            capturedGroups.put(decimalValue, -1)
+                            capturedGroups[decimalValue] = -1
                         } else {
                             // Replace with an unambiguous escape sequence so that
                             // an octal escape sequence does not turn into a backreference
@@ -288,7 +289,7 @@ class CombinePrefixPattern {
                     }
                 } else if ('\\' == p!!.get(0)) {
                     try {
-                        val decimalValue: Int = Math.abs(p.substring(1).toInt())
+                        val decimalValue: Int = abs(p.substring(1).toInt())
                         if (decimalValue <= groupIndex) {
                             parts[i] = "\\" + capturedGroups.get(decimalValue)
                         }
@@ -317,15 +318,13 @@ class CombinePrefixPattern {
                     parts[i] = caseFoldCharset(p)
                 } else if (ch0 != '\\') {
                     // TODO: handle letters in numeric escapes.
-                    val sb = StringBuffer()
+                    val sb = StringBuilder()
                     val _matcher = Pattern.compile("[a-zA-Z]").matcher(p)
                     while (_matcher.find()) {
                         val cc = _matcher.group(0).codePointAt(0)
                         _matcher.appendReplacement(sb, "")
-                        sb.append("[").append(Character.toString((cc and 32.inv()).toChar())).append(
-                            Character.toString(
-                                (cc or 32).toChar()
-                            )
+                        sb.append("[").append((cc and 32.inv()).toChar().toString()).append(
+                            (cc or 32).toChar().toString()
                         ).append("]")
                     }
                     _matcher.appendTail(sb)

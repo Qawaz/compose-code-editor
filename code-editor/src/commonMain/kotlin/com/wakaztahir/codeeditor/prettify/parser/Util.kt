@@ -13,8 +13,6 @@
 // limitations under the License.
 package com.wakaztahir.codeeditor.prettify.parser
 
-
-import java.util.*
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 
@@ -169,7 +167,6 @@ object Util {
      *
      * @return the joined string
      */
-    @JvmOverloads
     fun join(strings: Array<String>?, delimiter: String? = null): String {
         if (strings == null) {
             throw NullPointerException("argument 'strings' cannot be null")
