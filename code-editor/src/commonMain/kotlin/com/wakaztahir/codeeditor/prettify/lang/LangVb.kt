@@ -40,7 +40,7 @@ import java.util.regex.Pattern
 class LangVb : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("vb", "vbs")
+            get() = listOf("vb", "vbs")
     }
 
     init {
@@ -115,7 +115,7 @@ class LangVb : Lang() {
         // with square brackets, and there may be optional type
         // characters after a normal identifier in square brackets.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN, Pattern.compile(
                     "^(?:(?:[a-z]|_\\w)\\w*(?:\\[[%&@!#]+\\])?|\\[(?:[a-z]|_\\w)\\w*\\])",
                     Pattern.CASE_INSENSITIVE
@@ -124,14 +124,14 @@ class LangVb : Lang() {
         )
         // A run of punctuation
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[^\\w\\t\\n\\r \\\"\\'\\[\\]\\xA0\\u2018\\u2019\\u201C\\u201D\\u2028\\u2029]+")
             )
         )
         // Square brackets
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION, Pattern.compile("^(?:\\[|\\])")
             )
         )

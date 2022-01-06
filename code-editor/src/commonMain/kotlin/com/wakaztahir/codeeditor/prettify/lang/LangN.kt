@@ -37,7 +37,7 @@ class LangN : Lang() {
                 + "assert|assert2|async|break|checked|continue|do|else|ensures|for|foreach|if|late|lock|new|nolate|"
                 + "otherwise|regexp|repeat|requires|return|surroundwith|unchecked|unless|using|while|yield")
         val fileExtensions: List<String>
-            get() = Arrays.asList("n", "nemerle")
+            get() = listOf("n", "nemerle")
     }
 
     init {

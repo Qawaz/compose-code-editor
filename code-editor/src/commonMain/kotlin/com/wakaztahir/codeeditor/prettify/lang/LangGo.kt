@@ -85,7 +85,7 @@ class LangGo : Lang() {
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN, Pattern.compile("^(?:[^\\/\\\"\\'`]|\\/(?![\\/\\*]))+", Pattern.CASE_INSENSITIVE)
             )
         )

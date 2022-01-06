@@ -36,7 +36,7 @@ import java.util.regex.Pattern
 class LangRd : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("Rd", "rd")
+            get() = listOf("Rd", "rd")
     }
 
     init {
@@ -45,7 +45,7 @@ class LangRd : Lang() {
 
         // whitespace
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + Character.toString(
                     0xA0.toChar()
                 )
@@ -53,7 +53,7 @@ class LangRd : Lang() {
         )
         // all comments begin with '%'
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_COMMENT,
                 Pattern.compile("^%[^\\r\\n]*"),
                 null,
@@ -63,30 +63,30 @@ class LangRd : Lang() {
 
         // special macros with no args
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^\\\\(?:cr|l?dots|R|tab)\\b")
             )
         )
         // macros
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^\\\\[a-zA-Z@]+")
             )
         )
         // highlighted as macros, since technically they are
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^#(?:ifn?def|endif)")
             )
         )
         // catch escaped brackets
-        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_PLAIN, Pattern.compile("^\\\\[{}]")))
+        _fallthroughStylePatterns.add(listOf(Prettify.PR_PLAIN, Pattern.compile("^\\\\[{}]")))
         // punctuation
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[{}()\\[\\]]+")
             )

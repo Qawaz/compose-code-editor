@@ -49,7 +49,7 @@ import java.util.regex.Pattern
 class LangHs : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(("hs"))
+            get() = listOf(("hs"))
     }
 
     init {
@@ -144,14 +144,14 @@ class LangHs : Lang() {
         // ascLarge     ->    A | B | ... | Z
         // uniLarge     ->    any uppercase or titlecase Unicode letter
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN,
                 Pattern.compile("^(?:[A-Z][\\w\\']*\\.)*[a-zA-Z][\\w\\']*")
             )
         )
         // matches the symbol production
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[^\\t\\n\\x0B\\x0C\\r a-zA-Z0-9\\'\\\"]+")
             )
