@@ -20,9 +20,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.wakaztahir.codeeditor.parser
 
-import java.lang.StringBuilder
-import java.util.ArrayList
-
 /**
  * The parser parsed result.
  *
@@ -141,6 +138,6 @@ class ParseResult(
      * @param styleKeys the style keys of the content
      */
     init {
-        this.styleKeys = ArrayList(styleKeys)
+        this.styleKeys = styleKeys?.toMutableList() ?: mutableListOf()
     }
 }

@@ -41,7 +41,7 @@ class LangMatlab : Lang() {
     protected class LangMatlabIdentifier : Lang() {
         companion object {
             val fileExtensions: List<String>
-                get() = Arrays.asList(("matlab-identifiers"))
+                get() = listOf(("matlab-identifiers"))
         }
 
         init {
@@ -131,7 +131,7 @@ class LangMatlab : Lang() {
     protected class LangMatlabOperator : Lang() {
         companion object {
             val fileExtensions: List<String>
-                get() = Arrays.asList(*arrayOf("matlab-operators"))
+                get() = listOf(*arrayOf("matlab-operators"))
         }
 
         init {

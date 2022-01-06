@@ -108,7 +108,7 @@ class LangAppollo : Lang() {
         )
         // A printable non-space non-special character
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[^\\w\\t\\n\\r \\xA0()\\\"\\\\\\';]+")
             )

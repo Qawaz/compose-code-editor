@@ -33,7 +33,7 @@ import java.util.regex.Pattern
 class LangScala : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("scala")
+            get() = listOf("scala")
     }
 
     init {
@@ -42,7 +42,7 @@ class LangScala : Lang() {
 
         // Whitespace
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + Character.toString(
                     0xA0.toChar()
                 )
@@ -51,7 +51,7 @@ class LangScala : Lang() {
         // A double or single quoted string 
         // or a triple double-quoted multi-line string.
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_STRING,
                 Pattern.compile("^(?:\"(?:(?:\"\"(?:\"\"?(?!\")|[^\\\\\"]|\\\\.)*\"{0,3})|(?:[^\"\\r\\n\\\\]|\\\\.)*\"?))"),
                 null,
@@ -59,12 +59,12 @@ class LangScala : Lang() {
             )
         )
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL, Pattern.compile("^`(?:[^\\r\\n\\\\`]|\\\\.)*`?"), null, "`"
             )
         )
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[!#%&()*+,\\-:;<=>?@\\[\\\\\\]^{|}~]+"),
                 null,
@@ -75,27 +75,27 @@ class LangScala : Lang() {
         // single quote following
         // A character literal has single quotes on either side
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_STRING, Pattern.compile("^'(?:[^\\r\\n\\\\']|\\\\(?:'|[^\\r\\n']+))'")
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL, Pattern.compile("^'[a-zA-Z_$][\\w$]*(?!['$\\w])")
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_KEYWORD, Pattern.compile("^(?:abstract|case|catch|class|def|do|else|extends|final|finally|for|forSome|if|implicit|import|lazy|match|new|object|override|package|private|protected|requires|return|sealed|super|throw|trait|try|type|val|var|while|with|yield)\\b")
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL, Pattern.compile("^(?:true|false|null|this)\\b")
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL, Pattern.compile(
                     "^(?:(?:0(?:[0-7]+|X[0-9A-F]+))L?|(?:(?:0|[1-9][0-9]*)(?:(?:\\.[0-9]+)?(?:E[+\\-]?[0-9]+)?F?|L?))|\\\\.[0-9]+(?:E[+\\-]?[0-9]+)?F?)",
                     Pattern.CASE_INSENSITIVE
@@ -104,22 +104,22 @@ class LangScala : Lang() {
         )
         // Treat upper camel case identifiers as types.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_TYPE, Pattern.compile("^[\$_]*[A-Z][_\$A-Z0-9]*[a-z][\\w$]*")
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN, Pattern.compile("^[\$a-zA-Z_][\\w$]*")
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_COMMENT, Pattern.compile("^\\/(?:\\/.*|\\*(?:\\/|\\**[^*/])*(?:\\*+\\/?)?)")
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION, Pattern.compile("^(?:\\.+|\\/)")
             )
         )

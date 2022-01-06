@@ -39,7 +39,7 @@ import java.util.regex.Pattern
 class LangPascal : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(("pascal"))
+            get() = listOf(("pascal"))
     }
 
     init {

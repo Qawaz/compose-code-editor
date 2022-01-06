@@ -124,7 +124,7 @@ class CombinePrefixPattern {
         )
         val ranges: MutableList<MutableList<Int>> = ArrayList()
         val inverse = charsetParts!![0] != null && (charsetParts[0] == "^")
-        val out: MutableList<String> = ArrayList(Arrays.asList("["))
+        val out: MutableList<String> = ArrayList(listOf("["))
         if (inverse) {
             out.add("^")
         }
@@ -148,18 +148,18 @@ class CombinePrefixPattern {
                     } else {
                         end = start
                     }
-                    ranges.add(Arrays.asList(start, end))
+                    ranges.add(mutableListOf(start, end))
                     // If the range might intersect letters, then expand it.
                     // This case handling is too simplistic.
                     // It does not deal with non-latin case folding.
                     // It works for latin source code identifiers though.
                     if (!(end < 65 || start > 122)) {
                         if (!(end < 65 || start > 90)) {
-                            ranges.add(Arrays.asList(Math.max(65, start) or 32, Math.min(end, 90) or 32))
+                            ranges.add(mutableListOf(Math.max(65, start) or 32, Math.min(end, 90) or 32))
                         }
                         if (!(end < 97 || start > 122)) {
                             ranges.add(
-                                Arrays.asList(
+                                mutableListOf(
                                     Math.max(97, start) and 32.inv(), Math.min(end, 122) and 32.inv()
                                 )
                             )
@@ -174,8 +174,8 @@ class CombinePrefixPattern {
         // -> [[1, 12], [14, 14], [16, 17]]
         Collections.sort(ranges, Comparator { a, b -> if (a[0] !== b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
         val consolidatedRanges: MutableList<List<Int>> = ArrayList()
-        //        List<Integer> lastRange = Arrays.asList(new Integer[]{0, 0});
-        var lastRange: MutableList<Int> = ArrayList(Arrays.asList(0, 0))
+        //        List<Integer> lastRange = listOf(new Integer[]{0, 0});
+        var lastRange: MutableList<Int> = ArrayList(listOf(0, 0))
         for (i in ranges.indices) {
             val range = ranges[i]
             if (lastRange[1] != null && range[0] <= lastRange[1]!! + 1) {

@@ -46,7 +46,7 @@ import java.util.regex.Pattern
 class LangMumps : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("mumps")
+            get() = listOf("mumps")
     }
 
     init {
@@ -168,21 +168,21 @@ class LangMumps : Lang() {
         )
         // A number is a decimal real literal or in scientific notation.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^[+-]?(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:E[+\\-]?\\d+)?)", Pattern.CASE_INSENSITIVE)
             )
         )
         // An identifier
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN,
                 Pattern.compile("^[a-z][a-zA-Z0-9]*", Pattern.CASE_INSENSITIVE)
             )
         )
         // Exclude $ % and ^
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[^\\w\\t\\n\\r\\xA0\\\"\\$;%\\^]|_")
             )

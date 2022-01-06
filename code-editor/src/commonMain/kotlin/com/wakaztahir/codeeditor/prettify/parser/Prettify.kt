@@ -808,10 +808,10 @@ class Prettify {
             decorateSourceMap["cStyleComments"] = true
             decorateSourceMap["multiLineStrings"] = true
             decorateSourceMap["regexLiterals"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("default-code"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("default-code"))
             var shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
             var fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
-            fallthroughStylePatterns.add(Arrays.asList(PR_PLAIN, Pattern.compile("^[^<?]+")))
+            fallthroughStylePatterns.add(listOf(PR_PLAIN, Pattern.compile("^[^<?]+")))
             fallthroughStylePatterns.add(
                 listOf(
                     PR_DECLARATION, Pattern.compile("^<!\\w[^>]*(?:>|$)")
@@ -824,47 +824,47 @@ class Prettify {
             )
             // Unescaped content in an unknown language
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-", Pattern.compile("^<\\?([\\s\\S]+?)(?:\\?>|$)")
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-", Pattern.compile("^<%([\\s\\S]+?)(?:%>|$)")
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     PR_PUNCTUATION, Pattern.compile("^(?:<[%?]|[%?]>)")
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-", Pattern.compile("^<xmp\\b[^>]*>([\\s\\S]+?)<\\/xmp\\b[^>]*>", Pattern.CASE_INSENSITIVE)
                 )
             )
             // Unescaped content in javascript.  (Or possibly vbscript).
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-js",
                     Pattern.compile("^<script\\b[^>]*>([\\s\\S]*?)(<\\/script\\b[^>]*>)", Pattern.CASE_INSENSITIVE)
                 )
             )
             // Contains unescaped stylesheet content
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-css",
                     Pattern.compile("^<style\\b[^>]*>([\\s\\S]*?)(<\\/style\\b[^>]*>)", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-in.tag", Pattern.compile("^(<\\/?[a-z][^<>]*>)", Pattern.CASE_INSENSITIVE)
                 )
             )
             registerLangHandler(
                 CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns),
-                Arrays.asList("default-markup", "htm", "html", "mxml", "xhtml", "xml", "xsl")
+                listOf("default-markup", "htm", "html", "mxml", "xhtml", "xml", "xsl")
             )
             shortcutStylePatterns = ArrayList()
             fallthroughStylePatterns = ArrayList()
@@ -885,65 +885,65 @@ class Prettify {
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     PR_TAG, Pattern.compile("^^<\\/?[a-z](?:[\\w.:-]*\\w)?|\\/?>$", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     PR_ATTRIB_NAME,
                     Pattern.compile("^(?!style[\\s=]|on)[a-z](?:[\\w:-]*\\w)?", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-uq.val", Pattern.compile(
                         "^=\\s*([^>\\'\\\"\\s]*(?:[^>\\'\\\"\\s\\/]|\\/(?=\\s)))",
                         Pattern.CASE_INSENSITIVE
                     )
                 )
             )
-            fallthroughStylePatterns.add(Arrays.asList(PR_PUNCTUATION, Pattern.compile("^[=<>\\/]+")))
+            fallthroughStylePatterns.add(listOf(PR_PUNCTUATION, Pattern.compile("^[=<>\\/]+")))
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-js", Pattern.compile("^on\\w+\\s*=\\s*\\\"([^\\\"]+)\\\"", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-js", Pattern.compile("^on\\w+\\s*=\\s*\\'([^\\']+)\\'", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-js", Pattern.compile("^on\\w+\\s*=\\s*([^\\\"\\'>\\s]+)", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-css", Pattern.compile("^style\\s*=\\s*\\\"([^\\\"]+)\\\"", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-css", Pattern.compile("^style\\s*=\\s*\\'([^\\']+)\\'", Pattern.CASE_INSENSITIVE)
                 )
             )
             fallthroughStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     "lang-css", Pattern.compile("^style\\s*=\\s\\*([^\\\"\\'>\\s]+)", Pattern.CASE_INSENSITIVE)
                 )
             )
             registerLangHandler(
                 CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns),
-                Arrays.asList("in.tag")
+                listOf("in.tag")
             )
             shortcutStylePatterns = ArrayList()
             fallthroughStylePatterns = ArrayList()
-            fallthroughStylePatterns.add(Arrays.asList(PR_ATTRIB_VALUE, Pattern.compile("^[\\s\\S]+")))
+            fallthroughStylePatterns.add(listOf(PR_ATTRIB_VALUE, Pattern.compile("^[\\s\\S]+")))
             registerLangHandler(
                 CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns),
-                Arrays.asList("uq.val")
+                listOf("uq.val")
             )
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = CPP_KEYWORDS
@@ -952,50 +952,50 @@ class Prettify {
             decorateSourceMap["types"] = C_TYPES
             registerLangHandler(
                 sourceDecorator(decorateSourceMap),
-                Arrays.asList("c", "cc", "cpp", "cxx", "cyc", "m")
+                listOf("c", "cc", "cpp", "cxx", "cyc", "m")
             )
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = "null,true,false"
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("json"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("json"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = CSHARP_KEYWORDS
             decorateSourceMap["hashComments"] = true
             decorateSourceMap["cStyleComments"] = true
             decorateSourceMap["verbatimStrings"] = true
             decorateSourceMap["types"] = C_TYPES
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("cs"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("cs"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = JAVA_KEYWORDS
             decorateSourceMap["cStyleComments"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("java"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("java"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = SH_KEYWORDS
             decorateSourceMap["hashComments"] = true
             decorateSourceMap["multiLineStrings"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("bash", "bsh", "csh", "sh"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("bash", "bsh", "csh", "sh"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = PYTHON_KEYWORDS
             decorateSourceMap["hashComments"] = true
             decorateSourceMap["multiLineStrings"] = true
             decorateSourceMap["tripleQuotedStrings"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("cv", "py", "python"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("cv", "py", "python"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = PERL_KEYWORDS
             decorateSourceMap["hashComments"] = true
             decorateSourceMap["multiLineStrings"] = true
             decorateSourceMap["regexLiterals"] = 2 // multiline regex literals
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("perl", "pl", "pm"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("perl", "pl", "pm"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = RUBY_KEYWORDS
             decorateSourceMap["hashComments"] = true
             decorateSourceMap["multiLineStrings"] = true
             decorateSourceMap["regexLiterals"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("rb", "ruby"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("rb", "ruby"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = JSCRIPT_KEYWORDS
             decorateSourceMap["cStyleComments"] = true
             decorateSourceMap["regexLiterals"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("javascript", "js"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("javascript", "js"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = COFFEE_KEYWORDS
             decorateSourceMap["hashComments"] = 3 // ### style block comments
@@ -1003,7 +1003,7 @@ class Prettify {
             decorateSourceMap["multilineStrings"] = true
             decorateSourceMap["tripleQuotedStrings"] = true
             decorateSourceMap["regexLiterals"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("coffee"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("coffee"))
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = RUST_KEYWORDS
             decorateSourceMap["cStyleComments"] = true

@@ -31,14 +31,14 @@ import java.util.regex.Pattern
 class LangYaml : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("yaml", "yml")
+            get() = listOf("yaml", "yml")
     }
 
     init {
         val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
         val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[:|>?]+"),
                 null,
@@ -46,7 +46,7 @@ class LangYaml : Lang() {
             )
         )
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_DECLARATION,
                 Pattern.compile("^%(?:YAML|TAG)[^#\\r\\n]+"),
                 null,

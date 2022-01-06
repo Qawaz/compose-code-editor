@@ -31,7 +31,7 @@ class PrettifyParser : Parser {
             if (endPos != null) {
                 returnList.add(
                     ParseResult(
-                        startPos, endPos - startPos, Arrays.asList(
+                        startPos, endPos - startPos, listOf(
                             (
                                 decorations[i + 1] as String
                             )

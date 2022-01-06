@@ -40,7 +40,7 @@ import java.util.regex.Pattern
 class LangDart : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(("dart"))
+            get() = listOf(("dart"))
     }
 
     init {
@@ -57,39 +57,39 @@ class LangDart : Lang() {
         )
 
         // Script tag.
-        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_COMMENT, Pattern.compile("^#!(?:.*)")))
+        _fallthroughStylePatterns.add(listOf(Prettify.PR_COMMENT, Pattern.compile("^#!(?:.*)")))
         // `import`, `library`, `part of`, `part`, `as`, `show`, and `hide`
         // keywords.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^\\b(?:import|library|part of|part|as|show|hide)\\b", Pattern.CASE_INSENSITIVE)
             )
         )
         // Single-line comments.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_COMMENT,
                 Pattern.compile("^\\/\\/(?:.*)")
             )
         )
         // Multiline comments.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_COMMENT,
                 Pattern.compile("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
             )
         )
         // `class` and `interface` keywords.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^\\b(?:class|interface)\\b", Pattern.CASE_INSENSITIVE)
             )
         )
         // General keywords.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_KEYWORD,
                 Pattern.compile(
                     "^\\b(?:assert|break|case|catch|continue|default|do|else|finally|for|if|in|is|new|return|super|switch|this|throw|try|while)\\b",
@@ -99,7 +99,7 @@ class LangDart : Lang() {
         )
         // Declaration keywords.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_KEYWORD,
                 Pattern.compile(
                     "^\\b(?:abstract|const|extends|factory|final|get|implements|native|operator|set|static|typedef|var)\\b",
@@ -109,7 +109,7 @@ class LangDart : Lang() {
         )
         // Keywords for types.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_TYPE,
                 Pattern.compile(
                     "^\\b(?:bool|double|Dynamic|int|num|Object|String|void)\\b",
@@ -119,74 +119,74 @@ class LangDart : Lang() {
         )
         // Keywords for constants.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("\\b(?:false|null|true)\\b", Pattern.CASE_INSENSITIVE)
             )
         )
         // Multiline strings, single- and double-quoted.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_STRING,
                 Pattern.compile("^r?[\\']{3}[\\s|\\S]*?[^\\\\][\\']{3}")
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_STRING,
                 Pattern.compile("^r?[\\\"]{3}[\\s|\\S]*?[^\\\\][\\\"]{3}")
             )
         )
         // Normal and raw strings, single- and double-quoted.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_STRING,
                 Pattern.compile("^r?\\'(\\'|(?:[^\\n\\r\\f])*?[^\\\\]\\')")
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_STRING,
                 Pattern.compile("^r?\\\"(\\\"|(?:[^\\n\\r\\f])*?[^\\\\]\\\")")
             )
         )
         // Identifiers.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN,
                 Pattern.compile("^[a-z_$][a-z0-9_]*", Pattern.CASE_INSENSITIVE)
             )
         )
         // Operators.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[~!%^&*+=|?:<>/-]")
             )
         )
         // Hex numbers.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^\\b0x[0-9a-f]+", Pattern.CASE_INSENSITIVE)
             )
         )
         // Decimal numbers.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^\\b\\d+(?:\\.\\d*)?(?:e[+-]?\\d+)?", Pattern.CASE_INSENSITIVE)
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^\\b\\.\\d+(?:e[+-]?\\d+)?", Pattern.CASE_INSENSITIVE)
             )
         )
         // Punctuation.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[(){}\\[\\],.;]")
             )
