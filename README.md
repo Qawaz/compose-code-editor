@@ -6,7 +6,7 @@
 
 Its also supports kotlin multiplatform and supports Android & JVM at the moment , It will be better if you could get it from
 github packages since I use that and post latest versions there and Jitpack might not support multiplatform
-The version 2.0.2 is only for Android , Its 2.1.0 and afterwards for multiplatform
+The version 2.0.2 is only for Android , Its 3.0.0 and afterwards for multiplatform
 
 ## Demo
 

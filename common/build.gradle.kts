@@ -21,7 +21,7 @@ kotlin {
                 api(BuildConfig.Dependencies.Common.Compose.foundation)
                 api(BuildConfig.Dependencies.Common.Compose.material)
 
-                implementation(project(":code-editor"))
+                implementation(project(":codeeditor"))
             }
         }
         val commonTest by getting {
