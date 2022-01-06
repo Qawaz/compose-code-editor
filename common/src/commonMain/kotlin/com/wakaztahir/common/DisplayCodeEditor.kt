@@ -12,7 +12,7 @@ import com.wakaztahir.codeeditor.utils.parseCodeAsAnnotatedString
 
 @Composable
 fun DisplayCodeEditor() {
-    val language = CodeLang.Java
+    val language = CodeLang.HTML
     val code = """             
     package com.wakaztahir.codeeditor
     

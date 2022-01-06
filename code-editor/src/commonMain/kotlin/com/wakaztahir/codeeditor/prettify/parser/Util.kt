@@ -83,13 +83,7 @@ object Util {
      *
      * @return all matches
      */
-    fun match(pattern: Pattern?, string: String?, isGlobal: Boolean): Array<String> {
-        if (pattern == null) {
-            throw NullPointerException("argument 'pattern' cannot be null")
-        }
-        if (string == null) {
-            throw NullPointerException("argument 'string' cannot be null")
-        }
+    fun match(pattern: Pattern, string: String, isGlobal: Boolean): Array<String> {
         val matchesList: MutableList<String> = ArrayList()
         val matcher = pattern.matcher(string)
         while (matcher.find()) {

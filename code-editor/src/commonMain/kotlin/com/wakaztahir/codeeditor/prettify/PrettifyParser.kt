@@ -30,13 +30,7 @@ class PrettifyParser : Parser {
             val startPos = decorations[i] as Int
             if (endPos != null) {
                 returnList.add(
-                    ParseResult(
-                        startPos, endPos - startPos, listOf(
-                            (
-                                decorations[i + 1] as String
-                            )
-                        )
-                    )
+                    ParseResult(startPos, endPos - startPos, listOf((decorations[i + 1] as String)))
                 )
             }
             i += 2

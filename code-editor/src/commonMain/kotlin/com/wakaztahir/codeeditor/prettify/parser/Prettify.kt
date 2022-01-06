@@ -63,7 +63,8 @@ import java.util.regex.Pattern
  * Java annotations (start with "@") are now captured as literals ("lit")
 </blockquote> *
  */
-class Prettify {
+class Prettify() {
+
 
     inner class CreateSimpleLexer(
         shortcutStylePatterns: List<List<Any?>>,
@@ -264,6 +265,43 @@ class Prettify {
             nPatterns = fallthroughStylePatterns.size
         }
     }
+
+    fun getLangFromExtension(extension: String): Lang? {
+        return when (extension) {
+            in LangAppollo.fileExtensions -> LangAppollo()
+            in LangBasic.fileExtensions -> LangBasic()
+            in LangClj.fileExtensions -> LangClj()
+            in LangCss.fileExtensions -> LangCss()
+            in LangDart.fileExtensions -> LangDart()
+            in LangErlang.fileExtensions -> LangErlang()
+            in LangGo.fileExtensions -> LangGo()
+            in LangHs.fileExtensions -> LangHs()
+            in LangLisp.fileExtensions -> LangLisp()
+            in LangLlvm.fileExtensions -> LangLlvm()
+            in LangLua.fileExtensions -> LangLua()
+            in LangMatlab.fileExtensions -> LangMatlab()
+            in LangMd.fileExtensions -> LangMd()
+            in LangMl.fileExtensions -> LangMl()
+            in LangMumps.fileExtensions -> LangMumps()
+            in LangN.fileExtensions -> LangN()
+            in LangPascal.fileExtensions -> LangPascal()
+            in LangR.fileExtensions -> LangR()
+            in LangRd.fileExtensions -> LangRd()
+            in LangScala.fileExtensions -> LangScala()
+            in LangSql.fileExtensions -> LangSql()
+            in LangTex.fileExtensions -> LangTex()
+            in LangVb.fileExtensions -> LangVb()
+            in LangVhdl.fileExtensions -> LangVhdl()
+            in LangTcl.fileExtensions -> LangTcl()
+            in LangWiki.fileExtensions -> LangWiki()
+            in LangXq.fileExtensions -> LangXq()
+            in LangYaml.fileExtensions -> LangYaml()
+            else -> null
+        }
+    }
+
+    /** Maps language-specific file extensions to handlers.  */
+    private var langHandlerRegistry: MutableMap<String, CreateSimpleLexer?> = HashMap()
 
     /** returns a function that produces a list of decorations from source text.
      *
@@ -539,9 +577,6 @@ class Prettify {
         return CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns)
     }
 
-    /** Maps language-specific file extensions to handlers.  */
-    private var langHandlerRegistry: MutableMap<String, Any?> = HashMap()
-
     /** Register a language handler for the given file extensions.
      * @param handler a function from source code to a list
      * of decorations.  Takes a single argument job which describes the
@@ -560,37 +595,13 @@ class Prettify {
      */
     @Throws(Exception::class)
     internal fun registerLangHandler(handler: CreateSimpleLexer?, fileExtensions: List<String>) {
-        var i = fileExtensions.size
-        while (--i >= 0) {
-            val ext = fileExtensions[i]
-            if (langHandlerRegistry[ext] == null) {
-                langHandlerRegistry[ext] = handler
+        fileExtensions.forEach {
+            if (langHandlerRegistry[it] == null) {
+                langHandlerRegistry[it] = handler
             } else {
-                throw Exception("cannot override language handler $ext")
+                throw Exception("cannot override language handler $it")
             }
         }
-    }
-
-    /**
-     * Register language handler. The clazz will not be instantiated
-     * @param clazz the class of the language
-     * @throws Exception cannot instantiate the object using the class,
-     * or language handler with specified extension exist already
-     */
-    @Throws(Exception::class)
-    fun register(clazz: Class<out Lang>,fileExtensions: List<String> = getFileExtensionsFromClass(clazz)) {
-        var i = fileExtensions.size
-        while (--i >= 0) {
-            val ext = fileExtensions[i]
-            langHandlerRegistry[ext] = clazz
-        }
-    }
-
-    //todo this does not work
-    @Throws(Exception::class)
-    internal fun getFileExtensionsFromClass(clazz: Class<out Lang>): List<String> {
-        val getExtensionsMethod = clazz.getMethod("getFileExtensions", null)
-        return getExtensionsMethod.invoke(null, null) as List<String>
     }
 
     /**
@@ -599,34 +610,31 @@ class Prettify {
      * @param source the source code
      * @return the parser
      */
-    fun langHandlerForExtension(extension: String?, source: String?): CreateSimpleLexer? {
-        var extension = extension
+    fun langHandlerForExtension(ext: String?, source: String?): CreateSimpleLexer? {
+        var extension = ext
         if (!(extension != null && langHandlerRegistry[extension] != null)) {
             // Treat it as markup if the first non whitespace character is a < and
             // the last non-whitespace character is a >.
             extension = if (Util.test(Pattern.compile("^\\s*<"), source)) "default-markup" else "default-code"
         }
         val handler = langHandlerRegistry[extension]
-        return if (handler is CreateSimpleLexer) {
+        return if (handler != null) {
             handler
         } else {
-            val _simpleLexer: CreateSimpleLexer
-            try {
-                val _lang = (handler as Class<Lang>).newInstance()
-                _simpleLexer = CreateSimpleLexer(_lang.shortcutStylePatterns, _lang.fallthroughStylePatterns)
-                val extendedLangs = _lang.extendedLangs
-                for (_extendedLang in extendedLangs) {
-                    register(_extendedLang.javaClass)
+            val lang = getLangFromExtension(extension)
+            return if (lang != null) {
+                val simpleLexer = CreateSimpleLexer(lang.shortcutStylePatterns, lang.fallthroughStylePatterns)
+        //                val extendedLangs = lang.extendedLangs
+        //                for (extendedLang in extendedLangs) {
+        //                    register(extendedLang.javaClass)
+        //                }
+                lang.getFileExtensions().forEach {
+                    langHandlerRegistry[it] = simpleLexer
                 }
-                val fileExtensions = getFileExtensionsFromClass(handler)
-                for (_extension in fileExtensions) {
-                    langHandlerRegistry[_extension] = _simpleLexer
-                }
-            } catch (ex: Exception) {
-                throw ex
-                return null
+                simpleLexer
+            } else {
+                null
             }
-            _simpleLexer
         }
     }
 
@@ -1030,34 +1038,6 @@ class Prettify {
             decorateSourceMap["types"] = Pattern.compile("^(bool|(double|s?fixed|[su]?int)(32|64)|float|string)\\b")
             decorateSourceMap["cStyleComments"] = true
             registerLangHandler(sourceDecorator(decorateSourceMap), listOf("proto"))
-            register(LangAppollo::class.java, fileExtensions = LangAppollo.fileExtensions)
-            register(LangBasic::class.java,fileExtensions = LangBasic.fileExtensions)
-            register(LangClj::class.java,fileExtensions = LangClj.fileExtensions)
-            register(LangCss::class.java,fileExtensions = LangCss.fileExtensions)
-            register(LangDart::class.java,fileExtensions = LangDart.fileExtensions)
-            register(LangErlang::class.java,fileExtensions = LangErlang.fileExtensions)
-            register(LangGo::class.java,fileExtensions = LangGo.fileExtensions)
-            register(LangHs::class.java,fileExtensions = LangHs.fileExtensions)
-            register(LangLisp::class.java,fileExtensions = LangLisp.fileExtensions)
-            register(LangLlvm::class.java,fileExtensions = LangLlvm.fileExtensions)
-            register(LangLua::class.java,fileExtensions = LangLua.fileExtensions)
-            register(LangMatlab::class.java,fileExtensions = LangMatlab.fileExtensions)
-            register(LangMd::class.java,fileExtensions = LangMd.fileExtensions)
-            register(LangMl::class.java,fileExtensions = LangMl.fileExtensions)
-            register(LangMumps::class.java,fileExtensions = LangMumps.fileExtensions)
-            register(LangN::class.java,fileExtensions = LangN.fileExtensions)
-            register(LangPascal::class.java,fileExtensions = LangPascal.fileExtensions)
-            register(LangR::class.java,fileExtensions = LangR.fileExtensions)
-            register(LangRd::class.java,fileExtensions = LangRd.fileExtensions)
-            register(LangScala::class.java,fileExtensions = LangScala.fileExtensions)
-            register(LangSql::class.java,fileExtensions = LangSql.fileExtensions)
-            register(LangTex::class.java,fileExtensions = LangTex.fileExtensions)
-            register(LangVb::class.java,fileExtensions = LangVb.fileExtensions)
-            register(LangVhdl::class.java,fileExtensions = LangVhdl.fileExtensions)
-            register(LangTcl::class.java,fileExtensions = LangTcl.fileExtensions)
-            register(LangWiki::class.java,fileExtensions = LangWiki.fileExtensions)
-            register(LangXq::class.java,fileExtensions = LangXq.fileExtensions)
-            register(LangYaml::class.java,fileExtensions = LangYaml.fileExtensions)
         } catch (ex: Exception) {
             throw ex
         }
