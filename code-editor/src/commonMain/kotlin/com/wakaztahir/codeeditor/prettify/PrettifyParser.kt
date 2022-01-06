@@ -16,7 +16,7 @@ class PrettifyParser : Parser {
      */
     private var prettify: Prettify = Prettify()
 
-    override fun parse(fileExtension: String?, content: String?): List<ParseResult> {
+    override fun parse(fileExtension: String?, content: String): List<ParseResult> {
         val job = Job(0, content)
         prettify.langHandlerForExtension(fileExtension, content)?.decorate(job)
         val decorations = job.decorations

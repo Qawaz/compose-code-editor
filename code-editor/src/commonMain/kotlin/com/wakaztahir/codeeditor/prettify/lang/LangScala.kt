@@ -44,22 +44,22 @@ class LangScala : Lang() {
 
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double or single quoted string 
         // or a triple double-quoted multi-line string.
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^(?:\"(?:(?:\"\"(?:\"\"?(?!\")|[^\\\\\"]|\\\\.)*\"{0,3})|(?:[^\"\\r\\n\\\\]|\\\\.)*\"?))"),
+                Regex("^(?:\"(?:(?:\"\"(?:\"\"?(?!\")|[^\\\\\"]|\\\\.)*\"{0,3})|(?:[^\"\\r\\n\\\\]|\\\\.)*\"?))"),
                 null,
                 "\""
         )
         _shortcutStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile("^`(?:[^\\r\\n\\\\`]|\\\\.)*`?"), null, "`"
+                Prettify.PR_LITERAL, Regex("^`(?:[^\\r\\n\\\\`]|\\\\.)*`?"), null, "`"
         )
         _shortcutStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[!#%&()*+,\\-:;<=>?@\\[\\\\\\]^{|}~]+"),
+                Regex("^[!#%&()*+,\\-:;<=>?@\\[\\\\\\]^{|}~]+"),
                 null,
                 "!#%&()*+,-:;<=>?@[\\\\]^{|}~"
         )
@@ -67,35 +67,35 @@ class LangScala : Lang() {
         // single quote following
         // A character literal has single quotes on either side
         _fallthroughStylePatterns.new(
-                Prettify.PR_STRING, Pattern.compile("^'(?:[^\\r\\n\\\\']|\\\\(?:'|[^\\r\\n']+))'")
+                Prettify.PR_STRING, Regex("^'(?:[^\\r\\n\\\\']|\\\\(?:'|[^\\r\\n']+))'")
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile("^'[a-zA-Z_$][\\w$]*(?!['$\\w])")
+                Prettify.PR_LITERAL, Regex("^'[a-zA-Z_$][\\w$]*(?!['$\\w])")
             )
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD, Pattern.compile("^(?:abstract|case|catch|class|def|do|else|extends|final|finally|for|forSome|if|implicit|import|lazy|match|new|object|override|package|private|protected|requires|return|sealed|super|throw|trait|try|type|val|var|while|with|yield)\\b")
+                Prettify.PR_KEYWORD, Regex("^(?:abstract|case|catch|class|def|do|else|extends|final|finally|for|forSome|if|implicit|import|lazy|match|new|object|override|package|private|protected|requires|return|sealed|super|throw|trait|try|type|val|var|while|with|yield)\\b")
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile("^(?:true|false|null|this)\\b")
+                Prettify.PR_LITERAL, Regex("^(?:true|false|null|this)\\b")
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile(
+                Prettify.PR_LITERAL, Regex(
                     "^(?:(?:0(?:[0-7]+|X[0-9A-F]+))L?|(?:(?:0|[1-9][0-9]*)(?:(?:\\.[0-9]+)?(?:E[+\\-]?[0-9]+)?F?|L?))|\\\\.[0-9]+(?:E[+\\-]?[0-9]+)?F?)",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
             )
         )
         // Treat upper camel case identifiers as types.
         _fallthroughStylePatterns.new(
-                Prettify.PR_TYPE, Pattern.compile("^[\$_]*[A-Z][_\$A-Z0-9]*[a-z][\\w$]*")
+                Prettify.PR_TYPE, Regex("^[\$_]*[A-Z][_\$A-Z0-9]*[a-z][\\w$]*")
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\$a-zA-Z_][\\w$]*")
+                Prettify.PR_PLAIN, Regex("^[\$a-zA-Z_][\\w$]*")
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT, Pattern.compile("^\\/(?:\\/.*|\\*(?:\\/|\\**[^*/])*(?:\\*+\\/?)?)")
+                Prettify.PR_COMMENT, Regex("^\\/(?:\\/.*|\\*(?:\\/|\\**[^*/])*(?:\\*+\\/?)?)")
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION, Pattern.compile("^(?:\\.+|\\/)")
+                Prettify.PR_PUNCTUATION, Regex("^(?:\\.+|\\/)")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

@@ -52,44 +52,44 @@ class LangLlvm : Lang() {
 
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double quoted, possibly multi-line, string.
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^!?\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
+                Regex("^!?\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
                 null,
                 "\""
         )
         // comment.llvm
         _shortcutStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^;[^\r\n]*"),
+                Regex("^;[^\r\n]*"),
                 null,
                 ";"
         )
         // variable.llvm
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[%@!](?:[-a-zA-Z$._][-a-zA-Z$._0-9]*|\\d+)")
+                Prettify.PR_PLAIN, Regex("^[%@!](?:[-a-zA-Z$._][-a-zA-Z$._0-9]*|\\d+)")
         )
         // According to http://llvm.org/docs/LangRef.html#well-formedness
         // These reserved words cannot conflict with variable names, because none of them start with a prefix character ('%' or '@').
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^[A-Za-z_][0-9A-Za-z_]*"),
+                Regex("^[A-Za-z_][0-9A-Za-z_]*"),
                 null
         )
         // constant.numeric.float.llvm
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile("^\\d+\\.\\d+")
+                Prettify.PR_LITERAL, Regex("^\\d+\\.\\d+")
         )
         // constant.numeric.integer.llvm
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile("^(?:\\d+|0[xX][a-fA-F0-9]+)")
+                Prettify.PR_LITERAL, Regex("^(?:\\d+|0[xX][a-fA-F0-9]+)")
         )
         // punctuation
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION, Pattern.compile("^[()\\[\\]{},=*<>:]|\\.\\.\\.$")
+                Prettify.PR_PUNCTUATION, Regex("^[()\\[\\]{},=*<>:]|\\.\\.\\.$")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

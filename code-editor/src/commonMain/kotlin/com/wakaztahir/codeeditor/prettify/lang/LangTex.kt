@@ -15,6 +15,7 @@ package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
+import com.wakaztahir.codeeditor.utils.new
 
 import java.util.regex.Pattern
 
@@ -41,49 +42,39 @@ class LangTex : Lang() {
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // whitespace
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
-            )
+        _shortcutStylePatterns.new(
+                Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // all comments begin with '%'
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^%[^\\r\\n]*"),
+                Regex("^%[^\\r\\n]*"),
                 null,
                 "%"
-            )
         )
         //[PR['PR_DECLARATION'], /^\\([egx]?def|(new|renew|provide)(command|environment))\b/],
         // any command starting with a \ and contains
         // either only letters (a-z,A-Z), '@' (internal macros)
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^\\\\[a-zA-Z@]+")
+                Regex("^\\\\[a-zA-Z@]+")
             )
-        )
         // or contains only one character
-        _fallthroughStylePatterns.add(listOf(Prettify.PR_KEYWORD, Pattern.compile("^\\\\.")))
+        _fallthroughStylePatterns.new(Prettify.PR_KEYWORD, Regex("^\\\\."))
         // Highlight dollar for math mode and ampersam for tabular
-        _fallthroughStylePatterns.add(listOf(Prettify.PR_TYPE, Pattern.compile("^[$&]")))
+        _fallthroughStylePatterns.new(Prettify.PR_TYPE, Regex("^[$&]"))
         // numeric measurement values with attached units
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile(
+                Regex(
                     "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d*)?)(cm|em|ex|in|pc|pt|bp|mm)",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 )
-            )
         )
         // punctuation usually occurring within commands
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[{}()\\[\\]=]+")
-            )
+                Regex("^[{}()\\[\\]=]+")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

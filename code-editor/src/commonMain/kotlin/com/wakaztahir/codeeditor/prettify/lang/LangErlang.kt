@@ -49,25 +49,25 @@ class LangErlang : Lang() {
         // whitechar    ->    newline | vertab | space | tab | uniWhite
         // newline      ->    return linefeed | return | linefeed | formfeed
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar().toString() + 0x0C.toChar()
+                Prettify.PR_PLAIN, Regex("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar().toString() + 0x0C.toChar()
                     .toString() + "\r "
             )
         // Single line double-quoted strings.
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
+                Regex("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
                 null,
                 "\""
         )
 
         // Handle atoms
         _shortcutStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile("^[a-z][a-zA-Z0-9_]*")
+                Prettify.PR_LITERAL, Regex("^[a-z][a-zA-Z0-9_]*")
             )
         // Handle single quoted atoms
         _shortcutStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])+\\'?"),
+                Regex("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])+\\'?"),
                 null,
                 "'"
         )
@@ -77,7 +77,7 @@ class LangErlang : Lang() {
         // all the terminal elements
         _shortcutStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^\\?[^ \\t\\n({]+"),
+                Regex("^\\?[^ \\t\\n({]+"),
                 null,
                 "?"
         )
@@ -93,9 +93,9 @@ class LangErlang : Lang() {
         // exponent     ->    (e | E) [+ | -] decimal
         _shortcutStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile(
+                Regex(
                     "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 ),
                 null,
                 "0123456789"
@@ -106,7 +106,7 @@ class LangErlang : Lang() {
 
         // Comments in erlang are started with % and go till a newline
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT, Pattern.compile("^%[^\\n\\r]*")
+                Prettify.PR_COMMENT, Regex("^%[^\\n\\r]*")
         )
 
         // Catch macros
@@ -119,22 +119,22 @@ class LangErlang : Lang() {
          */
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^(?:module|attributes|do|let|in|letrec|apply|call|primop|case|of|end|when|fun|try|catch|receive|after|char|integer|float,atom,string,var)\\b")
+                Regex("^(?:module|attributes|do|let|in|letrec|apply|call|primop|case|of|end|when|fun|try|catch|receive|after|char|integer|float,atom,string,var)\\b")
         )
         /**
          * Catch definitions (usually defined at the top of the file)
          * Anything that starts -something
          */
-        _fallthroughStylePatterns.new(Prettify.PR_KEYWORD, Pattern.compile("^-[a-z_]+"))
+        _fallthroughStylePatterns.new(Prettify.PR_KEYWORD, Regex("^-[a-z_]+"))
 
         // Catch variables
         _fallthroughStylePatterns.new(
                 Prettify.PR_TYPE,
-                Pattern.compile("^[A-Z_][a-zA-Z0-9_]*")
+                Regex("^[A-Z_][a-zA-Z0-9_]*")
             )
 
         // matches the symbol production
-        _fallthroughStylePatterns.new(Prettify.PR_PUNCTUATION, Pattern.compile("^[.,;]"))
+        _fallthroughStylePatterns.new(Prettify.PR_PUNCTUATION, Regex("^[.,;]"))
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
     }

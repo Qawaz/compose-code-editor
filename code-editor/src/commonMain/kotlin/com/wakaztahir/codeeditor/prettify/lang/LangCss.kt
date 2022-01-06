@@ -47,16 +47,14 @@ class LangCss : Lang() {
         }
 
         init {
-            val _shortcutStylePatterns: List<List<Any>> = ArrayList()
-            val _fallthroughStylePatterns: MutableList<List<Any>> = ArrayList()
-            _fallthroughStylePatterns.add(
-                listOf(
+            val _shortcutStylePatterns: List<StylePattern> = ArrayList()
+            val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
+            _fallthroughStylePatterns.new(
                     Prettify.PR_KEYWORD,
-                    Pattern.compile(
+                    Regex(
                         "^-?(?:[_a-z]|(?:\\\\[\\da-f]+ ?))(?:[_a-z\\d\\-]|\\\\(?:\\\\[\\da-f]+ ?))*",
-                        Pattern.CASE_INSENSITIVE
+                        RegexOption.IGNORE_CASE
                     )
-                )
             )
             setShortcutStylePatterns(_shortcutStylePatterns)
             setFallthroughStylePatterns(_fallthroughStylePatterns)
@@ -74,13 +72,11 @@ class LangCss : Lang() {
         }
 
         init {
-            val _shortcutStylePatterns: List<List<Any>> = ArrayList()
-            val _fallthroughStylePatterns: MutableList<List<Any>> = ArrayList()
-            _fallthroughStylePatterns.add(
-                listOf(
+            val _shortcutStylePatterns: List<StylePattern> = ArrayList()
+            val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
+            _fallthroughStylePatterns.new(
                     Prettify.PR_STRING,
-                    Pattern.compile("^[^\\)\\\"\\']+")
-                )
+                    Regex("^[^\\)\\\"\\']+")
             )
             setShortcutStylePatterns(_shortcutStylePatterns)
             setFallthroughStylePatterns(_fallthroughStylePatterns)
@@ -101,77 +97,75 @@ class LangCss : Lang() {
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // The space production <s>
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_PLAIN,
-                Pattern.compile("^[ \t\r\n\\f]+"),
+                Regex("^[ \t\r\n\\f]+"),
                 null,
                 " \t\r\n\\f"
             )
-        )
         // Quoted strings.  <string1> and <string2>
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^\\\"(?:[^\n\r\\f\\\\\\\"]|\\\\(?:\r\n?|\n|\\f)|\\\\[\\s\\S])*\\\""),
+                Regex("^\\\"(?:[^\n\r\\f\\\\\\\"]|\\\\(?:\r\n?|\n|\\f)|\\\\[\\s\\S])*\\\""),
                 null
             )
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^\\'(?:[^\n\r\\f\\\\\\']|\\\\(?:\r\n?|\n|\\f)|\\\\[\\s\\S])*\\'"),
+                Regex("^\\'(?:[^\n\r\\f\\\\\\']|\\\\(?:\r\n?|\n|\\f)|\\\\[\\s\\S])*\\'"),
                 null
         )
         _fallthroughStylePatterns.new(
                 "lang-css-str",
-                Pattern.compile("^url\\(([^\\)\\\"\\']+)\\)", Pattern.CASE_INSENSITIVE)
+                Regex("^url\\(([^\\)\\\"\\']+)\\)", RegexOption.IGNORE_CASE)
             )
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile(
+                Regex(
                     "^(?:url|rgb|\\!important|@import|@page|@media|@charset|inherit)(?=[^\\-\\w]|$)",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 ),
                 null
         )
         // A property name -- an identifier followed by a colon.
         _fallthroughStylePatterns.new(
                 "lang-css-kw",
-                Pattern.compile(
+                Regex(
                     "^(-?(?:[_a-z]|(?:\\\\[0-9a-f]+ ?))(?:[_a-z0-9\\-]|\\\\(?:\\\\[0-9a-f]+ ?))*)\\s*:",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
             )
         )
         // A C style block comment.  The <comment> production.
         _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
+                Regex("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
             )
         // Escaping text spans
         _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^(?:<!--|-->)")
+                Regex("^(?:<!--|-->)")
         )
         // A number possibly containing a suffix.
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^(?:\\d+|\\d*\\.\\d+)(?:%|[a-z]+)?", Pattern.CASE_INSENSITIVE)
+                Regex("^(?:\\d+|\\d*\\.\\d+)(?:%|[a-z]+)?", RegexOption.IGNORE_CASE)
         )
         // A hex color
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^#(?:[0-9a-f]{3}){1,2}\\b", Pattern.CASE_INSENSITIVE)
+                Regex("^#(?:[0-9a-f]{3}){1,2}\\b", RegexOption.IGNORE_CASE)
             )
         // An identifier
         _fallthroughStylePatterns.new(
                 Prettify.PR_PLAIN,
-                Pattern.compile(
+                Regex(
                     "^-?(?:[_a-z]|(?:\\\\[\\da-f]+ ?))(?:[_a-z\\d\\-]|\\\\(?:\\\\[\\da-f]+ ?))*",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 )
         )
         // A run of punctuation
         _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[^\\s\\w\\'\\\"]+", Pattern.CASE_INSENSITIVE)
+                Regex("^[^\\s\\w\\'\\\"]+", RegexOption.IGNORE_CASE)
             )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

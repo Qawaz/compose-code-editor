@@ -47,12 +47,12 @@ class LangRd : Lang() {
 
         // whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
             )
         // all comments begin with '%'
         _shortcutStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^%[^\\r\\n]*"),
+                Regex("^%[^\\r\\n]*"),
                 null,
                 "%"
         )
@@ -60,24 +60,24 @@ class LangRd : Lang() {
         // special macros with no args
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^\\\\(?:cr|l?dots|R|tab)\\b")
+                Regex("^\\\\(?:cr|l?dots|R|tab)\\b")
             )
         // macros
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^\\\\[a-zA-Z@]+")
+                Regex("^\\\\[a-zA-Z@]+")
             )
         // highlighted as macros, since technically they are
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^#(?:ifn?def|endif)")
+                Regex("^#(?:ifn?def|endif)")
         )
         // catch escaped brackets
-        _fallthroughStylePatterns.new(Prettify.PR_PLAIN, Pattern.compile("^\\\\[{}]"))
+        _fallthroughStylePatterns.new(Prettify.PR_PLAIN, Regex("^\\\\[{}]"))
         // punctuation
         _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[{}()\\[\\]]+")
+                Regex("^[{}()\\[\\]]+")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

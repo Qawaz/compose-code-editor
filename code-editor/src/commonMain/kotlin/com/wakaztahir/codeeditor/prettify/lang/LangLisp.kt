@@ -83,56 +83,56 @@ class LangLisp : Lang() {
     init {
         val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
-        _shortcutStylePatterns.new("opn", Pattern.compile("^\\(+"), null, "(")
-        _shortcutStylePatterns.new("clo", Pattern.compile("^\\)+"), null, ")")
+        _shortcutStylePatterns.new("opn", Regex("^\\(+"), null, "(")
+        _shortcutStylePatterns.new("clo", Regex("^\\)+"), null, ")")
         // A line comment that starts with ;
         _shortcutStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^;[^\r\n]*"),
+                Regex("^;[^\r\n]*"),
                 null,
                 ";"
         )
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double quoted, possibly multi-line, string.
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
+                Regex("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
                 null,
                 "\""
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile(
+                Regex(
                     "^(?:block|c[ad]+r|catch|con[ds]|def(?:ine|un)|do|eq|eql|equal|equalp|eval-when|flet|format|go|if|labels|lambda|let|load-time-value|locally|macrolet|multiple-value-call|nil|progn|progv|quote|require|return-from|setq|symbol-macrolet|t|tagbody|the|throw|unwind)\\b",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 ),
                 null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile(
+                Prettify.PR_LITERAL, Regex(
                     "^[+\\-]?(?:[0#]x[0-9a-f]+|\\d+\\/\\d+|(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:[ed][+\\-]?\\d+)?)",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 )
         )
         // A single quote possibly followed by a word that optionally ends with
         // = ! or ?.
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^\\'(?:-*(?:\\w|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?)?")
+                Regex("^\\'(?:-*(?:\\w|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?)?")
             )
         // A word that optionally ends with = ! or ?.
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile(
+                Prettify.PR_PLAIN, Regex(
                     "^-*(?:[a-z_]|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
             )
         )
         // A printable non-space non-special character
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION, Pattern.compile("^[^\\w\\t\\n\\r \\xA0()\\\"\\\\\\';]+")
+                Prettify.PR_PUNCTUATION, Regex("^[^\\w\\t\\n\\r \\xA0()\\\"\\\\\\';]+")
             )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

@@ -51,52 +51,52 @@ class LangPascal : Lang() {
         // 'single-line-string'
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*(?:\\'|$))"),
+                Regex("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*(?:\\'|$))"),
                 null,
                 "'"
         )
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
             )
 
         // A cStyleComments comment (* *) or {}
         _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^\\(\\*[\\s\\S]*?(?:\\*\\)|$)|^\\{[\\s\\S]*?(?:\\}|$)"),
+                Regex("^\\(\\*[\\s\\S]*?(?:\\*\\)|$)|^\\{[\\s\\S]*?(?:\\}|$)"),
                 null
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile(
+                Regex(
                     "^(?:ABSOLUTE|AND|ARRAY|ASM|ASSEMBLER|BEGIN|CASE|CONST|CONSTRUCTOR|DESTRUCTOR|DIV|DO|DOWNTO|ELSE|END|EXTERNAL|FOR|FORWARD|FUNCTION|GOTO|IF|IMPLEMENTATION|IN|INLINE|INTERFACE|INTERRUPT|LABEL|MOD|NOT|OBJECT|OF|OR|PACKED|PROCEDURE|PROGRAM|RECORD|REPEAT|SET|SHL|SHR|THEN|TO|TYPE|UNIT|UNTIL|USES|VAR|VIRTUAL|WHILE|WITH|XOR)\\b",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 ),
                 null
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^(?:true|false|self|nil)", Pattern.CASE_INSENSITIVE),
+                Regex("^(?:true|false|self|nil)", RegexOption.IGNORE_CASE),
                 null
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_PLAIN,
-                Pattern.compile("^[a-z][a-z0-9]*", Pattern.CASE_INSENSITIVE),
+                Regex("^[a-z][a-z0-9]*", RegexOption.IGNORE_CASE),
                 null
         )
         // Literals .0, 0, 0.0 0E13
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile(
+                Regex(
                     "^(?:\\$[a-f0-9]+|(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+\\-]?\\d+)?)",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 ),
                 null,
                 "0123456789"
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^.[^\\s\\w\\.$@\\'\\/]*"),
+                Regex("^.[^\\s\\w\\.$@\\'\\/]*"),
                 null
         )
         setShortcutStylePatterns(_shortcutStylePatterns)

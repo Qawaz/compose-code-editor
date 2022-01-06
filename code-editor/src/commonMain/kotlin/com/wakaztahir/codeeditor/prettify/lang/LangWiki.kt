@@ -15,8 +15,7 @@ package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
-
-import java.util.regex.Pattern
+import com.wakaztahir.codeeditor.utils.new
 
 /**
  * This is similar to the lang-wiki.js in JavaScript Prettify.
@@ -40,14 +39,12 @@ class LangWiki : Lang() {
 
         init {
             val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-            val _fallthroughStylePatterns: List<List<Any?>> = ArrayList()
-            _shortcutStylePatterns.add(
-                listOf(
-                    Prettify.PR_KEYWORD,
-                    Pattern.compile("^#[a-z]+", Pattern.CASE_INSENSITIVE),
-                    null,
-                    "#"
-                )
+            val _fallthroughStylePatterns: List<StylePattern> = ArrayList()
+            _shortcutStylePatterns.new(
+                Prettify.PR_KEYWORD,
+                Regex("^#[a-z]+", RegexOption.IGNORE_CASE),
+                null,
+                "#"
             )
             setShortcutStylePatterns(_shortcutStylePatterns)
             setFallthroughStylePatterns(_fallthroughStylePatterns)
@@ -68,58 +65,47 @@ class LangWiki : Lang() {
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // Whitespace
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_PLAIN, Pattern.compile("^[\\t \\xA0a-gi-z0-9]+"), null, "\t " + 0xA0.toChar().toString() + "abcdefgijklmnopqrstuvwxyz0123456789"
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_PLAIN,
+            Regex("^[\\t \\xA0a-gi-z0-9]+"),
+            null,
+            "\t " + 0xA0.toChar().toString() + "abcdefgijklmnopqrstuvwxyz0123456789"
         )
         // Wiki formatting
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[=*~\\^\\[\\]]+"),
-                null,
-                "=*~^[]"
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_PUNCTUATION,
+            Regex("^[=*~\\^\\[\\]]+"),
+            null,
+            "=*~^[]"
         )
         // Meta-info like #summary, #labels, etc.
-        _fallthroughStylePatterns.add(
-            listOf(
-                "lang-wiki.meta",
-                Pattern.compile("(?:^^|\r\n?|\n)(#[a-z]+)\\b")
-            )
+        _fallthroughStylePatterns.new(
+            "lang-wiki.meta",
+            Regex("(?:^^|\r\n?|\n)(#[a-z]+)\\b")
         )
         // A WikiWord
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_LITERAL,
-                Pattern.compile("^(?:[A-Z][a-z][a-z0-9]+[A-Z][a-z][a-zA-Z0-9]+)\\b")
-            )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_LITERAL,
+            Regex("^(?:[A-Z][a-z][a-z0-9]+[A-Z][a-z][a-zA-Z0-9]+)\\b")
         )
         // A preformatted block in an unknown language
-        _fallthroughStylePatterns.add(
-            listOf(
-                "lang-",
-                Pattern.compile("^\\{\\{\\{([\\s\\S]+?)\\}\\}\\}")
-            )
+        _fallthroughStylePatterns.new(
+            "lang-",
+            Regex("^\\{\\{\\{([\\s\\S]+?)\\}\\}\\}")
         )
         // A block of source code in an unknown language
-        _fallthroughStylePatterns.add(listOf("lang-", Pattern.compile("^`([^\r\n`]+)`")))
+        _fallthroughStylePatterns.new("lang-", Regex("^`([^\r\n`]+)`"))
         // An inline URL.
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_STRING,
-                Pattern.compile(
-                    "^https?:\\/\\/[^\\/?#\\s]*(?:\\/[^?#\\s]*)?(?:\\?[^#\\s]*)?(?:#\\S*)?",
-                    Pattern.CASE_INSENSITIVE
-                )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_STRING,
+            Regex(
+                "^https?:\\/\\/[^\\/?#\\s]*(?:\\/[^?#\\s]*)?(?:\\?[^#\\s]*)?(?:#\\S*)?",
+                RegexOption.IGNORE_CASE
             )
         )
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_PLAIN,
-                Pattern.compile("^(?:\r\n|[\\s\\S])[^#=*~^A-Zh\\{`\\[\r\n]*")
-            )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_PLAIN,
+            Regex("^(?:\r\n|[\\s\\S])[^#=*~^A-Zh\\{`\\[\r\n]*")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

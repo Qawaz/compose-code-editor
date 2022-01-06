@@ -15,8 +15,7 @@ package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
-
-import java.util.regex.Pattern
+import com.wakaztahir.codeeditor.utils.new
 
 /**
  * This is similar to the lang-yaml.js in JavaScript Prettify.
@@ -38,84 +37,64 @@ class LangYaml : Lang() {
     init {
         val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[:|>?]+"),
-                null,
-                ":|>?"
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_PUNCTUATION,
+            Regex("^[:|>?]+"),
+            null,
+            ":|>?"
         )
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_DECLARATION,
-                Pattern.compile("^%(?:YAML|TAG)[^#\\r\\n]+"),
-                null,
-                "%"
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_DECLARATION,
+            Regex("^%(?:YAML|TAG)[^#\\r\\n]+"),
+            null,
+            "%"
         )
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_TYPE,
-                Pattern.compile("^[&]\\S+"),
-                null,
-                "&"
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_TYPE,
+            Regex("^[&]\\S+"),
+            null,
+            "&"
         )
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_TYPE,
-                Pattern.compile("^!\\S*"),
-                null,
-                "!"
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_TYPE,
+            Regex("^!\\S*"),
+            null,
+            "!"
         )
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_STRING,
-                Pattern.compile("^\"(?:[^\\\\\"]|\\\\.)*(?:\"|$)"),
-                null,
-                "\""
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_STRING,
+            Regex("^\"(?:[^\\\\\"]|\\\\.)*(?:\"|$)"),
+            null,
+            "\""
         )
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_STRING,
-                Pattern.compile("^'(?:[^']|'')*(?:'|$)"),
-                null,
-                "'"
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_STRING,
+            Regex("^'(?:[^']|'')*(?:'|$)"),
+            null,
+            "'"
         )
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_COMMENT,
-                Pattern.compile("^#[^\\r\\n]*"),
-                null,
-                "#"
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_COMMENT,
+            Regex("^#[^\\r\\n]*"),
+            null,
+            "#"
         )
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_PLAIN,
-                Pattern.compile("^\\s+"),
-                null,
-                " \t\r\n"
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_PLAIN,
+            Regex("^\\s+"),
+            null,
+            " \t\r\n"
         )
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_DECLARATION,
-                Pattern.compile("^(?:---|\\.\\.\\.)(?:[\\r\\n]|$)")
-            )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_DECLARATION,
+            Regex("^(?:---|\\.\\.\\.)(?:[\\r\\n]|$)")
         )
-        _fallthroughStylePatterns.add(listOf(Prettify.PR_PUNCTUATION, Pattern.compile("^-")))
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_KEYWORD,
-                Pattern.compile("^\\w+:[ \\r\\n]")
-            )
+        _fallthroughStylePatterns.new(Prettify.PR_PUNCTUATION, Regex("^-"))
+        _fallthroughStylePatterns.new(
+            Prettify.PR_KEYWORD,
+            Regex("^\\w+:[ \\r\\n]")
         )
-        _fallthroughStylePatterns.add(listOf(Prettify.PR_PLAIN, Pattern.compile("^\\w+")))
+        _fallthroughStylePatterns.new(Prettify.PR_PLAIN, Regex("^\\w+"))
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
     }

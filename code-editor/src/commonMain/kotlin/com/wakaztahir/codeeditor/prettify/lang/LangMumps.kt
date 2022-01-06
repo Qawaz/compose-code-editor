@@ -126,12 +126,12 @@ class LangMumps : Lang() {
 
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double or single quoted, possibly multi-line, string.
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^(?:\"(?:[^\"]|\\\\.)*\")"),
+                Regex("^(?:\"(?:[^\"]|\\\\.)*\")"),
                 null,
                 "\""
         )
@@ -139,37 +139,37 @@ class LangMumps : Lang() {
         // A line comment that starts with ;
         _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^;[^\\r\\n]*"),
+                Regex("^;[^\\r\\n]*"),
                 null,
                 ";"
         )
         // Add intrinsic variables and functions as declarations, there not really but it mean
         // they will hilighted differently from commands.
         _fallthroughStylePatterns.new(
-                Prettify.PR_DECLARATION, Pattern.compile(
-                    "^(?:\\$(?:$intrinsic))\\b", Pattern.CASE_INSENSITIVE
+                Prettify.PR_DECLARATION, Regex(
+                    "^(?:\\$(?:$intrinsic))\\b", RegexOption.IGNORE_CASE
                 ), null
         )
         // Add commands as keywords
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD, Pattern.compile(
-                    "^(?:[^\\$]$commands)\\b", Pattern.CASE_INSENSITIVE
+                Prettify.PR_KEYWORD, Regex(
+                    "^(?:[^\\$]$commands)\\b", RegexOption.IGNORE_CASE
                 ), null
         )
         // A number is a decimal real literal or in scientific notation.
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^[+-]?(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:E[+\\-]?\\d+)?)", Pattern.CASE_INSENSITIVE)
+                Regex("^[+-]?(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:E[+\\-]?\\d+)?)", RegexOption.IGNORE_CASE)
         )
         // An identifier
         _fallthroughStylePatterns.new(
                 Prettify.PR_PLAIN,
-                Pattern.compile("^[a-z][a-zA-Z0-9]*", Pattern.CASE_INSENSITIVE)
+                Regex("^[a-z][a-zA-Z0-9]*", RegexOption.IGNORE_CASE)
             )
         // Exclude $ % and ^
         _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[^\\w\\t\\n\\r\\xA0\\\"\\$;%\\^]|_")
+                Regex("^[^\\w\\t\\n\\r\\xA0\\\"\\$;%\\^]|_")
             )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

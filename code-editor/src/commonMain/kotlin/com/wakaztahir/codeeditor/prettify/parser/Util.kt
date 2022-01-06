@@ -13,9 +13,6 @@
 // limitations under the License.
 package com.wakaztahir.codeeditor.prettify.parser
 
-import java.util.regex.Pattern
-import kotlin.collections.ArrayList
-
 /**
  * Common Utilities.
  * Some of the functions are port from JavaScript.
@@ -77,27 +74,45 @@ object Util {
      * `isGlobal` is true, the return results will only include the
      * group 0 matches. It is similar to string.match(regexp) in JavaScript.
      *
-     * @param pattern the regexp
+     * @param regex the regexp
      * @param string the string
      * @param isGlobal similar to JavaScript /g flag
      *
      * @return all matches
      */
-    fun match(pattern: Pattern, string: String, isGlobal: Boolean): Array<String> {
-        val matchesList: MutableList<String> = ArrayList()
-        val matcher = pattern.matcher(string)
-        while (matcher.find()) {
-            matchesList.add(matcher.group(0))
+    fun match(regex: Regex, string: String, isGlobal: Boolean): MutableList<String> {
+        val matchesList = mutableListOf<String>()
+        var startIndex = 0
+        var matchResult = regex.find(string, startIndex)
+        while (matchResult != null) {
+            matchResult.groups[0]?.value?.let { matchesList.add(it) }
             if (!isGlobal) {
-                var i : Int = 1
-                val iEnd : Int = matcher.groupCount()
-                while (i <= iEnd) {
-                    matchesList.add(matcher.group(i))
+                var i = 1
+                while (i < matchResult.groups.size) {
+                    matchResult.groups[i]?.value?.let { matchesList.add(it) }
                     i++
                 }
             }
+            startIndex = matchResult.range.last + 1
+            matchResult = regex.find(string, startIndex)
         }
-        return matchesList.toTypedArray()
+        // Old written with pattern
+//        val matcher = Pattern.compile(regex.pattern).matcher(string)
+//        val matchesList = mutableListOf<String>()
+//        while (matcher.find()) {
+//            matchesList.add(matcher.group(0))
+//            if (!isGlobal) {
+//                var i : Int = 1
+//                val iEnd : Int = matcher.groupCount()
+//                while (i <= iEnd) {
+//                    matchesList.add(matcher.group(i))
+//                    i++
+//                }
+//            }
+//        }
+//        println("His Matches : ${matchesList.joinToString(",")}")
+//        println("Myy Matches : ${myMatchesList.joinToString(",")}")
+        return matchesList
     }
 
     /**
@@ -109,14 +124,8 @@ object Util {
      *
      * @return true if at least one match, false if no match
      */
-    fun test(pattern: Pattern?, string: String?): Boolean {
-        if (pattern == null) {
-            throw NullPointerException("argument 'pattern' cannot be null")
-        }
-        if (string == null) {
-            throw NullPointerException("argument 'string' cannot be null")
-        }
-        return pattern.matcher(string).find()
+    fun test(pattern: Regex, string: String): Boolean {
+        return pattern.find(string) != null
     }
 
     /**

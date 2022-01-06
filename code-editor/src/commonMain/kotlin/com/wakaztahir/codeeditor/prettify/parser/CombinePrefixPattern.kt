@@ -48,21 +48,20 @@ class CombinePrefixPattern {
      * @return Pattern a global regex.
      */
     @Throws(Exception::class)
-    fun combinePrefixPattern(regexs: List<Pattern>): Pattern {
+    fun combinePrefixPattern(regexs: List<Regex>): Regex {
         var ignoreCase = false
         run {
             var i: Int = 0
             val n: Int = regexs.size
             while (i < n) {
-                val regex: Pattern = regexs.get(i)
-                if ((regex.flags() and Pattern.CASE_INSENSITIVE) != 0) {
+                val regex: Regex = regexs.get(i)
+                if (regex.options.contains(RegexOption.IGNORE_CASE)) {
                     ignoreCase = true
                 } else if (Util.test(
-                        Pattern.compile("[a-z]", Pattern.CASE_INSENSITIVE),
-                        regex.pattern()
-                            .replace("\\\\[Uu][0-9A-Fa-f]{4}|\\\\[Xx][0-9A-Fa-f]{2}|\\\\[^UuXx]".toRegex(), "")
-                    )
-                ) {
+                        Regex("[a-z]", RegexOption.IGNORE_CASE),
+                        regex.pattern.replace("\\\\[Uu][0-9A-Fa-f]{4}|\\\\[Xx][0-9A-Fa-f]{2}|\\\\[^UuXx]".toRegex(), "")
+                    ))
+                {
                     needToFoldCase = true
                     ignoreCase = false
                     break
@@ -75,17 +74,17 @@ class CombinePrefixPattern {
         val n = regexs.size
         while (i < n) {
             val regex = regexs[i]
-            if ((regex.flags() and Pattern.MULTILINE) != 0) {
-                throw Exception(regex.pattern())
+            if (regex.options.contains(RegexOption.MULTILINE)) {
+                throw Exception("Multiline Regex : "+regex.pattern)
             }
             rewritten.add("(?:" + allowAnywhereFoldCaseAndRenumberGroups(regex) + ")")
             ++i
         }
-        return if (ignoreCase) Pattern.compile(
-            Util.join(rewritten, "|"),
-            Pattern.CASE_INSENSITIVE
-        ) else Pattern.compile(
-            Util.join(rewritten, "|")
+        return if (ignoreCase) Regex(
+            join(rewritten, "|"),
+            RegexOption.IGNORE_CASE
+        ) else Regex(
+            join(rewritten, "|")
         )
     }
 
@@ -129,7 +128,7 @@ class CombinePrefixPattern {
 
     internal fun caseFoldCharset(charSet: String?): String {
         val charsetParts = Util.match(
-            Pattern.compile(
+            Regex(
                 ("\\\\u[0-9A-Fa-f]{4}"
                         + "|\\\\x[0-9A-Fa-f]{2}"
                         + "|\\\\[0-3][0-7]{0,2}"
@@ -150,11 +149,7 @@ class CombinePrefixPattern {
             val n: Int = charsetParts.size
             while (i < n) {
                 val p: String = charsetParts[i]
-                if (Util.test(
-                        Pattern.compile("\\\\[bdsw]", Pattern.CASE_INSENSITIVE),
-                        p
-                    )
-                ) {  // Don't muck with named groups.
+                if (Util.test(Regex("\\\\[bdsw]", RegexOption.IGNORE_CASE), p)) {  // Don't muck with named groups.
                     out.add(p)
                 } else {
                     val start: Int = decodeEscape(p)
@@ -214,15 +209,15 @@ class CombinePrefixPattern {
             }
         }
         out.add("]")
-        return Util.join(out)
+        return join(out)
     }
 
-    internal fun allowAnywhereFoldCaseAndRenumberGroups(regex: Pattern): String {
+    internal fun allowAnywhereFoldCaseAndRenumberGroups(regex: Regex): String {
         // Split into character sets, escape sequences, punctuation strings
         // like ('(', '(?:', ')', '^'), and runs of characters that do not
         // include any of the above.
         val parts = Util.match(
-            Pattern.compile(
+            Regex(
                 ("(?:"
                         + "\\[(?:[^\\x5C\\x5D]|\\\\[\\s\\S])*\\]" // a character set
                         + "|\\\\u[A-Fa-f0-9]{4}" // a unicode escape
@@ -233,7 +228,7 @@ class CombinePrefixPattern {
                         + "|[\\(\\)\\^]" // start/end of a group, or line start
                         + "|[^\\x5B\\x5C\\(\\)\\^]+" // run of other characters
                         + ")")
-            ), regex.pattern(), true
+            ), regex.pattern, true
         )
         val n = parts.size
 
@@ -310,7 +305,7 @@ class CombinePrefixPattern {
 
         // Expand letters to groups to handle mixing of case-sensitive and
         // case-insensitive patterns if necessary.
-        if ((regex.flags() and Pattern.CASE_INSENSITIVE) != 0 && needToFoldCase) {
+        if (regex.options.contains(RegexOption.IGNORE_CASE) && needToFoldCase) {
             for (i in 0 until n) {
                 val p = parts[i]
                 val ch0: Char = if (p!!.length > 0) p[0] else '0'

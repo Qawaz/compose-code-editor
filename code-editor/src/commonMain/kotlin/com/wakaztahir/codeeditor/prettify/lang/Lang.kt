@@ -38,36 +38,12 @@ abstract class Lang {
      */
     internal var extendedLangs: List<Lang>
 
-    fun getShortcutStylePatterns(): List<StylePattern> {
-        val returnList: MutableList<StylePattern> = ArrayList()
-        for (shortcutStylePattern in shortcutStylePatterns) {
-            returnList.add(ArrayList(shortcutStylePattern))
-        }
-        return returnList
-    }
-
     fun setShortcutStylePatterns(shortcutStylePatterns: List<StylePattern>) {
-        val cloneList: MutableList<List<Any?>> = ArrayList()
-        for (shortcutStylePattern in shortcutStylePatterns) {
-            cloneList.add(ArrayList(shortcutStylePattern))
-        }
-        this.shortcutStylePatterns = cloneList
+        this.shortcutStylePatterns = shortcutStylePatterns.toMutableList()
     }
 
-    fun getFallthroughStylePatterns(): List<List<Any?>> {
-        val returnList: MutableList<List<Any?>> = ArrayList()
-        for (fallthroughStylePattern in fallthroughStylePatterns) {
-            returnList.add(ArrayList(fallthroughStylePattern))
-        }
-        return returnList
-    }
-
-    fun setFallthroughStylePatterns(fallthroughStylePatterns: List<List<Any?>>) {
-        val cloneList: MutableList<List<Any?>> = ArrayList()
-        for (fallthroughStylePattern in fallthroughStylePatterns) {
-            cloneList.add(ArrayList(fallthroughStylePattern))
-        }
-        this.fallthroughStylePatterns = cloneList
+    fun setFallthroughStylePatterns(fallthroughStylePatterns: List<StylePattern>) {
+        this.fallthroughStylePatterns = fallthroughStylePatterns.toMutableList()
     }
 
     /**

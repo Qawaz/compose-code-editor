@@ -62,7 +62,7 @@ class LangHs : Lang() {
         // whitechar    ->    newline | vertab | space | tab | uniWhite
         // newline      ->    return linefeed | return | linefeed | formfeed
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar()
+                Prettify.PR_PLAIN, Regex("^[\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar()
                     .toString() + 0x0C.toChar().toString() + "\r "
             )
         // Single line double and single-quoted strings.
@@ -73,13 +73,13 @@ class LangHs : Lang() {
         // charesc      ->    a | b | f | n | r | t | v | \ | " | ' | &
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
+                Regex("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
                 null,
                 "\""
         )
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])\\'?"),
+                Regex("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])\\'?"),
                 null,
                 "'"
             )
@@ -94,9 +94,9 @@ class LangHs : Lang() {
         // exponent     ->    (e | E) [+ | -] decimal
         _shortcutStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile(
+                Regex(
                     "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 ),
                 null,
                 "0123456789"
@@ -110,7 +110,7 @@ class LangHs : Lang() {
         // closecom     ->    '-}'
         _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^(?:(?:--+(?:[^\\r\\n\\x0C]*)?)|(?:\\{-(?:[^-]|-+[^-\\}])*-\\}))")
+                Regex("^(?:(?:--+(?:[^\\r\\n\\x0C]*)?)|(?:\\{-(?:[^-]|-+[^-\\}])*-\\}))")
         )
         // reservedid   ->    case | class | data | default | deriving | do
         //               |    else | if | import | in | infix | infixl | infixr
@@ -118,7 +118,7 @@ class LangHs : Lang() {
         //               |    type | where | _
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^(?:case|class|data|default|deriving|do|else|if|import|in|infix|infixl|infixr|instance|let|module|newtype|of|then|type|where|_)(?=[^a-zA-Z0-9\\']|$)"),
+                Regex("^(?:case|class|data|default|deriving|do|else|if|import|in|infix|infixl|infixr|instance|let|module|newtype|of|then|type|where|_)(?=[^a-zA-Z0-9\\']|$)"),
                 null
         )
         // qvarid       ->    [ modid . ] varid
@@ -134,12 +134,12 @@ class LangHs : Lang() {
         // uniLarge     ->    any uppercase or titlecase Unicode letter
         _fallthroughStylePatterns.new(
                 Prettify.PR_PLAIN,
-                Pattern.compile("^(?:[A-Z][\\w\\']*\\.)*[a-zA-Z][\\w\\']*")
+                Regex("^(?:[A-Z][\\w\\']*\\.)*[a-zA-Z][\\w\\']*")
         )
         // matches the symbol production
         _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[^\\t\\n\\x0B\\x0C\\r a-zA-Z0-9\\'\\\"]+")
+                Regex("^[^\\t\\n\\x0B\\x0C\\r a-zA-Z0-9\\'\\\"]+")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

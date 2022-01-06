@@ -66,35 +66,35 @@ class LangClj : Lang() {
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // clojure has more paren types than minimal lisp.
-        _shortcutStylePatterns.add(listOf("opn", Pattern.compile("^[\\(\\{\\[]+"), null, "([{"))
-        _shortcutStylePatterns.add(listOf("clo", Pattern.compile("^[\\)\\}\\]]+"), null, ")]}"))
+        _shortcutStylePatterns.new("opn", Regex("^[\\(\\{\\[]+"), null, "([{")
+        _shortcutStylePatterns.new("clo", Regex("^[\\)\\}\\]]+"), null, ")]}")
         // A line comment that starts with ;
         _shortcutStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^;[^\r\n]*"),
+                Regex("^;[^\r\n]*"),
                 null,
                 ";"
             )
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
             )
         // A double quoted, possibly multi-line, string.
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
+                Regex("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
                 null,
                 "\""
         )
         // clojure has a much larger set of keywords
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^(?:def|if|do|let|quote|var|fn|loop|recur|throw|try|monitor-enter|monitor-exit|defmacro|defn|defn-|macroexpand|macroexpand-1|for|doseq|dosync|dotimes|and|or|when|not|assert|doto|proxy|defstruct|first|rest|cons|defprotocol|deftype|defrecord|reify|defmulti|defmethod|meta|with-meta|ns|in-ns|create-ns|import|intern|refer|alias|namespace|resolve|ref|deref|refset|new|set!|memfn|to-array|into-array|aset|gen-class|reduce|map|filter|find|nil?|empty?|hash-map|hash-set|vec|vector|seq|flatten|reverse|assoc|dissoc|list|list?|disj|get|union|difference|intersection|extend|extend-type|extend-protocol|prn)\\b"),
+                Regex("^(?:def|if|do|let|quote|var|fn|loop|recur|throw|try|monitor-enter|monitor-exit|defmacro|defn|defn-|macroexpand|macroexpand-1|for|doseq|dosync|dotimes|and|or|when|not|assert|doto|proxy|defstruct|first|rest|cons|defprotocol|deftype|defrecord|reify|defmulti|defmethod|meta|with-meta|ns|in-ns|create-ns|import|intern|refer|alias|namespace|resolve|ref|deref|refset|new|set!|memfn|to-array|into-array|aset|gen-class|reduce|map|filter|find|nil?|empty?|hash-map|hash-set|vec|vector|seq|flatten|reverse|assoc|dissoc|list|list?|disj|get|union|difference|intersection|extend|extend-type|extend-protocol|prn)\\b"),
                 null
             )
         _fallthroughStylePatterns.new(
                 Prettify.PR_TYPE,
-                Pattern.compile("^:[0-9a-zA-Z\\-]+")
+                Regex("^:[0-9a-zA-Z\\-]+")
             )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

@@ -47,82 +47,82 @@ class LangN : Lang() {
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*\\'|\\\"(?:[^\\\\\\\"\\r\\n]|\\\\.)*(?:\\\"|$))"),
+                Regex("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*\\'|\\\"(?:[^\\\\\\\"\\r\\n]|\\\\.)*(?:\\\"|$))"),
                 null,
                 "\""
             )
         _shortcutStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^#(?:(?:define|elif|else|endif|error|ifdef|include|ifndef|line|pragma|undef|warning)\\b|[^\\r\\n]*)"),
+                Regex("^#(?:(?:define|elif|else|endif|error|ifdef|include|ifndef|line|pragma|undef|warning)\\b|[^\\r\\n]*)"),
                 null,
                 "#"
             )
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
             )
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^@\\\"(?:[^\\\"]|\\\"\\\")*(?:\\\"|$)"),
+                Regex("^@\\\"(?:[^\\\"]|\\\"\\\")*(?:\\\"|$)"),
                 null
             )
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^<#(?:[^#>])*(?:#>|$)"),
+                Regex("^<#(?:[^#>])*(?:#>|$)"),
                 null
             )
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^<(?:(?:(?:\\.\\.\\/)*|\\/?)(?:[\\w-]+(?:\\/[\\w-]+)+)?[\\w-]+\\.h|[a-z]\\w*)>"),
+                Regex("^<(?:(?:(?:\\.\\.\\/)*|\\/?)(?:[\\w-]+(?:\\/[\\w-]+)+)?[\\w-]+\\.h|[a-z]\\w*)>"),
                 null
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^\\/\\/[^\\r\\n]*"),
+                Regex("^\\/\\/[^\\r\\n]*"),
                 null
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^\\/\\*[\\s\\S]*?(?:\\*\\/|$)"),
+                Regex("^\\/\\*[\\s\\S]*?(?:\\*\\/|$)"),
                 null
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^(?:" + keywords + ")\\\\b"),
+                Regex("^(?:" + keywords + ")\\\\b"),
                 null
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_TYPE,
-                Pattern.compile("^(?:array|bool|byte|char|decimal|double|float|int|list|long|object|sbyte|short|string|ulong|uint|ufloat|ulong|ushort|void)\\b"),
+                Regex("^(?:array|bool|byte|char|decimal|double|float|int|list|long|object|sbyte|short|string|ulong|uint|ufloat|ulong|ushort|void)\\b"),
                 null
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^@[a-z_$][a-z_$@0-9]*", Pattern.CASE_INSENSITIVE),
+                Regex("^@[a-z_$][a-z_$@0-9]*", RegexOption.IGNORE_CASE),
                 null
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_TYPE,
-                Pattern.compile("^@[A-Z]+[a-z][A-Za-z_$@0-9]*"),
+                Regex("^@[A-Z]+[a-z][A-Za-z_$@0-9]*"),
                 null
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_PLAIN,
-                Pattern.compile("^'?[A-Za-z_$][a-z_$@0-9]*", Pattern.CASE_INSENSITIVE),
+                Regex("^'?[A-Za-z_$][a-z_$@0-9]*", RegexOption.IGNORE_CASE),
                 null
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile(
+                Prettify.PR_LITERAL, Regex(
                     "^(?:" // A hex number
                             + "0x[a-f0-9]+" // or an octal or decimal number,
                             + "|(?:\\\\d(?:_\\\\d+)*\\\\d*(?:\\\\.\\\\d*)?|\\\\.\\\\d\\\\+)" // possibly in scientific notation
                             + "(?:e[+\\\\-]?\\\\d+)?"
                             + ")" // with an optional modifier like UL for unsigned long
-                            + "[a-z]*", Pattern.CASE_INSENSITIVE
+                            + "[a-z]*", RegexOption.IGNORE_CASE
                 ), null, "0123456789"
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^.[^\\s\\w\\.$@\\'\\\"\\`\\/\\#]*"),
+                Regex("^.[^\\s\\w\\.$@\\'\\\"\\`\\/\\#]*"),
                 null
         )
         setShortcutStylePatterns(_shortcutStylePatterns)

@@ -34,37 +34,37 @@ class LangBasic : Lang() {
         // "single-line-string"
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^(?:\"(?:[^\\\\\"\\r\\n]|\\\\.)*(?:\"|$))"),
+                Regex("^(?:\"(?:[^\\\\\"\\r\\n]|\\\\.)*(?:\"|$))"),
                 null,
                 "\""
             )
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^\\s+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^\\s+"), null, "\t\n\r " + 0xA0.toChar().toString()
             )
 
         // A line comment that starts with REM
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT, Pattern.compile("^REM[^\\r\\n]*"), null
+                Prettify.PR_COMMENT, Regex("^REM[^\\r\\n]*"), null
             )
 
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^\\b(?:AND|CLOSE|CLR|CMD|CONT|DATA|DEF ?FN|DIM|END|FOR|GET|GOSUB|GOTO|IF|INPUT|LET|LIST|LOAD|NEW|NEXT|NOT|ON|OPEN|OR|POKE|PRINT|READ|RESTORE|RETURN|RUN|SAVE|STEP|STOP|SYS|THEN|TO|VERIFY|WAIT)\\b"),
+                Regex("^\\b(?:AND|CLOSE|CLR|CMD|CONT|DATA|DEF ?FN|DIM|END|FOR|GET|GOSUB|GOTO|IF|INPUT|LET|LIST|LOAD|NEW|NEXT|NOT|ON|OPEN|OR|POKE|PRINT|READ|RESTORE|RETURN|RUN|SAVE|STEP|STOP|SYS|THEN|TO|VERIFY|WAIT)\\b"),
                 null
             )
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[A-Z][A-Z0-9]?(?:\\$|%)?", Pattern.CASE_INSENSITIVE), null
+                Prettify.PR_PLAIN, Regex("^[A-Z][A-Z0-9]?(?:\\$|%)?", RegexOption.IGNORE_CASE), null
             )
         // Literals .0, 0, 0.0 0E13
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+\\-]?\\d+)?", Pattern.CASE_INSENSITIVE),
+                Regex("^(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+\\-]?\\d+)?", RegexOption.IGNORE_CASE),
                 null,
                 "0123456789"
             )
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION, Pattern.compile("^.[^\\s\\w\\.$%\"]*"), null
+                Prettify.PR_PUNCTUATION, Regex("^.[^\\s\\w\\.$%\"]*"), null
             )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

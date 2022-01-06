@@ -53,48 +53,48 @@ class LangLua : Lang() {
 
         // Whitespace
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double or single quoted, possibly multi-line, string.
         _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])*(?:\\'|$))"),
+                Regex("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])*(?:\\'|$))"),
                 null,
                 "\"'"
         )
         // A comment is either a line comment that starts with two dashes, or
         // two dashes preceding a long bracketed block.
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT, Pattern.compile("^--(?:\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)|[^\\r\\n]*)")
+                Prettify.PR_COMMENT, Regex("^--(?:\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)|[^\\r\\n]*)")
         )
         // A long bracketed block not preceded by -- is a string.
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)")
+                Regex("^\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)")
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^(?:and|break|do|else|elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\\b"),
+                Regex("^(?:and|break|do|else|elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\\b"),
                 null
         )
         // A number is a hex integer literal, a decimal real literal, or in
         // scientific notation.
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile(
+                Regex(
                     "^[+-]?(?:0x[\\da-f]+|(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:e[+\\-]?\\d+)?))",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 )
         )
         // An identifier
         _fallthroughStylePatterns.new(
                 Prettify.PR_PLAIN,
-                Pattern.compile("^[a-z_]\\w*", Pattern.CASE_INSENSITIVE)
+                Regex("^[a-z_]\\w*", RegexOption.IGNORE_CASE)
         )
         // A run of punctuation
         _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[^\\w\\t\\n\\r \\xA0][^\\w\\n\\r \\xA0\\\"\\'\\-\\+=]*")
+                Regex("^[^\\w\\t\\n\\r \\xA0][^\\w\\n\\r \\xA0\\\"\\'\\-\\+=]*")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

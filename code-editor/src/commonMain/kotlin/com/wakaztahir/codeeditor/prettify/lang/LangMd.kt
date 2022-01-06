@@ -22,11 +22,11 @@ class LangMd : Lang() {
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
         _fallthroughStylePatterns.new(
                 Prettify.PR_DECLARATION,
-                Pattern.compile("^#.*?[\\n\\r]")
+                Regex("^#.*?[\\n\\r]")
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^```[\\s\\S]*?(?:```|$)")
+                Regex("^```[\\s\\S]*?(?:```|$)")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

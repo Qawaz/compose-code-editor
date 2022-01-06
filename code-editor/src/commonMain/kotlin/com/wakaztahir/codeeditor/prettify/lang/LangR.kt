@@ -48,40 +48,40 @@ class LangR : Lang() {
         val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
             )
         _shortcutStylePatterns.new(
-                Prettify.PR_STRING, Pattern.compile("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"), null, "\""
+                Prettify.PR_STRING, Regex("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"), null, "\""
             )
         _shortcutStylePatterns.new(
-                Prettify.PR_STRING, Pattern.compile("^\\'(?:[^\\'\\\\]|\\\\[\\s\\S])*(?:\\'|$)"), null, "'"
+                Prettify.PR_STRING, Regex("^\\'(?:[^\\'\\\\]|\\\\[\\s\\S])*(?:\\'|$)"), null, "'"
             )
-        _fallthroughStylePatterns.new(Prettify.PR_COMMENT, Pattern.compile("^#.*"))
+        _fallthroughStylePatterns.new(Prettify.PR_COMMENT, Regex("^#.*"))
         _fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD, Pattern.compile("^(?:if|else|for|while|repeat|in|next|break|return|switch|function)(?![A-Za-z0-9_.])")
+                Prettify.PR_KEYWORD, Regex("^(?:if|else|for|while|repeat|in|next|break|return|switch|function)(?![A-Za-z0-9_.])")
         )
         // hex numbes
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile("^0[xX][a-fA-F0-9]+([pP][0-9]+)?[Li]?")
+                Prettify.PR_LITERAL, Regex("^0[xX][a-fA-F0-9]+([pP][0-9]+)?[Li]?")
             )
         // Decimal numbers
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile("^[+-]?([0-9]+(\\.[0-9]+)?|\\.[0-9]+)([eE][+-]?[0-9]+)?[Li]?")
+                Prettify.PR_LITERAL, Regex("^[+-]?([0-9]+(\\.[0-9]+)?|\\.[0-9]+)([eE][+-]?[0-9]+)?[Li]?")
         )
         // builtin symbols
         _fallthroughStylePatterns.new(
-                Prettify.PR_LITERAL, Pattern.compile("^(?:NULL|NA(?:_(?:integer|real|complex|character)_)?|Inf|TRUE|FALSE|NaN|\\.\\.(?:\\.|[0-9]+))(?![A-Za-z0-9_.])")
+                Prettify.PR_LITERAL, Regex("^(?:NULL|NA(?:_(?:integer|real|complex|character)_)?|Inf|TRUE|FALSE|NaN|\\.\\.(?:\\.|[0-9]+))(?![A-Za-z0-9_.])")
         )
         // assignment, operators, and parens, etc.
         _fallthroughStylePatterns.new(
-                Prettify.PR_PUNCTUATION, Pattern.compile("^(?:<<?-|->>?|-|==|<=|>=|<|>|&&?|!=|\\|\\|?|\\*|\\+|\\^|\\/|!|%.*?%|=|~|\\$|@|:{1,3}|[\\[\\](){};,?])")
+                Prettify.PR_PUNCTUATION, Regex("^(?:<<?-|->>?|-|==|<=|>=|<|>|&&?|!=|\\|\\|?|\\*|\\+|\\^|\\/|!|%.*?%|=|~|\\$|@|:{1,3}|[\\[\\](){};,?])")
         )
         // valid variable names
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^(?:[A-Za-z]+[A-Za-z0-9_.]*|\\.[a-zA-Z_][0-9a-zA-Z\\._]*)(?![A-Za-z0-9_.])")
+                Prettify.PR_PLAIN, Regex("^(?:[A-Za-z]+[A-Za-z0-9_.]*|\\.[a-zA-Z_][0-9a-zA-Z\\._]*)(?![A-Za-z0-9_.])")
         )
         // string backtick
-        _fallthroughStylePatterns.new(Prettify.PR_STRING, Pattern.compile("^`.+`"))
+        _fallthroughStylePatterns.new(Prettify.PR_STRING, Regex("^`.+`"))
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
     }

@@ -15,8 +15,7 @@ package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
-
-import java.util.regex.Pattern
+import com.wakaztahir.codeeditor.utils.new
 
 /**
  * This is similar to the lang-vhdl.js in JavaScript Prettify.
@@ -43,69 +42,51 @@ class LangVhdl : Lang() {
         val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // Whitespace
-        _shortcutStylePatterns.add(
-            listOf(
-                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
-            )
+        _shortcutStylePatterns.new(
+            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // String, character or bit string
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_STRING, Pattern.compile("^(?:[BOX]?\"(?:[^\\\"]|\"\")*\"|'.')", Pattern.CASE_INSENSITIVE)
-            )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_STRING, Regex("^(?:[BOX]?\"(?:[^\\\"]|\"\")*\"|'.')", RegexOption.IGNORE_CASE)
         )
         // Comment, from two dashes until end of line.
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_COMMENT, Pattern.compile("^--[^\\r\\n]*")
-            )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_COMMENT, Regex("^--[^\\r\\n]*")
         )
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_KEYWORD, Pattern.compile(
-                    "^(?:abs|access|after|alias|all|and|architecture|array|assert|attribute|begin|block|body|buffer|bus|case|component|configuration|constant|disconnect|downto|else|elsif|end|entity|exit|file|for|function|generate|generic|group|guarded|if|impure|in|inertial|inout|is|label|library|linkage|literal|loop|map|mod|nand|new|next|nor|not|null|of|on|open|or|others|out|package|port|postponed|procedure|process|pure|range|record|register|reject|rem|report|return|rol|ror|select|severity|shared|signal|sla|sll|sra|srl|subtype|then|to|transport|type|unaffected|units|until|use|variable|wait|when|while|with|xnor|xor)(?=[^\\w-]|$)",
-                    Pattern.CASE_INSENSITIVE
-                ), null
-            )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_KEYWORD, Regex(
+                "^(?:abs|access|after|alias|all|and|architecture|array|assert|attribute|begin|block|body|buffer|bus|case|component|configuration|constant|disconnect|downto|else|elsif|end|entity|exit|file|for|function|generate|generic|group|guarded|if|impure|in|inertial|inout|is|label|library|linkage|literal|loop|map|mod|nand|new|next|nor|not|null|of|on|open|or|others|out|package|port|postponed|procedure|process|pure|range|record|register|reject|rem|report|return|rol|ror|select|severity|shared|signal|sla|sll|sra|srl|subtype|then|to|transport|type|unaffected|units|until|use|variable|wait|when|while|with|xnor|xor)(?=[^\\w-]|$)",
+                RegexOption.IGNORE_CASE
+            ), null
         )
         // Type, predefined or standard
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_TYPE, Pattern.compile(
-                    "^(?:bit|bit_vector|character|boolean|integer|real|time|string|severity_level|positive|natural|signed|unsigned|line|text|std_u?logic(?:_vector)?)(?=[^\\w-]|$)",
-                    Pattern.CASE_INSENSITIVE
-                ), null
-            )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_TYPE, Regex(
+                "^(?:bit|bit_vector|character|boolean|integer|real|time|string|severity_level|positive|natural|signed|unsigned|line|text|std_u?logic(?:_vector)?)(?=[^\\w-]|$)",
+                RegexOption.IGNORE_CASE
+            ), null
         )
         // Predefined attributes
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_TYPE, Pattern.compile(
-                    "^\\'(?:ACTIVE|ASCENDING|BASE|DELAYED|DRIVING|DRIVING_VALUE|EVENT|HIGH|IMAGE|INSTANCE_NAME|LAST_ACTIVE|LAST_EVENT|LAST_VALUE|LEFT|LEFTOF|LENGTH|LOW|PATH_NAME|POS|PRED|QUIET|RANGE|REVERSE_RANGE|RIGHT|RIGHTOF|SIMPLE_NAME|STABLE|SUCC|TRANSACTION|VAL|VALUE)(?=[^\\w-]|$)",
-                    Pattern.CASE_INSENSITIVE
-                ), null
-            )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_TYPE, Regex(
+                "^\\'(?:ACTIVE|ASCENDING|BASE|DELAYED|DRIVING|DRIVING_VALUE|EVENT|HIGH|IMAGE|INSTANCE_NAME|LAST_ACTIVE|LAST_EVENT|LAST_VALUE|LEFT|LEFTOF|LENGTH|LOW|PATH_NAME|POS|PRED|QUIET|RANGE|REVERSE_RANGE|RIGHT|RIGHTOF|SIMPLE_NAME|STABLE|SUCC|TRANSACTION|VAL|VALUE)(?=[^\\w-]|$)",
+                RegexOption.IGNORE_CASE
+            ), null
         )
         // Number, decimal or based literal
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_LITERAL, Pattern.compile(
-                    "^\\d+(?:_\\d+)*(?:#[\\w\\\\.]+#(?:[+\\-]?\\d+(?:_\\d+)*)?|(?:\\.\\d+(?:_\\d+)*)?(?:E[+\\-]?\\d+(?:_\\d+)*)?)",
-                    Pattern.CASE_INSENSITIVE
-                )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_LITERAL, Regex(
+                "^\\d+(?:_\\d+)*(?:#[\\w\\\\.]+#(?:[+\\-]?\\d+(?:_\\d+)*)?|(?:\\.\\d+(?:_\\d+)*)?(?:E[+\\-]?\\d+(?:_\\d+)*)?)",
+                RegexOption.IGNORE_CASE
             )
         )
         // Identifier, basic or extended
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_PLAIN, Pattern.compile("^(?:[a-z]\\w*|\\\\[^\\\\]*\\\\)", Pattern.CASE_INSENSITIVE)
-            )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_PLAIN, Regex("^(?:[a-z]\\w*|\\\\[^\\\\]*\\\\)", RegexOption.IGNORE_CASE)
         )
         // Punctuation
-        _fallthroughStylePatterns.add(
-            listOf(
-                Prettify.PR_PUNCTUATION, Pattern.compile("^[^\\w\\t\\n\\r \\xA0\\\"\\'][^\\w\\t\\n\\r \\xA0\\-\\\"\\']*")
-            )
+        _fallthroughStylePatterns.new(
+            Prettify.PR_PUNCTUATION, Regex("^[^\\w\\t\\n\\r \\xA0\\\"\\'][^\\w\\t\\n\\r \\xA0\\-\\\"\\']*")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

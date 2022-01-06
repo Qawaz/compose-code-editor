@@ -51,110 +51,110 @@ class LangDart : Lang() {
 
         // Whitespace.
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
             )
 
         // Script tag.
-        _fallthroughStylePatterns.new(Prettify.PR_COMMENT, Pattern.compile("^#!(?:.*)"))
+        _fallthroughStylePatterns.new(Prettify.PR_COMMENT, Regex("^#!(?:.*)"))
         // `import`, `library`, `part of`, `part`, `as`, `show`, and `hide`
         // keywords.
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^\\b(?:import|library|part of|part|as|show|hide)\\b", Pattern.CASE_INSENSITIVE)
+                Regex("^\\b(?:import|library|part of|part|as|show|hide)\\b", RegexOption.IGNORE_CASE)
             )
         // Single-line comments.
         _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^\\/\\/(?:.*)")
+                Regex("^\\/\\/(?:.*)")
         )
         // Multiline comments.
         _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
-                Pattern.compile("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
+                Regex("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
         )
         // `class` and `interface` keywords.
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("^\\b(?:class|interface)\\b", Pattern.CASE_INSENSITIVE)
+                Regex("^\\b(?:class|interface)\\b", RegexOption.IGNORE_CASE)
         )
         // General keywords.
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile(
+                Regex(
                     "^\\b(?:assert|break|case|catch|continue|default|do|else|finally|for|if|in|is|new|return|super|switch|this|throw|try|while)\\b",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
             )
         )
         // Declaration keywords.
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile(
+                Regex(
                     "^\\b(?:abstract|const|extends|factory|final|get|implements|native|operator|set|static|typedef|var)\\b",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 )
             )
         // Keywords for types.
         _fallthroughStylePatterns.new(
                 Prettify.PR_TYPE,
-                Pattern.compile(
+                Regex(
                     "^\\b(?:bool|double|Dynamic|int|num|Object|String|void)\\b",
-                    Pattern.CASE_INSENSITIVE
+                    RegexOption.IGNORE_CASE
                 )
             )
         // Keywords for constants.
         _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
-                Pattern.compile("\\b(?:false|null|true)\\b", Pattern.CASE_INSENSITIVE)
+                Regex("\\b(?:false|null|true)\\b", RegexOption.IGNORE_CASE)
             )
         // Multiline strings, single- and double-quoted.
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^r?[\\']{3}[\\s|\\S]*?[^\\\\][\\']{3}")
+                Regex("^r?[\\']{3}[\\s|\\S]*?[^\\\\][\\']{3}")
             )
 
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^r?[\\\"]{3}[\\s|\\S]*?[^\\\\][\\\"]{3}")
+                Regex("^r?[\\\"]{3}[\\s|\\S]*?[^\\\\][\\\"]{3}")
             )
 
         // Normal and raw strings, single- and double-quoted.
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^r?\\'(\\'|(?:[^\\n\\r\\f])*?[^\\\\]\\')")
+                Regex("^r?\\'(\\'|(?:[^\\n\\r\\f])*?[^\\\\]\\')")
             )
 
         _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
-                Pattern.compile("^r?\\\"(\\\"|(?:[^\\n\\r\\f])*?[^\\\\]\\\")")
+                Regex("^r?\\\"(\\\"|(?:[^\\n\\r\\f])*?[^\\\\]\\\")")
             )
         // Identifiers.
         _fallthroughStylePatterns.new(
                 Prettify.PR_PLAIN,
-                Pattern.compile("^[a-z_$][a-z0-9_]*", Pattern.CASE_INSENSITIVE)
+                Regex("^[a-z_$][a-z0-9_]*", RegexOption.IGNORE_CASE)
             )
         // Operators.
         _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[~!%^&*+=|?:<>/-]")
+                Regex("^[~!%^&*+=|?:<>/-]")
             )
         // Hex numbers.
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^\\b0x[0-9a-f]+", Pattern.CASE_INSENSITIVE)
+                Regex("^\\b0x[0-9a-f]+", RegexOption.IGNORE_CASE)
         )
         // Decimal numbers.
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^\\b\\d+(?:\\.\\d*)?(?:e[+-]?\\d+)?", Pattern.CASE_INSENSITIVE)
+                Regex("^\\b\\d+(?:\\.\\d*)?(?:e[+-]?\\d+)?", RegexOption.IGNORE_CASE)
         )
         _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
-                Pattern.compile("^\\b\\.\\d+(?:e[+-]?\\d+)?", Pattern.CASE_INSENSITIVE)
+                Regex("^\\b\\.\\d+(?:e[+-]?\\d+)?", RegexOption.IGNORE_CASE)
             )
         // Punctuation.
         _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
-                Pattern.compile("^[(){}\\[\\],.;]")
+                Regex("^[(){}\\[\\],.;]")
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

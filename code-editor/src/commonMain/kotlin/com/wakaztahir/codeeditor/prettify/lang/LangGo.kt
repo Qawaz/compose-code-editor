@@ -64,22 +64,22 @@ class LangGo : Lang() {
 
         // Whitespace is made up of spaces, tabs and newline characters.
         _shortcutStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+                Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // Not escaped as a string.  See note on minimalism above.
         _shortcutStylePatterns.new(
                 Prettify.PR_PLAIN,
-                Pattern.compile("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])+(?:\\'|$)|`[^`]*(?:`|$))"),
+                Regex("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])+(?:\\'|$)|`[^`]*(?:`|$))"),
                 null,
                 "\"'"
         )
         // Block comments are delimited by /* and */.
         // Single-line comments begin with // and extend to the end of a line.
         _fallthroughStylePatterns.new(
-                Prettify.PR_COMMENT, Pattern.compile("^(?:\\/\\/[^\\r\\n]*|\\/\\*[\\s\\S]*?\\*\\/)")
+                Prettify.PR_COMMENT, Regex("^(?:\\/\\/[^\\r\\n]*|\\/\\*[\\s\\S]*?\\*\\/)")
         )
         _fallthroughStylePatterns.new(
-                Prettify.PR_PLAIN, Pattern.compile("^(?:[^\\/\\\"\\'`]|\\/(?![\\/\\*]))+", Pattern.CASE_INSENSITIVE)
+                Prettify.PR_PLAIN, Regex("^(?:[^\\/\\\"\\'`]|\\/(?![\\/\\*]))+", RegexOption.IGNORE_CASE)
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
