@@ -41,7 +41,7 @@ import java.util.regex.Pattern
 class LangLlvm : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("llvm", "ll")
+            get() = listOf("llvm", "ll")
     }
 
     init {
@@ -76,7 +76,7 @@ class LangLlvm : Lang() {
         )
         // variable.llvm
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN, Pattern.compile("^[%@!](?:[-a-zA-Z$._][-a-zA-Z$._0-9]*|\\d+)")
             )
         )
@@ -91,19 +91,19 @@ class LangLlvm : Lang() {
         )
         // constant.numeric.float.llvm
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL, Pattern.compile("^\\d+\\.\\d+")
             )
         )
         // constant.numeric.integer.llvm
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL, Pattern.compile("^(?:\\d+|0[xX][a-fA-F0-9]+)")
             )
         )
         // punctuation
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION, Pattern.compile("^[()\\[\\]{},=*<>:]|\\.\\.\\.$")
             )
         )

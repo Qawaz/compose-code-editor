@@ -185,7 +185,7 @@ class LangMatlab : Lang() {
         const val PR_TRANSPOSE = "transpose"
         const val PR_LINE_CONTINUATION = "linecont"
         val fileExtensions: List<String>
-            get() = Arrays.asList(*arrayOf("matlab"))
+            get() = listOf(*arrayOf("matlab"))
     }
 
     init {
@@ -201,7 +201,7 @@ class LangMatlab : Lang() {
         // patterns that always start with a known character. Must have a shortcut string.
         // whitespaces: space, tab, carriage return, line feed, line tab, form-feed, non-break space
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN,
                 Pattern.compile("^[ \\t\\r\\n\\v\\f\\xA0]+"),
                 null,
@@ -215,7 +215,7 @@ class LangMatlab : Lang() {
         //TODO: false positives when the lines with %{ and %} contain non-spaces
         //[PR.PR_COMMENT, /^%(?:[^\{].*|\{(?:%|%*[^\}%])*(?:\}+%?)?)/, null],
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
 
                 Prettify.PR_COMMENT,
                 Pattern.compile("^%\\{[^%]*%+(?:[^\\}%][^%]*%+)*\\}"),
@@ -225,7 +225,7 @@ class LangMatlab : Lang() {
         )
         // single-line comments
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
 
                 Prettify.PR_COMMENT,
                 Pattern.compile("^%[^\\r\\n]*"),
@@ -234,12 +234,12 @@ class LangMatlab : Lang() {
             )
         )
         // system commands
-        _shortcutStylePatterns.add(Arrays.asList(PR_SYSCMD, Pattern.compile("^![^\\r\\n]*"), null, "!"))
+        _shortcutStylePatterns.add(listOf(PR_SYSCMD, Pattern.compile("^![^\\r\\n]*"), null, "!"))
 
         // patterns that will be tried in order if the shortcut ones fail. May have shortcuts.
         // line continuation
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 PR_LINE_CONTINUATION,
                 Pattern.compile("^\\.\\.\\.\\s*[\\r\\n]"),
                 null
@@ -247,7 +247,7 @@ class LangMatlab : Lang() {
         )
         // error message
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 PR_ERROR,
                 Pattern.compile("^\\?\\?\\? [^\\r\\n]*"),
                 null
@@ -255,7 +255,7 @@ class LangMatlab : Lang() {
         )
         // warning message
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 PR_WARNING,
                 Pattern.compile("^Warning: [^\\r\\n]*"),
                 null
@@ -264,14 +264,14 @@ class LangMatlab : Lang() {
         // command prompt/output
         //[PR_CODE_OUTPUT, /^>>\s+[^\r\n]*[\r\n]{1,2}[^=]*=[^\r\n]*[\r\n]{1,2}[^\r\n]*/, null],    // full command output (both loose/compact format): `>> EXP\nVAR =\n VAL`
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 PR_CODE_OUTPUT,
                 Pattern.compile("^>>\\s+"),
                 null
             )
         ) // only the command prompt `>> `
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 PR_CODE_OUTPUT,
                 Pattern.compile("^octave:\\d+>\\s+"),
                 null
@@ -280,7 +280,7 @@ class LangMatlab : Lang() {
         // identifier (chain) or closing-parenthesis/brace/bracket, and IS followed by transpose operator
         // this way we dont misdetect the transpose operator ' as the start of a string
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 "lang-matlab-operators",
                 Pattern.compile("^((?:[a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*|\\)|\\]|\\}|\\.)')"),
                 null
@@ -289,7 +289,7 @@ class LangMatlab : Lang() {
         // identifier (chain), and NOT followed by transpose operator
         // this must come AFTER the "is followed by transpose" step (otherwise it chops the last char of identifier)
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 "lang-matlab-identifiers",
                 Pattern.compile("^([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z][a-zA-Z0-9_]*)*)(?!')"),
                 null
@@ -298,7 +298,7 @@ class LangMatlab : Lang() {
         // single-quoted strings: allow for escaping with '', no multilines
         //[PR.PR_STRING, /(?:(?<=(?:\(|\[|\{|\s|=|;|,|:))|^)'(?:[^']|'')*'(?=(?:\)|\]|\}|\s|=|;|,|:|~|<|>|&|-|\+|\*|\.|\^|\|))/, null],  // string vs. transpose (check before/after context using negative/positive lookbehind/lookahead)
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_STRING,
                 Pattern.compile("^'(?:[^']|'')*'"),
                 null
@@ -306,7 +306,7 @@ class LangMatlab : Lang() {
         ) // "'"
         // floating point numbers: 1, 1.0, 1i, -1.1E-1
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^[+\\-]?\\.?\\d+(?:\\.\\d*)?(?:[Ee][+\\-]?\\d+)?[ij]?"),
                 null
@@ -314,7 +314,7 @@ class LangMatlab : Lang() {
         )
         // parentheses, braces, brackets
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_TAG,
                 Pattern.compile("^(?:\\{|\\}|\\(|\\)|\\[|\\])"),
                 null
@@ -322,7 +322,7 @@ class LangMatlab : Lang() {
         ) // "{}()[]"
         // other operators
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^(?:<|>|=|~|@|&|;|,|:|!|\\-|\\+|\\*|\\^|\\.|\\||\\\\|\\/)"),
                 null
@@ -330,7 +330,7 @@ class LangMatlab : Lang() {
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
-        setExtendedLangs(Arrays.asList(*arrayOf(LangMatlabIdentifier(), LangMatlabOperator())))
+        setExtendedLangs(listOf(*arrayOf(LangMatlabIdentifier(), LangMatlabOperator())))
     }
 
     override fun getFileExtensions(): List<String> {

@@ -32,7 +32,7 @@ import java.util.regex.Pattern
 class LangTex : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("latex", "tex")
+            get() = listOf("latex", "tex")
     }
 
     init {
@@ -60,18 +60,18 @@ class LangTex : Lang() {
         // any command starting with a \ and contains
         // either only letters (a-z,A-Z), '@' (internal macros)
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^\\\\[a-zA-Z@]+")
             )
         )
         // or contains only one character
-        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_KEYWORD, Pattern.compile("^\\\\.")))
+        _fallthroughStylePatterns.add(listOf(Prettify.PR_KEYWORD, Pattern.compile("^\\\\.")))
         // Highlight dollar for math mode and ampersam for tabular
-        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_TYPE, Pattern.compile("^[$&]")))
+        _fallthroughStylePatterns.add(listOf(Prettify.PR_TYPE, Pattern.compile("^[$&]")))
         // numeric measurement values with attached units
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile(
                     "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d*)?)(cm|em|ex|in|pc|pt|bp|mm)",
@@ -81,7 +81,7 @@ class LangTex : Lang() {
         )
         // punctuation usually occurring within commands
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[{}()\\[\\]=]+")
             )

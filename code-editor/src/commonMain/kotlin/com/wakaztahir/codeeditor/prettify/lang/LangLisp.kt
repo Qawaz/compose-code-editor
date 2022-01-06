@@ -75,7 +75,7 @@ import java.util.regex.Pattern
 class LangLisp : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("cl", "el", "lisp", "lsp", "scm", "ss", "rkt")
+            get() = listOf("cl", "el", "lisp", "lsp", "scm", "ss", "rkt")
     }
 
     init {
@@ -120,7 +120,7 @@ class LangLisp : Lang() {
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL, Pattern.compile(
                     "^[+\\-]?(?:[0#]x[0-9a-f]+|\\d+\\/\\d+|(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:[ed][+\\-]?\\d+)?)",
                     Pattern.CASE_INSENSITIVE
@@ -130,14 +130,14 @@ class LangLisp : Lang() {
         // A single quote possibly followed by a word that optionally ends with
         // = ! or ?.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^\\'(?:-*(?:\\w|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?)?")
             )
         )
         // A word that optionally ends with = ! or ?.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN, Pattern.compile(
                     "^-*(?:[a-z_]|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?",
                     Pattern.CASE_INSENSITIVE
@@ -146,7 +146,7 @@ class LangLisp : Lang() {
         )
         // A printable non-space non-special character
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION, Pattern.compile("^[^\\w\\t\\n\\r \\xA0()\\\"\\\\\\';]+")
             )
         )

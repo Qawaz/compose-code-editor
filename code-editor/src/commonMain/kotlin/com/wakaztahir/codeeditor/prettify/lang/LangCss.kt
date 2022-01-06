@@ -41,7 +41,7 @@ class LangCss : Lang() {
     protected class LangCssKeyword : Lang() {
         companion object {
             val fileExtensions: List<String>
-                get() = Arrays.asList(("css-kw"))
+                get() = listOf(("css-kw"))
         }
 
         init {
@@ -68,7 +68,7 @@ class LangCss : Lang() {
     protected class LangCssString : Lang() {
         companion object {
             val fileExtensions: List<String>
-                get() = Arrays.asList(("css-str"))
+                get() = listOf(("css-str"))
         }
 
         init {
@@ -91,7 +91,7 @@ class LangCss : Lang() {
 
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(("css"))
+            get() = listOf(("css"))
     }
 
     init {
@@ -140,7 +140,7 @@ class LangCss : Lang() {
         )
         // A property name -- an identifier followed by a colon.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 "lang-css-kw",
                 Pattern.compile(
                     "^(-?(?:[_a-z]|(?:\\\\[0-9a-f]+ ?))(?:[_a-z0-9\\-]|\\\\(?:\\\\[0-9a-f]+ ?))*)\\s*:",
@@ -150,35 +150,35 @@ class LangCss : Lang() {
         )
         // A C style block comment.  The <comment> production.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_COMMENT,
                 Pattern.compile("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
             )
         )
         // Escaping text spans
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_COMMENT,
                 Pattern.compile("^(?:<!--|-->)")
             )
         )
         // A number possibly containing a suffix.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^(?:\\d+|\\d*\\.\\d+)(?:%|[a-z]+)?", Pattern.CASE_INSENSITIVE)
             )
         )
         // A hex color
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^#(?:[0-9a-f]{3}){1,2}\\b", Pattern.CASE_INSENSITIVE)
             )
         )
         // An identifier
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN,
                 Pattern.compile(
                     "^-?(?:[_a-z]|(?:\\\\[\\da-f]+ ?))(?:[_a-z\\d\\-]|\\\\(?:\\\\[\\da-f]+ ?))*",
@@ -188,14 +188,14 @@ class LangCss : Lang() {
         )
         // A run of punctuation
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[^\\s\\w\\'\\\"]+", Pattern.CASE_INSENSITIVE)
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
-        setExtendedLangs(Arrays.asList(LangCssKeyword(), LangCssString()))
+        setExtendedLangs(listOf(LangCssKeyword(), LangCssString()))
     }
 
     override fun getFileExtensions(): List<String> {

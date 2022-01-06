@@ -42,7 +42,7 @@ import java.util.regex.Pattern
 class LangLua : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("lua")
+            get() = listOf("lua")
     }
 
     init {
@@ -69,13 +69,13 @@ class LangLua : Lang() {
         // A comment is either a line comment that starts with two dashes, or
         // two dashes preceding a long bracketed block.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_COMMENT, Pattern.compile("^--(?:\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)|[^\\r\\n]*)")
             )
         )
         // A long bracketed block not preceded by -- is a string.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_STRING,
                 Pattern.compile("^\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)")
             )
@@ -90,7 +90,7 @@ class LangLua : Lang() {
         // A number is a hex integer literal, a decimal real literal, or in
         // scientific notation.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile(
                     "^[+-]?(?:0x[\\da-f]+|(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:e[+\\-]?\\d+)?))",
@@ -100,14 +100,14 @@ class LangLua : Lang() {
         )
         // An identifier
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN,
                 Pattern.compile("^[a-z_]\\w*", Pattern.CASE_INSENSITIVE)
             )
         )
         // A run of punctuation
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[^\\w\\t\\n\\r \\xA0][^\\w\\n\\r \\xA0\\\"\\'\\-\\+=]*")
             )

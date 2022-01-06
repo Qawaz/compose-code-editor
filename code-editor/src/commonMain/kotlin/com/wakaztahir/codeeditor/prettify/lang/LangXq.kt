@@ -39,7 +39,7 @@ class LangXq : Lang() {
         const val PR_FUNCTION = "fun"
         const val PR_VARIABLE = "var"
         val fileExtensions: List<String>
-            get() = Arrays.asList("xq", "xquery")
+            get() = listOf("xq", "xquery")
     }
 
     init {
@@ -48,14 +48,14 @@ class LangXq : Lang() {
 
         // Matching $var-ia_bles
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 PR_VARIABLE, Pattern.compile("^\\$[A-Za-z0-9_\\-]+"), null, "$"
             )
         )
         // Matching lt and gt operators
         // Not the best matching solution but you have to differentiate between the gt operator and the tag closing char
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN, Pattern.compile("^[\\s=][<>][\\s=]")
             )
         )

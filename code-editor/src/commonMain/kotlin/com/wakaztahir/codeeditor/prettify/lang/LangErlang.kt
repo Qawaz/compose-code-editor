@@ -36,7 +36,7 @@ import java.util.regex.Pattern
 class LangErlang : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("erlang", "erl")
+            get() = listOf("erlang", "erl")
     }
 
     init {
@@ -65,7 +65,7 @@ class LangErlang : Lang() {
 
         // Handle atoms
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL, Pattern.compile("^[a-z][a-zA-Z0-9_]*")
             )
         )
@@ -117,7 +117,7 @@ class LangErlang : Lang() {
 
         // Comments in erlang are started with % and go till a newline
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_COMMENT, Pattern.compile("^%[^\\n\\r]*")
             )
         )
@@ -131,7 +131,7 @@ class LangErlang : Lang() {
          * 'case' 'of' 'end' 'when' 'fun' 'try' 'catch' 'receive' 'after'
          */
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^(?:module|attributes|do|let|in|letrec|apply|call|primop|case|of|end|when|fun|try|catch|receive|after|char|integer|float,atom,string,var)\\b")
             )
@@ -140,18 +140,18 @@ class LangErlang : Lang() {
          * Catch definitions (usually defined at the top of the file)
          * Anything that starts -something
          */
-        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_KEYWORD, Pattern.compile("^-[a-z_]+")))
+        _fallthroughStylePatterns.add(listOf(Prettify.PR_KEYWORD, Pattern.compile("^-[a-z_]+")))
 
         // Catch variables
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_TYPE,
                 Pattern.compile("^[A-Z_][a-zA-Z0-9_]*")
             )
         )
 
         // matches the symbol production
-        _fallthroughStylePatterns.add(Arrays.asList(Prettify.PR_PUNCTUATION, Pattern.compile("^[.,;]")))
+        _fallthroughStylePatterns.add(listOf(Prettify.PR_PUNCTUATION, Pattern.compile("^[.,;]")))
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
     }

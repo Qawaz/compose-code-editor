@@ -1008,13 +1008,13 @@ class Prettify {
             decorateSourceMap["keywords"] = RUST_KEYWORDS
             decorateSourceMap["cStyleComments"] = true
             decorateSourceMap["multilineStrings"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("rc", "rs", "rust"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("rc", "rs", "rust"))
             shortcutStylePatterns = ArrayList()
             fallthroughStylePatterns = ArrayList()
-            fallthroughStylePatterns.add(Arrays.asList(PR_STRING, Pattern.compile("^[\\s\\S]+")))
+            fallthroughStylePatterns.add(listOf(PR_STRING, Pattern.compile("^[\\s\\S]+")))
             registerLangHandler(
                 CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns),
-                Arrays.asList("regex")
+                listOf("regex")
             )
             /**
              * Registers a language handler for Protocol Buffers as described at
@@ -1032,7 +1032,7 @@ class Prettify {
                     + "syntax,to,true")
             decorateSourceMap["types"] = Pattern.compile("^(bool|(double|s?fixed|[su]?int)(32|64)|float|string)\\b")
             decorateSourceMap["cStyleComments"] = true
-            registerLangHandler(sourceDecorator(decorateSourceMap), Arrays.asList("proto"))
+            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("proto"))
             register(LangAppollo::class.java, fileExtensions = LangAppollo.fileExtensions)
             register(LangBasic::class.java,fileExtensions = LangBasic.fileExtensions)
             register(LangClj::class.java,fileExtensions = LangClj.fileExtensions)

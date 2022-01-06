@@ -55,7 +55,7 @@ import java.util.regex.Pattern
 class LangClj : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("clj")
+            get() = listOf("clj")
     }
 
 

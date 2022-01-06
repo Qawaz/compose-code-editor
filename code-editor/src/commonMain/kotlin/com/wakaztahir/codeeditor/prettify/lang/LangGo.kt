@@ -53,7 +53,7 @@ import java.util.regex.Pattern
 class LangGo : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("go")
+            get() = listOf("go")
     }
 
     init {
@@ -80,7 +80,7 @@ class LangGo : Lang() {
         // Block comments are delimited by /* and */.
         // Single-line comments begin with // and extend to the end of a line.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_COMMENT, Pattern.compile("^(?:\\/\\/[^\\r\\n]*|\\/\\*[\\s\\S]*?\\*\\/)")
             )
         )

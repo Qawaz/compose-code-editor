@@ -34,14 +34,14 @@ class LangWiki : Lang() {
     protected class LangWikiMeta : Lang() {
         companion object {
             val fileExtensions: List<String>
-                get() = Arrays.asList(("wiki.meta"))
+                get() = listOf(("wiki.meta"))
         }
 
         init {
             val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
             val _fallthroughStylePatterns: List<List<Any?>> = ArrayList()
             _shortcutStylePatterns.add(
-                Arrays.asList(
+                listOf(
                     Prettify.PR_KEYWORD,
                     Pattern.compile("^#[a-z]+", Pattern.CASE_INSENSITIVE),
                     null,
@@ -59,7 +59,7 @@ class LangWiki : Lang() {
 
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList(("wiki"))
+            get() = listOf(("wiki"))
     }
 
     init {
@@ -68,7 +68,7 @@ class LangWiki : Lang() {
 
         // Whitespace
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN, Pattern.compile("^[\\t \\xA0a-gi-z0-9]+"), null, "\t " + Character.toString(
                     0xA0.toChar()
                 ) + "abcdefgijklmnopqrstuvwxyz0123456789"
@@ -76,7 +76,7 @@ class LangWiki : Lang() {
         )
         // Wiki formatting
         _shortcutStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[=*~\\^\\[\\]]+"),
                 null,
@@ -85,30 +85,30 @@ class LangWiki : Lang() {
         )
         // Meta-info like #summary, #labels, etc.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 "lang-wiki.meta",
                 Pattern.compile("(?:^^|\r\n?|\n)(#[a-z]+)\\b")
             )
         )
         // A WikiWord
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^(?:[A-Z][a-z][a-z0-9]+[A-Z][a-z][a-zA-Z0-9]+)\\b")
             )
         )
         // A preformatted block in an unknown language
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 "lang-",
                 Pattern.compile("^\\{\\{\\{([\\s\\S]+?)\\}\\}\\}")
             )
         )
         // A block of source code in an unknown language
-        _fallthroughStylePatterns.add(Arrays.asList("lang-", Pattern.compile("^`([^\r\n`]+)`")))
+        _fallthroughStylePatterns.add(listOf("lang-", Pattern.compile("^`([^\r\n`]+)`")))
         // An inline URL.
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_STRING,
                 Pattern.compile(
                     "^https?:\\/\\/[^\\/?#\\s]*(?:\\/[^?#\\s]*)?(?:\\?[^#\\s]*)?(?:#\\S*)?",
@@ -117,14 +117,14 @@ class LangWiki : Lang() {
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_PLAIN,
                 Pattern.compile("^(?:\r\n|[\\s\\S])[^#=*~^A-Zh\\{`\\[\r\n]*")
             )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
-        setExtendedLangs(Arrays.asList(LangWikiMeta()))
+        setExtendedLangs(listOf(LangWikiMeta()))
     }
 
     override fun getFileExtensions(): List<String> {

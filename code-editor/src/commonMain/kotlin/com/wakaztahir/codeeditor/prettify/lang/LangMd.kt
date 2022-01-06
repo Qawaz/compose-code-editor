@@ -12,20 +12,20 @@ import java.util.regex.Pattern
 class LangMd : Lang() {
     companion object {
         val fileExtensions: List<String>
-            get() = Arrays.asList("md", "markdown")
+            get() = listOf("md", "markdown")
     }
 
     init {
         val _shortcutStylePatterns: List<List<Any>> = ArrayList()
         val _fallthroughStylePatterns: MutableList<List<Any>> = ArrayList()
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_DECLARATION,
                 Pattern.compile("^#.*?[\\n\\r]")
             )
         )
         _fallthroughStylePatterns.add(
-            Arrays.asList(
+            listOf(
                 Prettify.PR_STRING,
                 Pattern.compile("^```[\\s\\S]*?(?:```|$)")
             )
