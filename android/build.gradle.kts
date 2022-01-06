@@ -1,11 +1,11 @@
 plugins {
-    id("org.jetbrains.compose") version "1.0.0-alpha3"
+    id("org.jetbrains.compose") version "1.0.1"
     id("com.android.application")
     kotlin("android")
 }
 
-group = "com.wakaztahir"
-version = "1.0"
+group = BuildConfig.Info.group
+version = BuildConfig.Info.version
 
 repositories {
     jcenter()
@@ -17,13 +17,13 @@ dependencies {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdkVersion(BuildConfig.Android.compileSdkVersion)
     defaultConfig {
         applicationId = "com.wakaztahir.android"
-        minSdkVersion(24)
-        targetSdkVersion(30)
-        versionCode = 1
-        versionName = "1.0"
+        minSdkVersion(BuildConfig.Android.minSdkVersion)
+        targetSdkVersion(BuildConfig.Android.targetSdkVersion)
+        versionCode = BuildConfig.Info.versionCode
+        versionName = BuildConfig.Info.version
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

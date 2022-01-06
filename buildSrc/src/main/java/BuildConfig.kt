@@ -5,7 +5,7 @@ object BuildConfig {
         const val versionCode = 1
 
         const val ComposeVersion = "1.0.1"
-        const val KotlinVersion = "1.5.31"
+        const val KotlinVersion = "1.6.10"
     }
 
     object Android {

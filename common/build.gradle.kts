@@ -4,8 +4,8 @@ plugins {
     id("com.android.library")
 }
 
-group = "com.wakaztahir.common"
-version = "1.0.0"
+group = BuildConfig.Info.group
+version = BuildConfig.Info.version
 
 kotlin {
     android()
@@ -20,6 +20,8 @@ kotlin {
                 api(BuildConfig.Dependencies.Common.Compose.runtime)
                 api(BuildConfig.Dependencies.Common.Compose.foundation)
                 api(BuildConfig.Dependencies.Common.Compose.material)
+
+                implementation(project(":code-editor"))
             }
         }
         val commonTest by getting {
@@ -43,11 +45,11 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdkVersion(BuildConfig.Android.compileSdkVersion)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(30)
+        minSdkVersion(BuildConfig.Android.minSdkVersion)
+        targetSdkVersion(BuildConfig.Android.targetSdkVersion)
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

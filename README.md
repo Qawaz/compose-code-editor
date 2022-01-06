@@ -73,37 +73,49 @@ Text(parsedCode)
 ### Using TextField Composable
 
 ```kotlin
-// Step 3. Create TextFieldValue State For Parsed Code 
-var parsedCode by remember {
-    mutableStateOf(
-        TextFieldValue(
-            parseCodeAsAnnotatedString(
-                parser = parser,
-                theme = theme,
-                lang = language,
-                code = code
-            )
-        )
-    )
-}
+    // Same Steps From Above
+    val language = CodeLang.Java
+    val code = """             
+        package com.wakaztahir.codeeditor
+        
+        public static void main(String[] args){
+            System.out.println("Hello World")
+        }
+        """.trimIndent()
+    
+    val parser = remember { PrettifyParser() }
+    val themeState by remember { mutableStateOf(CodeThemeType.Default) }
+    val theme = remember(themeState) { themeState.theme() }
 
-// Step 4. Display In A TextField Composable
-TextField(
-    modifier = Modifier
-        .fillMaxSize()
-        .background(color = MaterialTheme.colors.background),
-    value = parsedCode,
-    onValueChange = {
-        parsedCode = it.copy(
-            parseCodeAsAnnotatedString(
-                parser = parser,
-                theme = theme,
-                lang = language,
-                code = it.text
-            )
+    // Creating Text Field Value , Prasing Initial Code As Annotated String
+    var textFieldValue by remember {
+      mutableStateOf(
+        TextFieldValue(
+          annotatedString = parseCodeAsAnnotatedString(
+            parser = parser,
+            theme = theme,
+            lang = language,
+            code = code
+          )
         )
+      )
     }
-)
+    
+    // Displaying In A Text Field
+    OutlinedTextField(
+      modifier = Modifier.fillMaxSize(),
+      value = textFieldValue,
+      onValueChange = {
+        textFieldValue = it.copy(
+          annotatedString = parseCodeAsAnnotatedString(
+            parser = parser,
+            theme = theme,
+            lang = language,
+            code = it.text
+          )
+        )
+      }
+    )
 ```
 
 ## List of available languages & their extensions

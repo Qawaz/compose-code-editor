@@ -3,11 +3,11 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose") version "1.0.0-alpha3"
+    id("org.jetbrains.compose") version "1.0.1"
 }
 
-group = "com.wakaztahir"
-version = "1.0"
+group = BuildConfig.Info.group
+version = BuildConfig.Info.version
 
 kotlin {
     jvm {
