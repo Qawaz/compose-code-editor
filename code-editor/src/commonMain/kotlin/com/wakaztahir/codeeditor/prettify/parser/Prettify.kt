@@ -14,8 +14,16 @@
 package com.wakaztahir.codeeditor.prettify.parser
 
 import com.wakaztahir.codeeditor.prettify.lang.*
+import com.wakaztahir.codeeditor.utils.new
 
 import java.util.regex.Pattern
+
+open class StylePattern(
+    val tokenStyle: String,
+    val regExp: Regex,
+    val shortcutChars: String? = null,
+    val unknownThing: String? = null
+)
 
 /**
  * This is similar to the prettify.js in JavaScript Prettify.
@@ -63,17 +71,86 @@ import java.util.regex.Pattern
  * Java annotations (start with "@") are now captured as literals ("lit")
 </blockquote> *
  */
-class Prettify() {
+class Prettify {
 
 
     inner class CreateSimpleLexer(
-        shortcutStylePatterns: List<List<Any?>>,
-        private var fallthroughStylePatterns: List<List<Any?>>
+        shortcutStylePatterns: List<StylePattern>,
+        private var fallthroughStylePatterns: List<StylePattern>
     ) {
-        private var shortcuts: MutableMap<Char, List<Any?>> = HashMap()
+        private var shortcuts: MutableMap<Char, StylePattern> = HashMap()
         private var tokenizer: Pattern
         private var nPatterns: Int
 
+        /** Given triples of [style, pattern, context] returns a lexing function,
+         * The lexing function interprets the patterns to find token boundaries and
+         * returns a decoration list of the form
+         * [index_0, style_0, index_1, style_1, ..., index_n, style_n]
+         * where index_n is an index into the sourceCode, and style_n is a style
+         * constant like PR_PLAIN.  index_n-1 <= index_n, and style_n-1 applies to
+         * all characters in sourceCode[index_n-1:index_n].
+         *
+         * The stylePatterns is a list whose elements have the form
+         * [style : string, pattern : RegExp, DEPRECATED, shortcut : string].
+         *
+         * Style is a style constant like PR_PLAIN, or can be a string of the
+         * form 'lang-FOO', where FOO is a language extension describing the
+         * language of the portion of the token in $1 after pattern executes.
+         * E.g., if style is 'lang-lisp', and group 1 contains the text
+         * '(hello (world))', then that portion of the token will be passed to the
+         * registered lisp handler for formatting.
+         * The text before and after group 1 will be restyled using this decorator
+         * so decorators should take care that this doesn't result in infinite
+         * recursion.  For example, the HTML lexer rule for SCRIPT elements looks
+         * something like ['lang-js', /<[s]cript>(.+?)<\/script>/].  This may match
+         * '<script>foo()<\/script>', which would cause the current decorator to
+        be called with '<script>' which would not match the same rule since
+        group 1 must not be empty, so it would be instead styled as PR_TAG by
+        the generic tag rule.  The handler registered for the 'js' extension would
+        then be called with 'foo()', and finally, the current decorator would
+        be called with '<\/script>' which would not match the original rule and
+        so the generic tag rule would identify it as a tag.
+
+        Pattern must only match prefixes, and if it matches a prefix, then that
+        match is considered a token with the same style.
+
+        Context is applied to the last non-whitespace, non-comment token
+        recognized.
+
+        Shortcut is an optional string of characters, any of which, if the first
+        character, gurantee that this pattern and only this pattern matches.
+
+        @param shortcutStylePatterns patterns that always start with
+        a known character.  Must have a shortcut string.
+        @param fallthroughStylePatterns patterns that will be tried in
+        order if the shortcut ones fail.  May have shortcuts.
+        </script> */
+        init {
+            val allPatterns: MutableList<StylePattern> = shortcutStylePatterns.toMutableList()
+            allPatterns.addAll(fallthroughStylePatterns)
+            val allRegexs: MutableList<Regex> = ArrayList()
+            val regexKeys: MutableMap<String, Any?> = HashMap()
+            allPatterns.forEach { pattern ->
+                val shortcutChars = pattern.shortcutChars
+                if (shortcutChars != null) {
+                    var c = shortcutChars.length
+                    while (--c >= 0) {
+                        shortcuts[shortcutChars[c]] = pattern
+                    }
+                }
+                val regex = pattern.regExp
+                val k = regex.pattern
+                if (regexKeys[k] == null) {
+                    allRegexs.add(regex)
+                    regexKeys[k] = Any()
+                }
+            }
+            allRegexs.add("[\u0000-\\uffff]".toRegex())
+            tokenizer = CombinePrefixPattern().combinePrefixPattern(allRegexs) //todo change this function
+            nPatterns = fallthroughStylePatterns.size
+        }
+
+        //todo change this functioon
         /**
          * Lexes job.sourceCode and produces an output array job.decorations of
          * style classes preceded by the position at which they start in
@@ -177,93 +254,6 @@ class Prettify() {
             }
             job.setDecorations(Util.removeDuplicates(decorations, job.getSourceCode()))
         }
-
-        /** Given triples of [style, pattern, context] returns a lexing function,
-         * The lexing function interprets the patterns to find token boundaries and
-         * returns a decoration list of the form
-         * [index_0, style_0, index_1, style_1, ..., index_n, style_n]
-         * where index_n is an index into the sourceCode, and style_n is a style
-         * constant like PR_PLAIN.  index_n-1 <= index_n, and style_n-1 applies to
-         * all characters in sourceCode[index_n-1:index_n].
-         *
-         * The stylePatterns is a list whose elements have the form
-         * [style : string, pattern : RegExp, DEPRECATED, shortcut : string].
-         *
-         * Style is a style constant like PR_PLAIN, or can be a string of the
-         * form 'lang-FOO', where FOO is a language extension describing the
-         * language of the portion of the token in $1 after pattern executes.
-         * E.g., if style is 'lang-lisp', and group 1 contains the text
-         * '(hello (world))', then that portion of the token will be passed to the
-         * registered lisp handler for formatting.
-         * The text before and after group 1 will be restyled using this decorator
-         * so decorators should take care that this doesn't result in infinite
-         * recursion.  For example, the HTML lexer rule for SCRIPT elements looks
-         * something like ['lang-js', /<[s]cript>(.+?)<\/script>/].  This may match
-         * '<script>foo()<\/script>', which would cause the current decorator to
-        be called with '<script>' which would not match the same rule since
-        group 1 must not be empty, so it would be instead styled as PR_TAG by
-        the generic tag rule.  The handler registered for the 'js' extension would
-        then be called with 'foo()', and finally, the current decorator would
-        be called with '<\/script>' which would not match the original rule and
-        so the generic tag rule would identify it as a tag.
-
-        Pattern must only match prefixes, and if it matches a prefix, then that
-        match is considered a token with the same style.
-
-        Context is applied to the last non-whitespace, non-comment token
-        recognized.
-
-        Shortcut is an optional string of characters, any of which, if the first
-        character, gurantee that this pattern and only this pattern matches.
-
-        @param shortcutStylePatterns patterns that always start with
-        a known character.  Must have a shortcut string.
-        @param fallthroughStylePatterns patterns that will be tried in
-        order if the shortcut ones fail.  May have shortcuts.
-        </script> */
-        init {
-            val allPatterns: MutableList<List<Any?>> = ArrayList(shortcutStylePatterns)
-            allPatterns.addAll(fallthroughStylePatterns)
-            val allRegexs: MutableList<Pattern> = ArrayList()
-            val regexKeys: MutableMap<String, Any?> = HashMap()
-            allPatterns.forEach { patternParts ->
-                val shortcutChars = if (patternParts.size > 3) patternParts[3] as String else null
-                if (shortcutChars != null) {
-                    var c = shortcutChars.length
-                    while (--c >= 0) {
-                        shortcuts[shortcutChars[c]] = patternParts
-                    }
-                }
-                val regex = patternParts[1] as Pattern
-                val k = regex.pattern()
-                if (regexKeys[k] == null) {
-                    allRegexs.add(regex)
-                    regexKeys[k] = Any()
-                }
-            }
-//            var i = 0
-//            val n = allPatterns.size
-//            while (i < n) {
-//                val patternParts = allPatterns[i]
-//                val shortcutChars = if (patternParts.size > 3) patternParts[3] as String else null
-//                if (shortcutChars != null) {
-//                    var c = shortcutChars.length
-//                    while (--c >= 0) {
-//                        shortcuts[shortcutChars[c]] = patternParts
-//                    }
-//                }
-//                val regex = patternParts[1] as Pattern
-//                val k = regex.pattern()
-//                if (regexKeys[k] == null) {
-//                    allRegexs.add(regex)
-//                    regexKeys[k] = Any()
-//                }
-//                ++i
-//            }
-            allRegexs.add(Pattern.compile("[\u0000-\\uffff]"))
-            tokenizer = CombinePrefixPattern().combinePrefixPattern(allRegexs)
-            nPatterns = fallthroughStylePatterns.size
-        }
     }
 
     fun getLangFromExtension(extension: String): Lang? {
@@ -301,7 +291,7 @@ class Prettify() {
     }
 
     /** Maps language-specific file extensions to handlers.  */
-    private var langHandlerRegistry: MutableMap<String, CreateSimpleLexer?> = HashMap()
+    private val langHandlerRegistry: MutableMap<String, CreateSimpleLexer?> = HashMap()
 
     /** returns a function that produces a list of decorations from source text.
      *
@@ -320,17 +310,15 @@ class Prettify() {
      */
     @Throws(Exception::class)
     internal fun sourceDecorator(options: Map<String?, Any?>): CreateSimpleLexer {
-        val shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
-        val fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
+        val fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
         if (Util.getVariableValueAsBoolean(options["tripleQuotedStrings"])) {
             // '''multi-line-string''', 'single-line-string', and double-quoted
-            shortcutStylePatterns.add(
-                listOf(
-                    PR_STRING,
-                    Pattern.compile("^(?:\\'\\'\\'(?:[^\\'\\\\]|\\\\[\\s\\S]|\\'{1,2}(?=[^\\']))*(?:\\'\\'\\'|$)|\\\"\\\"\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S]|\\\"{1,2}(?=[^\\\"]))*(?:\\\"\\\"\\\"|$)|\\'(?:[^\\\\\\']|\\\\[\\s\\S])*(?:\\'|$)|\\\"(?:[^\\\\\\\"]|\\\\[\\s\\S])*(?:\\\"|$))"),
-                    null,
-                    "'\""
-                )
+            shortcutStylePatterns.new(
+                tokenStyle = PR_STRING,
+                regExp = Regex("^(?:\\'\\'\\'(?:[^\\'\\\\]|\\\\[\\s\\S]|\\'{1,2}(?=[^\\']))*(?:\\'\\'\\'|$)|\\\"\\\"\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S]|\\\"{1,2}(?=[^\\\"]))*(?:\\\"\\\"\\\"|$)|\\'(?:[^\\\\\\']|\\\\[\\s\\S])*(?:\\'|$)|\\\"(?:[^\\\\\\\"]|\\\\[\\s\\S])*(?:\\\"|$))"),
+                shortcutChars = null,
+                unknownThing = "'\""
             )
         } else if (Util.getVariableValueAsBoolean(options["multiLineStrings"])) {
             // 'multi-line-string', "multi-line-string"
@@ -471,6 +459,7 @@ class Prettify() {
                 )
             }
         }
+
         shortcutStylePatterns.add(
             listOf(
                 PR_PLAIN,
@@ -624,10 +613,10 @@ class Prettify() {
             val lang = getLangFromExtension(extension)
             return if (lang != null) {
                 val simpleLexer = CreateSimpleLexer(lang.shortcutStylePatterns, lang.fallthroughStylePatterns)
-        //                val extendedLangs = lang.extendedLangs
-        //                for (extendedLang in extendedLangs) {
-        //                    register(extendedLang.javaClass)
-        //                }
+                //                val extendedLangs = lang.extendedLangs
+                //                for (extendedLang in extendedLangs) {
+                //                    register(extendedLang.javaClass)
+                //                }
                 lang.getFileExtensions().forEach {
                     langHandlerRegistry[it] = simpleLexer
                 }
@@ -814,8 +803,8 @@ class Prettify() {
             decorateSourceMap["multiLineStrings"] = true
             decorateSourceMap["regexLiterals"] = true
             registerLangHandler(sourceDecorator(decorateSourceMap), listOf("default-code"))
-            var shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
-            var fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
+            var shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
+            var fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
             fallthroughStylePatterns.add(listOf(PR_PLAIN, Pattern.compile("^[^<?]+")))
             fallthroughStylePatterns.add(
                 listOf(

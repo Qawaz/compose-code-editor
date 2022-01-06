@@ -14,6 +14,7 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
+import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 
 import java.util.regex.Pattern
 
@@ -36,8 +37,8 @@ class LangTex : Lang() {
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // whitespace
         _shortcutStylePatterns.add(

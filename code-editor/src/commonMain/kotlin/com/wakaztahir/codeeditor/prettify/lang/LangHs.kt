@@ -14,6 +14,8 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
+import com.wakaztahir.codeeditor.prettify.parser.StylePattern
+import com.wakaztahir.codeeditor.utils.new
 
 import java.util.regex.Pattern
 
@@ -53,40 +55,34 @@ class LangHs : Lang() {
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // Whitespace
         // whitechar    ->    newline | vertab | space | tab | uniWhite
         // newline      ->    return linefeed | return | linefeed | formfeed
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar()
                     .toString() + 0x0C.toChar().toString() + "\r "
             )
-        )
         // Single line double and single-quoted strings.
         // char         ->    ' (graphic<' | \> | space | escape<\&>) '
         // string       ->    " {graphic<" | \> | space | escape | gap}"
         // escape       ->    \ ( charesc | ascii | decimal | o octal
         //                        | x hexadecimal )
         // charesc      ->    a | b | f | n | r | t | v | \ | " | ' | &
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
                 Pattern.compile("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
                 null,
                 "\""
-            )
         )
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
                 Pattern.compile("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])\\'?"),
                 null,
                 "'"
             )
-        )
         // decimal      ->    digit{digit}
         // octal        ->    octit{octit}
         // hexadecimal  ->    hexit{hexit}
@@ -96,8 +92,7 @@ class LangHs : Lang() {
         // float        ->    decimal . decimal [exponent]
         //               |    decimal exponent
         // exponent     ->    (e | E) [+ | -] decimal
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_LITERAL,
                 Pattern.compile(
                     "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
@@ -105,7 +100,6 @@ class LangHs : Lang() {
                 ),
                 null,
                 "0123456789"
-            )
         )
         // Haskell does not have a regular lexical grammar due to the nested
         // ncomment.
@@ -114,22 +108,18 @@ class LangHs : Lang() {
         // dashes       ->    '--' {'-'}
         // opencom      ->    '{-'
         // closecom     ->    '-}'
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
                 Pattern.compile("^(?:(?:--+(?:[^\\r\\n\\x0C]*)?)|(?:\\{-(?:[^-]|-+[^-\\}])*-\\}))")
-            )
         )
         // reservedid   ->    case | class | data | default | deriving | do
         //               |    else | if | import | in | infix | infixl | infixr
         //               |    instance | let | module | newtype | of | then
         //               |    type | where | _
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^(?:case|class|data|default|deriving|do|else|if|import|in|infix|infixl|infixr|instance|let|module|newtype|of|then|type|where|_)(?=[^a-zA-Z0-9\\']|$)"),
                 null
-            )
         )
         // qvarid       ->    [ modid . ] varid
         // qconid       ->    [ modid . ] conid
@@ -142,18 +132,14 @@ class LangHs : Lang() {
         // large        ->    ascLarge | uniLarge
         // ascLarge     ->    A | B | ... | Z
         // uniLarge     ->    any uppercase or titlecase Unicode letter
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_PLAIN,
                 Pattern.compile("^(?:[A-Z][\\w\\']*\\.)*[a-zA-Z][\\w\\']*")
-            )
         )
         // matches the symbol production
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[^\\t\\n\\x0B\\x0C\\r a-zA-Z0-9\\'\\\"]+")
-            )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

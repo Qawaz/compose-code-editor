@@ -14,6 +14,8 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
+import com.wakaztahir.codeeditor.prettify.parser.StylePattern
+import com.wakaztahir.codeeditor.utils.new
 
 import java.util.regex.Pattern
 
@@ -40,54 +42,44 @@ class LangErlang : Lang() {
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // Whitespace
         // whitechar    ->    newline | vertab | space | tab | uniWhite
         // newline      ->    return linefeed | return | linefeed | formfeed
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_PLAIN, Pattern.compile("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar().toString() + 0x0C.toChar()
                     .toString() + "\r "
             )
-        )
         // Single line double-quoted strings.
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
                 Pattern.compile("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
                 null,
                 "\""
-            )
         )
 
         // Handle atoms
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_LITERAL, Pattern.compile("^[a-z][a-zA-Z0-9_]*")
             )
-        )
         // Handle single quoted atoms
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])+\\'?"),
                 null,
                 "'"
-            )
         )
 
         // Handle macros. Just to be extra clear on this one, it detects the ?
         // then uses the regexp to end it so be very careful about matching
         // all the terminal elements
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^\\?[^ \\t\\n({]+"),
                 null,
                 "?"
-            )
         )
 
         // decimal      ->    digit{digit}
@@ -99,8 +91,7 @@ class LangErlang : Lang() {
         // float        ->    decimal . decimal [exponent]
         //               |    decimal exponent
         // exponent     ->    (e | E) [+ | -] decimal
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_LITERAL,
                 Pattern.compile(
                     "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
@@ -109,16 +100,13 @@ class LangErlang : Lang() {
                 null,
                 "0123456789"
             )
-        )
 
 
         // TODO: catch @declarations inside comments
 
         // Comments in erlang are started with % and go till a newline
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT, Pattern.compile("^%[^\\n\\r]*")
-            )
         )
 
         // Catch macros
@@ -129,28 +117,24 @@ class LangErlang : Lang() {
          * 'apply' 'call' 'primop'
          * 'case' 'of' 'end' 'when' 'fun' 'try' 'catch' 'receive' 'after'
          */
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^(?:module|attributes|do|let|in|letrec|apply|call|primop|case|of|end|when|fun|try|catch|receive|after|char|integer|float,atom,string,var)\\b")
-            )
         )
         /**
          * Catch definitions (usually defined at the top of the file)
          * Anything that starts -something
          */
-        _fallthroughStylePatterns.add(listOf(Prettify.PR_KEYWORD, Pattern.compile("^-[a-z_]+")))
+        _fallthroughStylePatterns.new(Prettify.PR_KEYWORD, Pattern.compile("^-[a-z_]+"))
 
         // Catch variables
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_TYPE,
                 Pattern.compile("^[A-Z_][a-zA-Z0-9_]*")
             )
-        )
 
         // matches the symbol production
-        _fallthroughStylePatterns.add(listOf(Prettify.PR_PUNCTUATION, Pattern.compile("^[.,;]")))
+        _fallthroughStylePatterns.new(Prettify.PR_PUNCTUATION, Pattern.compile("^[.,;]"))
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
     }

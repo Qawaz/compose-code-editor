@@ -14,6 +14,8 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
+import com.wakaztahir.codeeditor.prettify.parser.StylePattern
+import com.wakaztahir.codeeditor.utils.new
 
 import java.util.regex.Pattern
 
@@ -46,31 +48,25 @@ class LangSql : Lang() {
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // Whitespace
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
-            )
         )
         // A double or single quoted, possibly multi-line, string.
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
                 Pattern.compile("^(?:\"(?:[^\\\"\\\\]|\\\\.)*\"|'(?:[^\\'\\\\]|\\\\.)*')"),
                 null,
                 "\"'"
-            )
         )
         // A comment is either a line comment that starts with two dashes, or
         // two dashes preceding a long bracketed block.
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
                 Pattern.compile("^(?:--[^\\r\\n]*|\\/\\*[\\s\\S]*?(?:\\*\\/|$))")
-            )
         )
         _fallthroughStylePatterns.add(
             listOf(

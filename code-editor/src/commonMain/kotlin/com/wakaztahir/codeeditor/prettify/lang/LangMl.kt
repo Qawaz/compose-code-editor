@@ -14,6 +14,8 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
+import com.wakaztahir.codeeditor.prettify.parser.StylePattern
+import com.wakaztahir.codeeditor.utils.new
 
 import java.util.regex.Pattern
 
@@ -38,19 +40,16 @@ class LangMl : Lang() {
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // Whitespace is made up of spaces, tabs and newline characters.
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
-            )
         )
         // #if ident/#else/#endif directives delimit conditional compilation
         // sections
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_COMMENT,
                 Pattern.compile(
                     "^#(?:if[\\t\\n\\r \\xA0]+(?:[a-z_$][\\w\\']*|``[^\\r\\n\\t`]*(?:``|$))|else|endif|light)",
@@ -58,54 +57,41 @@ class LangMl : Lang() {
                 ),
                 null,
                 "#"
-            )
         )
         // A double or single quoted, possibly multi-line, string.
         // F# allows escaped newlines in strings.
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
                 Pattern.compile("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])(?:\\'|$))"),
                 null,
                 "\"'"
-            )
         )
         // Block comments are delimited by (* and *) and may be
         // nested. Single-line comments begin with // and extend to
         // the end of a line.
         // TODO: (*...*) comments can be nested.  This does not handle that.
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT, Pattern.compile("^(?:\\/\\/[^\\r\\n]*|\\(\\*[\\s\\S]*?\\*\\))")
-            )
         )
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^(?:abstract|and|as|assert|begin|class|default|delegate|do|done|downcast|downto|elif|else|end|exception|extern|false|finally|for|fun|function|if|in|inherit|inline|interface|internal|lazy|let|match|member|module|mutable|namespace|new|null|of|open|or|override|private|public|rec|return|static|struct|then|to|true|try|type|upcast|use|val|void|when|while|with|yield|asr|land|lor|lsl|lsr|lxor|mod|sig|atomic|break|checked|component|const|constraint|constructor|continue|eager|event|external|fixed|functor|global|include|method|mixin|object|parallel|process|protected|pure|sealed|trait|virtual|volatile)\\b")
-            )
         )
         // A number is a hex integer literal, a decimal real literal, or in
         // scientific notation.
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL, Pattern.compile(
                     "^[+\\-]?(?:0x[\\da-f]+|(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:e[+\\-]?\\d+)?))",
                     Pattern.CASE_INSENSITIVE
-                )
             )
         )
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_PLAIN,
                 Pattern.compile("^(?:[a-z_][\\w']*[!?#]?|``[^\\r\\n\\t`]*(?:``|$))", Pattern.CASE_INSENSITIVE)
-            )
         )
         // A printable non-space non-special character
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION, Pattern.compile("^[^\\t\\n\\r \\xA0\\\"\\'\\w]+")
-            )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

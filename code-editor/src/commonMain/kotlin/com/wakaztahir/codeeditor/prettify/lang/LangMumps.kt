@@ -14,6 +14,8 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
+import com.wakaztahir.codeeditor.prettify.parser.StylePattern
+import com.wakaztahir.codeeditor.utils.new
 
 import java.util.regex.Pattern
 
@@ -50,8 +52,8 @@ class LangMumps : Lang() {
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
         val commands = "B|BREAK|" +
                 "C|CLOSE|" +
                 "D|DO|" +
@@ -123,68 +125,52 @@ class LangMumps : Lang() {
         val intrinsic = intrinsicVariables + intrinsicFunctions
 
         // Whitespace
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_PLAIN, Pattern.compile("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
-            )
         )
         // A double or single quoted, possibly multi-line, string.
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_STRING,
                 Pattern.compile("^(?:\"(?:[^\"]|\\\\.)*\")"),
                 null,
                 "\""
-            )
         )
 
         // A line comment that starts with ;
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_COMMENT,
                 Pattern.compile("^;[^\\r\\n]*"),
                 null,
                 ";"
-            )
         )
         // Add intrinsic variables and functions as declarations, there not really but it mean
         // they will hilighted differently from commands.
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_DECLARATION, Pattern.compile(
                     "^(?:\\$(?:$intrinsic))\\b", Pattern.CASE_INSENSITIVE
                 ), null
-            )
         )
         // Add commands as keywords
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD, Pattern.compile(
                     "^(?:[^\\$]$commands)\\b", Pattern.CASE_INSENSITIVE
                 ), null
-            )
         )
         // A number is a decimal real literal or in scientific notation.
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^[+-]?(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:E[+\\-]?\\d+)?)", Pattern.CASE_INSENSITIVE)
-            )
         )
         // An identifier
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_PLAIN,
                 Pattern.compile("^[a-z][a-zA-Z0-9]*", Pattern.CASE_INSENSITIVE)
             )
-        )
         // Exclude $ % and ^
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[^\\w\\t\\n\\r\\xA0\\\"\\$;%\\^]|_")
             )
-        )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
     }

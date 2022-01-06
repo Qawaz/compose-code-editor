@@ -14,6 +14,7 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.lang.Lang
+import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 
 /**
  * Lang class for Java Prettify.
@@ -25,27 +26,27 @@ abstract class Lang {
     /**
      * Similar to those in JavaScript prettify.js.
      */
-    internal var shortcutStylePatterns: List<List<Any?>>
+    internal var shortcutStylePatterns: List<StylePattern>
 
     /**
      * Similar to those in JavaScript prettify.js.
      */
-    internal var fallthroughStylePatterns: List<List<Any?>>
+    internal var fallthroughStylePatterns: List<StylePattern>
 
     /**
      * See [LangCss] for example.
      */
     internal var extendedLangs: List<Lang>
 
-    fun getShortcutStylePatterns(): List<List<Any?>> {
-        val returnList: MutableList<List<Any?>> = ArrayList()
+    fun getShortcutStylePatterns(): List<StylePattern> {
+        val returnList: MutableList<StylePattern> = ArrayList()
         for (shortcutStylePattern in shortcutStylePatterns) {
             returnList.add(ArrayList(shortcutStylePattern))
         }
         return returnList
     }
 
-    fun setShortcutStylePatterns(shortcutStylePatterns: List<List<Any?>>) {
+    fun setShortcutStylePatterns(shortcutStylePatterns: List<StylePattern>) {
         val cloneList: MutableList<List<Any?>> = ArrayList()
         for (shortcutStylePattern in shortcutStylePatterns) {
             cloneList.add(ArrayList(shortcutStylePattern))

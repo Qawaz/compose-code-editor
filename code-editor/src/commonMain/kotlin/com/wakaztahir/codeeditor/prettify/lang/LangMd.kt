@@ -1,6 +1,8 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
+import com.wakaztahir.codeeditor.prettify.parser.StylePattern
+import com.wakaztahir.codeeditor.utils.new
 
 import java.util.regex.Pattern
 
@@ -16,19 +18,15 @@ class LangMd : Lang() {
     }
 
     init {
-        val _shortcutStylePatterns: List<List<Any>> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any>> = ArrayList()
-        _fallthroughStylePatterns.add(
-            listOf(
+        val _shortcutStylePatterns: List<StylePattern> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
+        _fallthroughStylePatterns.new(
                 Prettify.PR_DECLARATION,
                 Pattern.compile("^#.*?[\\n\\r]")
-            )
         )
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
                 Pattern.compile("^```[\\s\\S]*?(?:```|$)")
-            )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)

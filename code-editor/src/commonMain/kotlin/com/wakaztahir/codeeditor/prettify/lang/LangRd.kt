@@ -14,6 +14,8 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
+import com.wakaztahir.codeeditor.prettify.parser.StylePattern
+import com.wakaztahir.codeeditor.utils.new
 
 import java.util.regex.Pattern
 
@@ -40,54 +42,42 @@ class LangRd : Lang() {
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<List<Any?>> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<List<Any?>> = ArrayList()
+        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
+        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // whitespace
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_PLAIN, Pattern.compile("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
             )
-        )
         // all comments begin with '%'
-        _shortcutStylePatterns.add(
-            listOf(
+        _shortcutStylePatterns.new(
                 Prettify.PR_COMMENT,
                 Pattern.compile("^%[^\\r\\n]*"),
                 null,
                 "%"
-            )
         )
 
         // special macros with no args
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_LITERAL,
                 Pattern.compile("^\\\\(?:cr|l?dots|R|tab)\\b")
             )
-        )
         // macros
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^\\\\[a-zA-Z@]+")
             )
-        )
         // highlighted as macros, since technically they are
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
                 Pattern.compile("^#(?:ifn?def|endif)")
-            )
         )
         // catch escaped brackets
-        _fallthroughStylePatterns.add(listOf(Prettify.PR_PLAIN, Pattern.compile("^\\\\[{}]")))
+        _fallthroughStylePatterns.new(Prettify.PR_PLAIN, Pattern.compile("^\\\\[{}]"))
         // punctuation
-        _fallthroughStylePatterns.add(
-            listOf(
+        _fallthroughStylePatterns.new(
                 Prettify.PR_PUNCTUATION,
                 Pattern.compile("^[{}()\\[\\]]+")
-            )
         )
         setShortcutStylePatterns(_shortcutStylePatterns)
         setFallthroughStylePatterns(_fallthroughStylePatterns)
