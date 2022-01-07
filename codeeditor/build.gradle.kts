@@ -24,9 +24,10 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(BuildConfig.Dependencies.Common.Compose.runtime)
-                api(BuildConfig.Dependencies.Common.Compose.foundation)
-                api(BuildConfig.Dependencies.Common.Compose.material)
+                with(BuildConfig.Dependencies.Compose){
+                    api(runtime)
+                    api(foundation)
+                }
             }
         }
         val commonTest by getting {

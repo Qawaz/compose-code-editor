@@ -2,7 +2,7 @@ object BuildConfig {
     object Info {
         const val group = "com.wakaztahir"
         const val version = "3.0.0"
-        const val versionCode = 1
+        const val versionCode = 3
 
         const val ComposeVersion = "1.0.1"
         const val KotlinVersion = "1.6.10"
@@ -15,12 +15,10 @@ object BuildConfig {
     }
 
     object Dependencies {
-        object Common {
-            object Compose {
-                val runtime get() = "org.jetbrains.compose.runtime:runtime:${Info.ComposeVersion}"
-                val foundation get() = "org.jetbrains.compose.foundation:foundation:${Info.ComposeVersion}"
-                val material get() = "org.jetbrains.compose.material:material:${Info.ComposeVersion}"
-            }
+        object Compose {
+            val runtime get() = "org.jetbrains.compose.runtime:runtime:${Info.ComposeVersion}"
+            val foundation get() = "org.jetbrains.compose.foundation:foundation:${Info.ComposeVersion}"
+            val material get() = "org.jetbrains.compose.material:material:${Info.ComposeVersion}"
         }
     }
 }
