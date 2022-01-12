@@ -43,12 +43,16 @@ dependencies {
 val githubProperties = Properties()
 githubProperties.load(FileInputStream(rootProject.file("github.properties")))
 
-maven {
-    name = "GitHubPackages"
-    url = uri("https://maven.pkg.github.com/timeline-notes/timeline-kmp")
-    credentials {
-        username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
-        password = (githubProperties["gpr.key"] ?: System.getenv("GPR_API_KEY")).toString()
+allprojects {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/timeline-notes/timeline-kmp")
+            credentials {
+                username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
+                password = (githubProperties["gpr.key"] ?: System.getenv("GPR_API_KEY")).toString()
+            }
+        }
     }
 }
 ```
