@@ -1,7 +1,7 @@
 object BuildConfig {
     object Info {
         const val group = "com.wakaztahir"
-        const val version = "3.0.1"
+        const val version = "3.0.2"
         const val versionCode = 3
 
         const val ComposeVersion = "1.0.1"

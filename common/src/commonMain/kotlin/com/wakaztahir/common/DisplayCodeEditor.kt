@@ -21,6 +21,8 @@ fun DisplayCodeEditor() {
     }
     """.trimIndent()
 
+    val scope = rememberCoroutineScope()
+    var bringIntoViewRequester = remember { BringIntoViewRequester() }
     val parser = remember { PrettifyParser() }
     val themeState by remember { mutableStateOf(CodeThemeType.Default) }
     val theme = remember(themeState) { themeState.theme() }
@@ -38,7 +40,7 @@ fun DisplayCodeEditor() {
     }
 
     OutlinedTextField(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().bringIntoViewRequester(bringIntoViewRequester),
         value = textFieldValue,
         onValueChange = {
             textFieldValue = it.copy(
@@ -49,6 +51,9 @@ fun DisplayCodeEditor() {
                     code = it.text
                 )
             )
+            scope.launch {
+                bringIntoViewRequester.bringIntoView()
+            }
         }
     )
 }
