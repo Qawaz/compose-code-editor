@@ -111,49 +111,50 @@ Text(parsedCode)
 ### Using TextField Composable
 
 ```kotlin
-    // Same Steps From Above
-    val language = CodeLang.Java
-    val code = """             
-        package com.wakaztahir.codeeditor
-        
-        public static void main(String[] args){
-            System.out.println("Hello World")
-        }
-        """.trimIndent()
+  val language = CodeLang.Java
+val code = """             
+    package com.wakaztahir.codeeditor
     
-    val parser = remember { PrettifyParser() }
-    val themeState by remember { mutableStateOf(CodeThemeType.Default) }
-    val theme = remember(themeState) { themeState.theme() }
-
-    // Creating Text Field Value , Prasing Initial Code As Annotated String
-    var textFieldValue by remember {
-      mutableStateOf(
-        TextFieldValue(
-          annotatedString = parseCodeAsAnnotatedString(
-            parser = parser,
-            theme = theme,
-            lang = language,
-            code = code
-          )
-        )
-      )
+    public static void main(String[] args){
+        System.out.println("Hello World")
     }
-    
-    // Displaying In A Text Field
-    OutlinedTextField(
-      modifier = Modifier.fillMaxSize(),
-      value = textFieldValue,
-      onValueChange = {
-        textFieldValue = it.copy(
-          annotatedString = parseCodeAsAnnotatedString(
-            parser = parser,
-            theme = theme,
-            lang = language,
-            code = it.text
-          )
-        )
-      }
+    """.trimIndent()
+
+val scope = rememberCoroutineScope()
+var bringIntoViewRequester = remember { BringIntoViewRequester() }
+val parser = remember { PrettifyParser() }
+val themeState by remember { mutableStateOf(CodeThemeType.Default) }
+val theme = remember(themeState) { themeState.theme() }
+var textFieldValue by remember {
+  mutableStateOf(
+    TextFieldValue(
+      annotatedString = parseCodeAsAnnotatedString(
+        parser = parser,
+        theme = theme,
+        lang = language,
+        code = code
+      )
     )
+  )
+}
+
+OutlinedTextField(
+  modifier = Modifier.fillMaxSize().bringIntoViewRequester(bringIntoViewRequester),
+  value = textFieldValue,
+  onValueChange = {
+    textFieldValue = it.copy(
+      annotatedString = parseCodeAsAnnotatedString(
+        parser = parser,
+        theme = theme,
+        lang = language,
+        code = it.text
+      )
+    )
+    scope.launch {
+      bringIntoViewRequester.bringIntoView()
+    }
+  }
+)
 ```
 
 ## List of available languages & their extensions
