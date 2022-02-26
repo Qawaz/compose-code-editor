@@ -1,4 +1,4 @@
-site_name: Compose Mind Mapper
+site_name: Compose Code Editor
 theme:
   name: material
 markdown_extensions:
@@ -9,4 +9,4 @@ markdown_extensions:
   - pymdownx.superfences
 nav:
   - 'Overview': README.md
-  - 'API' : api/codeditor
+  - 'API' : api/codeeditor
