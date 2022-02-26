@@ -1,4 +1,14 @@
 site_name: Compose Code Editor
+site_description: 'Jetpack Compose Code Editor'
+site_author: 'Waqas Tahir'
+site_url: 'https://codeckle.github.io/compose-code-editor/'
+remote_branch: gh-pages
+
+docs_dir: docs
+
+repo_name: 'compose-code-editor'
+repo_url: 'https://github.com/codeckle/compose-code-editor'
+
 theme:
   name: material
 markdown_extensions:
