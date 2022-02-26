@@ -25,7 +25,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                with(BuildConfig.Dependencies.Compose){
+                with(BuildConfig.Dependencies.Compose) {
                     api(runtime)
                     api(foundation)
                 }
@@ -69,7 +69,7 @@ android {
 }
 
 val githubProperties = Properties()
-githubProperties.load(FileInputStream(rootProject.file("github.properties")))
+runCatching { githubProperties.load(FileInputStream(rootProject.file("github.properties"))) }
 
 afterEvaluate {
     publishing {
