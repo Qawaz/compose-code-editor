@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.compose") version "1.0.1"
+    id("org.jetbrains.compose") version BuildConfig.Info.ComposeVersion
     id("com.android.application")
     kotlin("android")
 }
@@ -7,21 +7,17 @@ plugins {
 group = BuildConfig.Info.group
 version = BuildConfig.Info.version
 
-repositories {
-    jcenter()
-}
-
 dependencies {
     implementation(project(":common"))
     implementation("androidx.activity:activity-compose:1.3.0")
 }
 
 android {
-    compileSdkVersion(BuildConfig.Android.compileSdkVersion)
+    compileSdk = BuildConfig.Android.compileSdkVersion
     defaultConfig {
         applicationId = "com.wakaztahir.android"
-        minSdkVersion(BuildConfig.Android.minSdkVersion)
-        targetSdkVersion(BuildConfig.Android.targetSdkVersion)
+        minSdk = BuildConfig.Android.minSdkVersion
+        targetSdk = BuildConfig.Android.targetSdkVersion
         versionCode = BuildConfig.Info.versionCode
         versionName = BuildConfig.Info.version
     }

@@ -4,7 +4,7 @@ import java.util.*
 plugins {
     kotlin("multiplatform")
     id("maven-publish")
-    id("org.jetbrains.compose") version "1.0.1"
+    id("org.jetbrains.compose") version BuildConfig.Info.ComposeVersion
     id("com.android.library")
     id("org.jetbrains.dokka")
 }
@@ -13,7 +13,6 @@ group = BuildConfig.Info.group
 version = BuildConfig.Info.version
 
 kotlin {
-    android()
     android {
         publishLibraryVariants("release")
     }
