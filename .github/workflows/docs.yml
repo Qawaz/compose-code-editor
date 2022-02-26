@@ -17,9 +17,6 @@ jobs:
           distribution: 'adopt'
           cache: gradle
 
-      - name: Install Gradle Wrapper
-        run: gradle wrapper --stacktrace
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
