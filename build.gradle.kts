@@ -14,6 +14,14 @@ buildscript {
 group = BuildConfig.Info.group
 version = BuildConfig.Info.version
 
+plugins {
+    id("org.jetbrains.dokka") version BuildConfig.Info.DokkaVersion
+}
+
+tasks.withType<org.jetbrains.dokka.gradle.DokkaMultiModuleTask>(){
+    outputDirectory.set(rootProject.file("docs/api"))
+}
+
 allprojects {
     repositories {
         google()

@@ -6,6 +6,7 @@ plugins {
     id("maven-publish")
     id("org.jetbrains.compose") version "1.0.1"
     id("com.android.library")
+    id("org.jetbrains.dokka")
 }
 
 group = BuildConfig.Info.group

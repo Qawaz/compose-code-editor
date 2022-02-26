@@ -1,0 +1,127 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Prettify</title>
+</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+
+  
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html"><span>ComposeCodeEditor</span></a></div>
+      <div>3.0.3</div>
+      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
+    <div id="container">
+      <div id="leftColumn">
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <div class="main-content" id="content" pageids="codeeditor::com.wakaztahir.codeeditor.prettify.parser/Prettify///PointingToDeclaration//1145851193">
+          <div class="breadcrumbs"><a href="../../index.html">codeeditor</a>/<a href="../index.html">com.wakaztahir.codeeditor.prettify.parser</a>/<a href="index.html">Prettify</a></div>
+          <div class="cover ">
+            <h1 class="cover"><span><span>Prettify</span></span></h1>
+            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":codeeditor:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Prettify</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">This is similar to the prettify.js in JavaScript Prettify.</p><p class="paragraph">All comments are adapted from the JavaScript Prettify.</p><p class="paragraph">Some functions for browser-side pretty printing of code contained in html.</p><p class="paragraph">For a fairly comprehensive set of languages see the <a href="http://google-code-prettify.googlecode.com/svn/trunk/README.html#langs">README</a> file that came with this source.  At a minimum, the lexer should work on a number of languages including C and friends, Java, Python, Bash, SQL, HTML, XML, CSS, Javascript, and Makefiles.  It works passably on Ruby, PHP and Awk and a subset of Perl, but, because of commenting conventions, doesn't work on Smalltalk, Lisp-like, or CAML-like languages without an explicit lang class.</p><p class="paragraph">Usage:</p><ol><li><p class="paragraph">include this source file in an html page via <code class="lang-kotlin">&lt;script type="text/javascript" src="/path/to/prettify.js"&gt;&lt;/script&gt;</code></p></li><li><p class="paragraph">define style rules.  See the example page for examples.</p></li><li><p class="paragraph">mark the <code class="lang-kotlin">&lt;pre&gt;</code> and <code class="lang-kotlin">&lt;code&gt;</code> tags in your source with <code class="lang-kotlin">class=prettyprint.</code> You can also use the (html deprecated) <code class="lang-kotlin">&lt;xmp&gt;</code> tag, but the pretty printer needs to do more substantial DOM manipulations to support that, so some css styles may not be preserved.</p></li></ol><p class="paragraph">That's it.  I wanted to keep the API as simple as possible, so there's no need to specify which language the code is in, but if you wish, you can add another class to the <code class="lang-kotlin">&lt;pre&gt;</code> or <code class="lang-kotlin">&lt;code&gt;</code> element to specify the language, as in <code class="lang-kotlin">&lt;pre class="prettyprint lang-java"&gt;</code>.  Any class that starts with "lang-" followed by a file extension, specifies the file type. See the "lang-*.js" files in this directory for code that implements per-language file handlers.</p><p class="paragraph">Change log:<br><br> cbeust, 2006/08/22</p><blockquote>
+Java annotations (start with "@") are now captured as literals ("lit")
+</blockquote> *</div></div>
+          </div>
+          <div class="tabbedcontent">
+            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button></div>
+            <div class="tabs-section-body">
+              <h2 class="tabbedcontent">Constructors</h2>
+              <div class="table" data-togglable="Constructors"><a data-name="1973817446%2FConstructors%2F1145851193" anchor-label="Prettify" id="1973817446%2FConstructors%2F1145851193" data-filterable-set=":codeeditor:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":codeeditor:dokkaHtmlPartial/commonMain" data-filterable-set=":codeeditor:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue TabbedContent">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-prettify.html"><span><span>Prettify</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1973817446%2FConstructors%2F1145851193"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":codeeditor:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-prettify.html"><span class="token function">Prettify</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Types</h2>
+              <div class="table" data-togglable="Types"><a data-name="-1389079838%2FClasslikes%2F1145851193" anchor-label="Companion" id="-1389079838%2FClasslikes%2F1145851193" data-filterable-set=":codeeditor:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":codeeditor:dokkaHtmlPartial/commonMain" data-filterable-set=":codeeditor:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-companion/index.html"><span><span>Companion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1389079838%2FClasslikes%2F1145851193"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":codeeditor:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-companion/index.html">Companion</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-748812464%2FClasslikes%2F1145851193" anchor-label="CreateSimpleLexer" id="-748812464%2FClasslikes%2F1145851193" data-filterable-set=":codeeditor:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":codeeditor:dokkaHtmlPartial/commonMain" data-filterable-set=":codeeditor:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-create-simple-lexer/index.html"><span>Create</span><wbr><span>Simple</span><wbr><span><span>Lexer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-748812464%2FClasslikes%2F1145851193"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":codeeditor:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inner </span><span class="token keyword">class </span><a href="-create-simple-lexer/index.html">CreateSimpleLexer</a><span class="token punctuation">(</span>shortcutStylePatterns<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-style-pattern/index.html">StylePattern</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>fallthroughStylePatterns<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-style-pattern/index.html">StylePattern</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Functions</h2>
+              <div class="table" data-togglable="Functions"><a data-name="1635900214%2FFunctions%2F1145851193" anchor-label="getLangFromExtension" id="1635900214%2FFunctions%2F1145851193" data-filterable-set=":codeeditor:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":codeeditor:dokkaHtmlPartial/commonMain" data-filterable-set=":codeeditor:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="get-lang-from-extension.html"><span>get</span><wbr><span>Lang</span><wbr><span>From</span><wbr><span><span>Extension</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1635900214%2FFunctions%2F1145851193"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":codeeditor:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-lang-from-extension.html"><span class="token function">getLangFromExtension</span></a><span class="token punctuation">(</span>extension<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.wakaztahir.codeeditor.prettify.lang/-lang/index.html">Lang</a><span class="token operator">?</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="983599565%2FFunctions%2F1145851193" anchor-label="langHandlerForExtension" id="983599565%2FFunctions%2F1145851193" data-filterable-set=":codeeditor:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":codeeditor:dokkaHtmlPartial/commonMain" data-filterable-set=":codeeditor:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="lang-handler-for-extension.html"><span>lang</span><wbr><span>Handler</span><wbr><span>For</span><wbr><span><span>Extension</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="983599565%2FFunctions%2F1145851193"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":codeeditor:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="lang-handler-for-extension.html"><span class="token function">langHandlerForExtension</span></a><span class="token punctuation">(</span>ext<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span>source<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-create-simple-lexer/index.html">Prettify.CreateSimpleLexer</a><span class="token operator">?</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Get the parser for the extension specified.</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  
+</body></html>
+
+
