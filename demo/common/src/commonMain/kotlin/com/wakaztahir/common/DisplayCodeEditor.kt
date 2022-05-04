@@ -14,20 +14,17 @@ import com.wakaztahir.codeeditor.theme.CodeThemeType
 import com.wakaztahir.codeeditor.utils.parseCodeAsAnnotatedString
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DisplayCodeEditor() {
-    val language = CodeLang.Java
+    val language = CodeLang.Kotlin
     val code = """             
     package com.wakaztahir.codeeditor
     
-    public static void main(String[] args){
-        System.out.println("Hello World")
+    fun main(){
+        println("Hello World");
     }
     """.trimIndent()
 
-    val scope = rememberCoroutineScope()
-    var bringIntoViewRequester = remember { BringIntoViewRequester() }
     val parser = remember { PrettifyParser() }
     val themeState by remember { mutableStateOf(CodeThemeType.Default) }
     val theme = remember(themeState) { themeState.theme() }
@@ -45,7 +42,7 @@ fun DisplayCodeEditor() {
     }
 
     OutlinedTextField(
-        modifier = Modifier.fillMaxSize().bringIntoViewRequester(bringIntoViewRequester),
+        modifier = Modifier.fillMaxSize(),
         value = textFieldValue,
         onValueChange = {
             textFieldValue = it.copy(
@@ -56,9 +53,6 @@ fun DisplayCodeEditor() {
                     code = it.text
                 )
             )
-            scope.launch {
-                bringIntoViewRequester.bringIntoView()
-            }
         }
     )
 }

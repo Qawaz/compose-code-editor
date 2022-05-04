@@ -25,6 +25,7 @@ enum class CodeLang(val value: Array<String>) {
     Haskell(arrayOf("hs")),
     Lisp(arrayOf("lisp")),
     Llvm(arrayOf("llvm")),
+    Kotlin(arrayOf("kt")),
     Lua(arrayOf("lua")),
     Matlab(arrayOf("matlab")),
     ML(arrayOf("ml")),

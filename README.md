@@ -75,20 +75,45 @@ implementation("com.wakaztahir:codeeditor:3.0.1")
 ## Usage
 
 ```kotlin
-// Step 1. Declare Language & Code
-val language = CodeLang.Java
+val language = CodeLang.Kotlin
 val code = """             
     package com.wakaztahir.codeeditor
     
-    public static void main(String[] args){
-        System.out.println("Hello World")
+    fun main(){
+        println("Hello World");
     }
-""".trimIndent()
+    """.trimIndent()
 
-// Step 2. Create Parser & Theme
-val parser = remember { PrettifyParser() } // try getting from LocalPrettifyParser.current
-var themeState by remember { mutableStateOf(CodeThemeType.Monokai) }
+val parser = remember { PrettifyParser() }
+val themeState by remember { mutableStateOf(CodeThemeType.Default) }
 val theme = remember(themeState) { themeState.theme() }
+var textFieldValue by remember {
+  mutableStateOf(
+    TextFieldValue(
+      annotatedString = parseCodeAsAnnotatedString(
+        parser = parser,
+        theme = theme,
+        lang = language,
+        code = code
+      )
+    )
+  )
+}
+
+OutlinedTextField(
+  modifier = Modifier.fillMaxSize(),
+  value = textFieldValue,
+  onValueChange = {
+    textFieldValue = it.copy(
+      annotatedString = parseCodeAsAnnotatedString(
+        parser = parser,
+        theme = theme,
+        lang = language,
+        code = it.text
+      )
+    )
+  }
+)
 ```
 
 ### Using Text Composable
