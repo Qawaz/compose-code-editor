@@ -4,13 +4,13 @@ import java.util.*
 plugins {
     kotlin("multiplatform")
     id("maven-publish")
-    id("org.jetbrains.compose") version BuildConfig.Info.ComposeVersion
+    id("org.jetbrains.compose")
     id("com.android.library")
     id("org.jetbrains.dokka")
 }
 
-group = BuildConfig.Info.group
-version = BuildConfig.Info.version
+group = "com.wakaztahir"
+version = "3.0.3"
 
 kotlin {
     android {
@@ -24,10 +24,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                with(BuildConfig.Dependencies.Compose) {
-                    api(runtime)
-                    api(foundation)
-                }
+                api(compose.runtime)
+                api(compose.foundation)
             }
         }
         val commonTest by getting {
@@ -55,11 +53,11 @@ kotlin {
 }
 
 android {
-    compileSdk = BuildConfig.Android.compileSdkVersion
+    compileSdk = 31
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdk = BuildConfig.Android.minSdkVersion
-        targetSdk = BuildConfig.Android.targetSdkVersion
+        minSdk = 21
+        targetSdk = 31
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

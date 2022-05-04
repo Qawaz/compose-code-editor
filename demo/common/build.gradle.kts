@@ -1,11 +1,8 @@
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose") version BuildConfig.Info.ComposeVersion
+    id("org.jetbrains.compose")
     id("com.android.library")
 }
-
-group = BuildConfig.Info.group
-version = BuildConfig.Info.version
 
 kotlin {
     android()
@@ -17,12 +14,9 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                with(BuildConfig.Dependencies.Compose){
-                    api(runtime)
-                    api(foundation)
-                    api(material)
-                }
-
+                api(compose.runtime)
+                api(compose.foundation)
+                api(compose.material)
                 implementation(project(":codeeditor"))
             }
         }
@@ -47,11 +41,11 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(BuildConfig.Android.compileSdkVersion)
+    compileSdk = 31
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(BuildConfig.Android.minSdkVersion)
-        targetSdkVersion(BuildConfig.Android.targetSdkVersion)
+        minSdk = 21
+        targetSdk = 31
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

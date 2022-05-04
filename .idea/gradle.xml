@@ -9,11 +9,12 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/android" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/codeeditor" />
-            <option value="$PROJECT_DIR$/common" />
-            <option value="$PROJECT_DIR$/desktop" />
+            <option value="$PROJECT_DIR$/demo" />
+            <option value="$PROJECT_DIR$/demo/android" />
+            <option value="$PROJECT_DIR$/demo/common" />
+            <option value="$PROJECT_DIR$/demo/desktop" />
           </set>
         </option>
       </GradleProjectSettings>

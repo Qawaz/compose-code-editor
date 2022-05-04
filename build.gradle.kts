@@ -4,17 +4,16 @@ buildscript {
         google()
         mavenCentral()
     }
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${BuildConfig.Info.KotlinVersion}")
-        classpath("com.android.tools.build:gradle:7.0.4")
-    }
 }
 
-group = BuildConfig.Info.group
-version = BuildConfig.Info.version
-
 plugins {
-    id("org.jetbrains.dokka") version BuildConfig.Info.DokkaVersion
+    kotlin("jvm").apply(false)
+    kotlin("multiplatform").apply(false)
+    kotlin("android").apply(false)
+    id("com.android.application").apply(false)
+    id("com.android.library").apply(false)
+    id("org.jetbrains.compose").apply(false)
+    id("org.jetbrains.dokka")
 }
 
 tasks.withType<org.jetbrains.dokka.gradle.DokkaMultiModuleTask>(){
