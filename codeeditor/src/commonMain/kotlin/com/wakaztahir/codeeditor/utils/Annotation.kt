@@ -7,28 +7,19 @@ import com.wakaztahir.codeeditor.parser.ParseResult
 import com.wakaztahir.codeeditor.prettify.PrettifyParser
 import com.wakaztahir.codeeditor.theme.CodeTheme
 
-fun List<ParseResult>.toAnnotatedString(theme: CodeTheme, source: String): AnnotatedString {
-    val result = this
-    return buildAnnotatedString {
-
-        append(source)
-
-        // Appending Span Styles
-        result.forEach {
-            addStyle(theme toSpanStyle it, it.offset, it.offset + it.length)
-        }
+fun List<ParseResult>.toAnnotatedString(theme: CodeTheme, source: String): AnnotatedString = AnnotatedString(
+    text = source,
+    spanStyles = map {
+        AnnotatedString.Range(theme toSpanStyle it, it.offset, it.offset + it.length)
     }
-}
-
+)
 
 fun parseCodeAsAnnotatedString(
     parser: PrettifyParser,
     theme: CodeTheme,
     lang: String,
     code: String
-): AnnotatedString {
-    return parser.parse(lang, code).toAnnotatedString(theme, code)
-}
+): AnnotatedString = parser.parse(lang, code).toAnnotatedString(theme, code)
 
 fun parseCodeAsAnnotatedString(
     parser: PrettifyParser,

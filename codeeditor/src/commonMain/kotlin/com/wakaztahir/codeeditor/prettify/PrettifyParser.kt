@@ -20,7 +20,7 @@ class PrettifyParser : Parser {
         val job = Job(0, content)
         prettify.langHandlerForExtension(fileExtension, content)?.decorate(job)
         val decorations = job.decorations
-        val returnList: MutableList<ParseResult> = ArrayList()
+        val returnList = ArrayList<ParseResult>()
 
         // apply style according to the style list
         var i = 0
@@ -28,11 +28,9 @@ class PrettifyParser : Parser {
         while (i < iEnd) {
             val endPos = if (i + 2 < iEnd) decorations[i + 2] as Int else content.length
             val startPos = decorations[i] as Int
-            if (endPos != null) {
-                returnList.add(
-                    ParseResult(startPos, endPos - startPos, listOf((decorations[i + 1] as String)))
-                )
-            }
+            returnList.add(
+                ParseResult(startPos, endPos - startPos, listOf((decorations[i + 1] as String)))
+            )
             i += 2
         }
         return returnList

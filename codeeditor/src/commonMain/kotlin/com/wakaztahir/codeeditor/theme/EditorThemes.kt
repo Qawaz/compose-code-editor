@@ -2,8 +2,8 @@ package com.wakaztahir.codeeditor.theme
 
 import androidx.compose.ui.graphics.Color
 
-class DefaultTheme : CodeTheme() {
-    override val colors = SyntaxColors(
+class DefaultTheme : CodeTheme(
+    colors = SyntaxColors(
         type = Color(0xFF859900),
         keyword = Color(0xFF268BD2),
         literal = Color(0xFF269186),
@@ -18,10 +18,10 @@ class DefaultTheme : CodeTheme() {
         attrValue = Color(0xFF269186),
         nocode = Color(0xFF586E75),
     )
-}
+)
 
-class MonokaiTheme : CodeTheme() {
-    override val colors = SyntaxColors(
+class MonokaiTheme : CodeTheme(
+    colors = SyntaxColors(
         type = Color(0xFFA7E22E),
         keyword = Color(0xFFFA2772),
         literal = Color(0xFF66D9EE),
@@ -36,4 +36,4 @@ class MonokaiTheme : CodeTheme() {
         attrValue = Color(0xFFE6DB74),
         nocode = Color(0xFFF8F8F0),
     )
-}
+)

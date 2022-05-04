@@ -75,6 +75,7 @@ implementation("com.wakaztahir:codeeditor:3.0.1")
 ## Usage
 
 ```kotlin
+// Step 1. Declare Language & Code
 val language = CodeLang.Kotlin
 val code = """             
     package com.wakaztahir.codeeditor
@@ -82,11 +83,34 @@ val code = """
     fun main(){
         println("Hello World");
     }
-    """.trimIndent()
+""".trimIndent()
 
-val parser = remember { PrettifyParser() }
-val themeState by remember { mutableStateOf(CodeThemeType.Default) }
+// Step 2. Create Parser & Theme
+val parser = remember { PrettifyParser() } // try getting from LocalPrettifyParser.current
+var themeState by remember { mutableStateOf(CodeThemeType.Monokai) }
 val theme = remember(themeState) { themeState.theme() }
+```
+
+### Using Text Composable
+
+```kotlin
+// Step 3. Parse Code For Highlighting
+val parsedCode = remember {
+    parseCodeAsAnnotatedString(
+        parser = parser,
+        theme = theme,
+        lang = language,
+        code = code
+    )
+}
+
+// Step 4. Display In A Text Composable
+Text(parsedCode)
+```
+
+### Using TextField Composable
+
+```kotlin
 var textFieldValue by remember {
   mutableStateOf(
     TextFieldValue(
@@ -116,76 +140,10 @@ OutlinedTextField(
 )
 ```
 
-### Using Text Composable
-
-```kotlin
-// Step 3. Parse Code For Highlighting
-val parsedCode = remember {
-    parseCodeAsAnnotatedString(
-        parser = parser,
-        theme = theme,
-        lang = language,
-        code = code
-    )
-}
-
-// Step 4. Display In A Text Composable
-Text(parsedCode)
-```
-
-### Using TextField Composable
-
-```kotlin
-  val language = CodeLang.Java
-val code = """             
-    package com.wakaztahir.codeeditor
-    
-    public static void main(String[] args){
-        System.out.println("Hello World")
-    }
-    """.trimIndent()
-
-val scope = rememberCoroutineScope()
-var bringIntoViewRequester = remember { BringIntoViewRequester() }
-val parser = remember { PrettifyParser() }
-val themeState by remember { mutableStateOf(CodeThemeType.Default) }
-val theme = remember(themeState) { themeState.theme() }
-var textFieldValue by remember {
-  mutableStateOf(
-    TextFieldValue(
-      annotatedString = parseCodeAsAnnotatedString(
-        parser = parser,
-        theme = theme,
-        lang = language,
-        code = code
-      )
-    )
-  )
-}
-
-OutlinedTextField(
-  modifier = Modifier.fillMaxSize().bringIntoViewRequester(bringIntoViewRequester),
-  value = textFieldValue,
-  onValueChange = {
-    textFieldValue = it.copy(
-      annotatedString = parseCodeAsAnnotatedString(
-        parser = parser,
-        theme = theme,
-        lang = language,
-        code = it.text
-      )
-    )
-    scope.launch {
-      bringIntoViewRequester.bringIntoView()
-    }
-  }
-)
-```
-
 ## List of available languages & their extensions
 
 Default (```"default-code"```), HTML (```"default-markup"```) , C/C++/Objective-C (```"c"```, ```"cc"```, ```"cpp"```, ```"cxx"```, ```"cyc"```, ```"m"```),
-C# (```"cs"```), Java (```"java"```), Bash (```"bash"```, ```"bsh"```, ```"csh"```, ```"sh"```),
+C# (```"cs"```), Java (```"java"```),Kotlin (```"kt"```) ,Bash (```"bash"```, ```"bsh"```, ```"csh"```, ```"sh"```),
 Python (```"cv"```, ```"py"```, ```"python"```), Perl (```"perl"```, ```"pl"```, ```"pm"```),
 Ruby (```"rb"```, ```"ruby"```), JavaScript (```"javascript"```, ```"js"```),
 CoffeeScript (```"coffee"```), Rust (```"rc"```, ```"rs"```, ```"rust"```), Appollo (```"apollo"```
@@ -211,8 +169,6 @@ releases.
 
 ## Issues
 
-* Does not support kotlin yet , but basic syntax highlighting can be achieved by using another
-  language
 * Lack of themes
 * Everytime user types code in a text field , all the code is parsed again rather than only the
   changed lines which makes it a little inefficient , This is due to compose not supporting
