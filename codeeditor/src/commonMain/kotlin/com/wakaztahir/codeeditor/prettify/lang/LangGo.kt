@@ -56,16 +56,20 @@ class LangGo : Lang() {
             get() = listOf("go")
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
+
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
+
+
 
         // Whitespace is made up of spaces, tabs and newline characters.
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // Not escaped as a string.  See note on minimalism above.
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])+(?:\\'|$)|`[^`]*(?:`|$))"),
             null,
@@ -73,14 +77,12 @@ class LangGo : Lang() {
         )
         // Block comments are delimited by /* and */.
         // Single-line comments begin with // and extend to the end of a line.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT, Regex("^(?:\\/\\/[^\\r\\n]*|\\/\\*[\\s\\S]*?\\*\\/)")
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^(?:[^\\/\\\"\\'`]|\\/(?![\\/\\*]))+", RegexOption.IGNORE_CASE)
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
     }
 
     override fun getFileExtensions(): List<String> {

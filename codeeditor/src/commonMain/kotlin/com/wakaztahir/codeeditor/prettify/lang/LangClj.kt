@@ -58,44 +58,43 @@ class LangClj : Lang() {
             get() = listOf("clj")
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
 
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // clojure has more paren types than minimal lisp.
-        _shortcutStylePatterns.new("opn", Regex("^[\\(\\{\\[]+"), null, "([{")
-        _shortcutStylePatterns.new("clo", Regex("^[\\)\\}\\]]+"), null, ")]}")
+        shortcutStylePatterns.new("opn", Regex("^[\\(\\{\\[]+"), null, "([{")
+        shortcutStylePatterns.new("clo", Regex("^[\\)\\}\\]]+"), null, ")]}")
         // A line comment that starts with ;
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^;[^\r\n]*"),
             null,
             ";"
         )
         // Whitespace
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double quoted, possibly multi-line, string.
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
             null,
             "\""
         )
         // clojure has a much larger set of keywords
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^(?:def|if|do|let|quote|var|fn|loop|recur|throw|try|monitor-enter|monitor-exit|defmacro|defn|defn-|macroexpand|macroexpand-1|for|doseq|dosync|dotimes|and|or|when|not|assert|doto|proxy|defstruct|first|rest|cons|defprotocol|deftype|defrecord|reify|defmulti|defmethod|meta|with-meta|ns|in-ns|create-ns|import|intern|refer|alias|namespace|resolve|ref|deref|refset|new|set!|memfn|to-array|into-array|aset|gen-class|reduce|map|filter|find|nil?|empty?|hash-map|hash-set|vec|vector|seq|flatten|reverse|assoc|dissoc|list|list?|disj|get|union|difference|intersection|extend|extend-type|extend-protocol|prn)\\b"),
             null
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_TYPE,
             Regex("^:[0-9a-zA-Z\\-]+")
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
     }
 
     override fun getFileExtensions(): List<String> {

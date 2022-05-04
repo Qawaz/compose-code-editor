@@ -45,16 +45,17 @@ class LangLua : Lang() {
             get() = listOf("lua")
     }
 
-    init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
 
+    init {
         // Whitespace
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double or single quoted, possibly multi-line, string.
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])*(?:\\'|$))"),
             null,
@@ -62,22 +63,22 @@ class LangLua : Lang() {
         )
         // A comment is either a line comment that starts with two dashes, or
         // two dashes preceding a long bracketed block.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT, Regex("^--(?:\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)|[^\\r\\n]*)")
         )
         // A long bracketed block not preceded by -- is a string.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\[(=*)\\[[\\s\\S]*?(?:\\]\\1\\]|$)")
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^(?:and|break|do|else|elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\\b"),
             null
         )
         // A number is a hex integer literal, a decimal real literal, or in
         // scientific notation.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex(
                 "^[+-]?(?:0x[\\da-f]+|(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:e[+\\-]?\\d+)?))",
@@ -85,17 +86,17 @@ class LangLua : Lang() {
             )
         )
         // An identifier
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[a-z_]\\w*", RegexOption.IGNORE_CASE)
         )
         // A run of punctuation
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[^\\w\\t\\n\\r \\xA0][^\\w\\n\\r \\xA0\\\"\\'\\-\\+=]*")
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
+
+
     }
 
     override fun getFileExtensions(): List<String> {

@@ -44,53 +44,56 @@ class LangLlvm : Lang() {
             get() = listOf("llvm", "ll")
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
+
+
 
         // Whitespace
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double quoted, possibly multi-line, string.
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^!?\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
             null,
             "\""
         )
         // comment.llvm
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^;[^\r\n]*"),
             null,
             ";"
         )
         // variable.llvm
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[%@!](?:[-a-zA-Z$._][-a-zA-Z$._0-9]*|\\d+)")
         )
         // According to http://llvm.org/docs/LangRef.html#well-formedness
         // These reserved words cannot conflict with variable names, because none of them start with a prefix character ('%' or '@').
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^[A-Za-z_][0-9A-Za-z_]*"),
             null
         )
         // constant.numeric.float.llvm
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL, Regex("^\\d+\\.\\d+")
         )
         // constant.numeric.integer.llvm
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL, Regex("^(?:\\d+|0[xX][a-fA-F0-9]+)")
         )
         // punctuation
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION, Regex("^[()\\[\\]{},=*<>:]|\\.\\.\\.$")
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
+
+
     }
 
     override fun getFileExtensions(): List<String> {

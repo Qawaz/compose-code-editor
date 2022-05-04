@@ -39,19 +39,22 @@ class LangErlang : Lang() {
             get() = listOf("erlang", "erl")
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
+
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
+
 
         // Whitespace
         // whitechar    ->    newline | vertab | space | tab | uniWhite
         // newline      ->    return linefeed | return | linefeed | formfeed
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar().toString() + 0x0C.toChar()
                 .toString() + "\r "
         )
         // Single line double-quoted strings.
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
             null,
@@ -59,11 +62,11 @@ class LangErlang : Lang() {
         )
 
         // Handle atoms
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_LITERAL, Regex("^[a-z][a-zA-Z0-9_]*")
         )
         // Handle single quoted atoms
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])+\\'?"),
             null,
@@ -73,7 +76,7 @@ class LangErlang : Lang() {
         // Handle macros. Just to be extra clear on this one, it detects the ?
         // then uses the regexp to end it so be very careful about matching
         // all the terminal elements
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^\\?[^ \\t\\n({]+"),
             null,
@@ -89,7 +92,7 @@ class LangErlang : Lang() {
         // float        ->    decimal . decimal [exponent]
         //               |    decimal exponent
         // exponent     ->    (e | E) [+ | -] decimal
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex(
                 "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
@@ -103,7 +106,7 @@ class LangErlang : Lang() {
         // TODO: catch @declarations inside comments
 
         // Comments in erlang are started with % and go till a newline
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT, Regex("^%[^\\n\\r]*")
         )
 
@@ -115,7 +118,7 @@ class LangErlang : Lang() {
          * 'apply' 'call' 'primop'
          * 'case' 'of' 'end' 'when' 'fun' 'try' 'catch' 'receive' 'after'
          */
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^(?:module|attributes|do|let|in|letrec|apply|call|primop|case|of|end|when|fun|try|catch|receive|after|char|integer|float,atom,string,var)\\b")
         )
@@ -123,21 +126,18 @@ class LangErlang : Lang() {
          * Catch definitions (usually defined at the top of the file)
          * Anything that starts -something
          */
-        _fallthroughStylePatterns.new(Prettify.PR_KEYWORD, Regex("^-[a-z_]+"))
+        fallthroughStylePatterns.new(Prettify.PR_KEYWORD, Regex("^-[a-z_]+"))
 
         // Catch variables
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_TYPE,
             Regex("^[A-Z_][a-zA-Z0-9_]*")
         )
 
         // matches the symbol production
-        _fallthroughStylePatterns.new(Prettify.PR_PUNCTUATION, Regex("^[.,;]"))
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
+        fallthroughStylePatterns.new(Prettify.PR_PUNCTUATION, Regex("^[.,;]"))
     }
 
-    override fun getFileExtensions(): List<String> {
-        return fileExtensions
-    }
+    override fun getFileExtensions(): List<String> = fileExtensions
+
 }

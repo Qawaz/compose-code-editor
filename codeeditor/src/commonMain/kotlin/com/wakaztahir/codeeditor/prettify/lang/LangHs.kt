@@ -52,14 +52,16 @@ class LangHs : Lang() {
             get() = listOf(("hs"))
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
+
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // Whitespace
         // whitechar    ->    newline | vertab | space | tab | uniWhite
         // newline      ->    return linefeed | return | linefeed | formfeed
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar()
                 .toString() + 0x0C.toChar().toString() + "\r "
         )
@@ -69,13 +71,13 @@ class LangHs : Lang() {
         // escape       ->    \ ( charesc | ascii | decimal | o octal
         //                        | x hexadecimal )
         // charesc      ->    a | b | f | n | r | t | v | \ | " | ' | &
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
             null,
             "\""
         )
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])\\'?"),
             null,
@@ -90,7 +92,7 @@ class LangHs : Lang() {
         // float        ->    decimal . decimal [exponent]
         //               |    decimal exponent
         // exponent     ->    (e | E) [+ | -] decimal
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex(
                 "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
@@ -106,7 +108,7 @@ class LangHs : Lang() {
         // dashes       ->    '--' {'-'}
         // opencom      ->    '{-'
         // closecom     ->    '-}'
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^(?:(?:--+(?:[^\\r\\n\\x0C]*)?)|(?:\\{-(?:[^-]|-+[^-\\}])*-\\}))")
         )
@@ -114,7 +116,7 @@ class LangHs : Lang() {
         //               |    else | if | import | in | infix | infixl | infixr
         //               |    instance | let | module | newtype | of | then
         //               |    type | where | _
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^(?:case|class|data|default|deriving|do|else|if|import|in|infix|infixl|infixr|instance|let|module|newtype|of|then|type|where|_)(?=[^a-zA-Z0-9\\']|$)"),
             null
@@ -130,17 +132,17 @@ class LangHs : Lang() {
         // large        ->    ascLarge | uniLarge
         // ascLarge     ->    A | B | ... | Z
         // uniLarge     ->    any uppercase or titlecase Unicode letter
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^(?:[A-Z][\\w\\']*\\.)*[a-zA-Z][\\w\\']*")
         )
         // matches the symbol production
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[^\\t\\n\\x0B\\x0C\\r a-zA-Z0-9\\'\\\"]+")
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
+
+
     }
 
     override fun getFileExtensions(): List<String> {

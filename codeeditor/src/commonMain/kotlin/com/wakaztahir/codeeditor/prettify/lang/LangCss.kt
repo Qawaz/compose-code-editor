@@ -44,18 +44,18 @@ class LangCss : Lang() {
                 get() = listOf(("css-kw"))
         }
 
+        override val fallthroughStylePatterns = ArrayList<StylePattern>()
+        override val shortcutStylePatterns = ArrayList<StylePattern>()
+        override val extendedLangs = ArrayList<Lang>()
+
         init {
-            val _shortcutStylePatterns: List<StylePattern> = ArrayList()
-            val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
-            _fallthroughStylePatterns.new(
+            fallthroughStylePatterns.new(
                 Prettify.PR_KEYWORD,
                 Regex(
                     "^-?(?:[_a-z]|(?:\\\\[\\da-f]+ ?))(?:[_a-z\\d\\-]|\\\\(?:\\\\[\\da-f]+ ?))*",
                     RegexOption.IGNORE_CASE
                 )
             )
-            setShortcutStylePatterns(_shortcutStylePatterns)
-            setFallthroughStylePatterns(_fallthroughStylePatterns)
         }
 
         override fun getFileExtensions(): List<String> {
@@ -69,15 +69,15 @@ class LangCss : Lang() {
                 get() = listOf(("css-str"))
         }
 
+        override val fallthroughStylePatterns = ArrayList<StylePattern>()
+        override val shortcutStylePatterns = ArrayList<StylePattern>()
+        override val extendedLangs = ArrayList<Lang>()
+
         init {
-            val _shortcutStylePatterns: List<StylePattern> = ArrayList()
-            val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
-            _fallthroughStylePatterns.new(
+            fallthroughStylePatterns.new(
                 Prettify.PR_STRING,
                 Regex("^[^\\)\\\"\\']+")
             )
-            setShortcutStylePatterns(_shortcutStylePatterns)
-            setFallthroughStylePatterns(_fallthroughStylePatterns)
         }
 
         override fun getFileExtensions(): List<String> {
@@ -90,33 +90,35 @@ class LangCss : Lang() {
             get() = listOf(("css"))
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = listOf(LangCssKeyword(), LangCssString())
+
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // The space production <s>
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[ \t\r\n\\f]+"),
             null,
             " \t\r\n\\f"
         )
         // Quoted strings.  <string1> and <string2>
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\\"(?:[^\n\r\\f\\\\\\\"]|\\\\(?:\r\n?|\n|\\f)|\\\\[\\s\\S])*\\\""),
             null
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\'(?:[^\n\r\\f\\\\\\']|\\\\(?:\r\n?|\n|\\f)|\\\\[\\s\\S])*\\'"),
             null
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             "lang-css-str",
             Regex("^url\\(([^\\)\\\"\\']+)\\)", RegexOption.IGNORE_CASE)
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex(
                 "^(?:url|rgb|\\!important|@import|@page|@media|@charset|inherit)(?=[^\\-\\w]|$)",
@@ -125,7 +127,7 @@ class LangCss : Lang() {
             null
         )
         // A property name -- an identifier followed by a colon.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             "lang-css-kw",
             Regex(
                 "^(-?(?:[_a-z]|(?:\\\\[0-9a-f]+ ?))(?:[_a-z0-9\\-]|\\\\(?:\\\\[0-9a-f]+ ?))*)\\s*:",
@@ -133,27 +135,27 @@ class LangCss : Lang() {
             )
         )
         // A C style block comment.  The <comment> production.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
         )
         // Escaping text spans
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^(?:<!--|-->)")
         )
         // A number possibly containing a suffix.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^(?:\\d+|\\d*\\.\\d+)(?:%|[a-z]+)?", RegexOption.IGNORE_CASE)
         )
         // A hex color
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^#(?:[0-9a-f]{3}){1,2}\\b", RegexOption.IGNORE_CASE)
         )
         // An identifier
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex(
                 "^-?(?:[_a-z]|(?:\\\\[\\da-f]+ ?))(?:[_a-z\\d\\-]|\\\\(?:\\\\[\\da-f]+ ?))*",
@@ -161,13 +163,10 @@ class LangCss : Lang() {
             )
         )
         // A run of punctuation
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[^\\s\\w\\'\\\"]+", RegexOption.IGNORE_CASE)
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
-        setExtendedLangs(listOf(LangCssKeyword(), LangCssString()))
     }
 
     override fun getFileExtensions(): List<String> {

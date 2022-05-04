@@ -31,29 +31,11 @@ import com.wakaztahir.codeeditor.utils.new
  * @author mikesamuel@gmail.com
  */
 class LangWiki : Lang() {
-    protected class LangWikiMeta : Lang() {
-        companion object {
-            val fileExtensions: List<String>
-                get() = listOf(("wiki.meta"))
-        }
 
-        init {
-            val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-            val _fallthroughStylePatterns: List<StylePattern> = ArrayList()
-            _shortcutStylePatterns.new(
-                Prettify.PR_KEYWORD,
-                Regex("^#[a-z]+", RegexOption.IGNORE_CASE),
-                null,
-                "#"
-            )
-            setShortcutStylePatterns(_shortcutStylePatterns)
-            setFallthroughStylePatterns(_fallthroughStylePatterns)
-        }
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = listOf(LangWikiMeta())
 
-        override fun getFileExtensions(): List<String> {
-            return fileExtensions
-        }
-    }
 
     companion object {
         val fileExtensions: List<String>
@@ -61,58 +43,78 @@ class LangWiki : Lang() {
     }
 
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
-
         // Whitespace
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[\\t \\xA0a-gi-z0-9]+"),
             null,
             "\t " + 0xA0.toChar().toString() + "abcdefgijklmnopqrstuvwxyz0123456789"
         )
         // Wiki formatting
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[=*~\\^\\[\\]]+"),
             null,
             "=*~^[]"
         )
         // Meta-info like #summary, #labels, etc.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             "lang-wiki.meta",
             Regex("(?:^^|\r\n?|\n)(#[a-z]+)\\b")
         )
         // A WikiWord
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^(?:[A-Z][a-z][a-z0-9]+[A-Z][a-z][a-zA-Z0-9]+)\\b")
         )
         // A preformatted block in an unknown language
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             "lang-",
             Regex("^\\{\\{\\{([\\s\\S]+?)\\}\\}\\}")
         )
         // A block of source code in an unknown language
-        _fallthroughStylePatterns.new("lang-", Regex("^`([^\r\n`]+)`"))
+        fallthroughStylePatterns.new("lang-", Regex("^`([^\r\n`]+)`"))
         // An inline URL.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_STRING,
             Regex(
                 "^https?:\\/\\/[^\\/?#\\s]*(?:\\/[^?#\\s]*)?(?:\\?[^#\\s]*)?(?:#\\S*)?",
                 RegexOption.IGNORE_CASE
             )
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^(?:\r\n|[\\s\\S])[^#=*~^A-Zh\\{`\\[\r\n]*")
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
-        setExtendedLangs(listOf(LangWikiMeta()))
+
     }
 
-    override fun getFileExtensions(): List<String> {
-        return fileExtensions
+    override fun getFileExtensions(): List<String> = fileExtensions
+
+    internal class LangWikiMeta : Lang() {
+        companion object {
+            val fileExtensions: List<String>
+                get() = listOf(("wiki.meta"))
+        }
+
+        override val fallthroughStylePatterns = ArrayList<StylePattern>()
+        override val shortcutStylePatterns = ArrayList<StylePattern>()
+        override val extendedLangs = ArrayList<Lang>()
+        init {
+
+            val fallthroughStylePatterns: List<StylePattern> = ArrayList()
+            shortcutStylePatterns.new(
+                Prettify.PR_KEYWORD,
+                Regex("^#[a-z]+", RegexOption.IGNORE_CASE),
+                null,
+                "#"
+            )
+
+
+        }
+
+        override fun getFileExtensions(): List<String> {
+            return fileExtensions
+        }
     }
 }

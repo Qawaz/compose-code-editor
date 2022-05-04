@@ -78,30 +78,34 @@ class LangLisp : Lang() {
             get() = listOf("cl", "el", "lisp", "lsp", "scm", "ss", "rkt")
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
+
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
-        _shortcutStylePatterns.new("opn", Regex("^\\(+"), null, "(")
-        _shortcutStylePatterns.new("clo", Regex("^\\)+"), null, ")")
+
+
+        shortcutStylePatterns.new("opn", Regex("^\\(+"), null, "(")
+        shortcutStylePatterns.new("clo", Regex("^\\)+"), null, ")")
         // A line comment that starts with ;
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^;[^\r\n]*"),
             null,
             ";"
         )
         // Whitespace
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double quoted, possibly multi-line, string.
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
             null,
             "\""
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex(
                 "^(?:block|c[ad]+r|catch|con[ds]|def(?:ine|un)|do|eq|eql|equal|equalp|eval-when|flet|format|go|if|labels|lambda|let|load-time-value|locally|macrolet|multiple-value-call|nil|progn|progv|quote|require|return-from|setq|symbol-macrolet|t|tagbody|the|throw|unwind)\\b",
@@ -109,7 +113,7 @@ class LangLisp : Lang() {
             ),
             null
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL, Regex(
                 "^[+\\-]?(?:[0#]x[0-9a-f]+|\\d+\\/\\d+|(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:[ed][+\\-]?\\d+)?)",
                 RegexOption.IGNORE_CASE
@@ -117,23 +121,23 @@ class LangLisp : Lang() {
         )
         // A single quote possibly followed by a word that optionally ends with
         // = ! or ?.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^\\'(?:-*(?:\\w|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?)?")
         )
         // A word that optionally ends with = ! or ?.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN, Regex(
                 "^-*(?:[a-z_]|\\\\[\\x21-\\x7e])(?:[\\w-]*|\\\\[\\x21-\\x7e])[=!?]?",
                 RegexOption.IGNORE_CASE
             )
         )
         // A printable non-space non-special character
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION, Regex("^[^\\w\\t\\n\\r \\xA0()\\\"\\\\\\';]+")
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
+
+
     }
 
     override fun getFileExtensions(): List<String> {

@@ -36,26 +36,30 @@ class LangScala : Lang() {
             get() = listOf("scala")
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
+
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
+
+
 
         // Whitespace
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double or single quoted string 
         // or a triple double-quoted multi-line string.
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^(?:\"(?:(?:\"\"(?:\"\"?(?!\")|[^\\\\\"]|\\\\.)*\"{0,3})|(?:[^\"\\r\\n\\\\]|\\\\.)*\"?))"),
             null,
             "\""
         )
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_LITERAL, Regex("^`(?:[^\\r\\n\\\\`]|\\\\.)*`?"), null, "`"
         )
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[!#%&()*+,\\-:;<=>?@\\[\\\\\\]^{|}~]+"),
             null,
@@ -64,40 +68,40 @@ class LangScala : Lang() {
         // A symbol literal is a single quote followed by an identifier with no
         // single quote following
         // A character literal has single quotes on either side
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_STRING, Regex("^'(?:[^\\r\\n\\\\']|\\\\(?:'|[^\\r\\n']+))'")
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL, Regex("^'[a-zA-Z_$][\\w$]*(?!['$\\w])")
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^(?:abstract|case|catch|class|def|do|else|extends|final|finally|for|forSome|if|implicit|import|lazy|match|new|object|override|package|private|protected|requires|return|sealed|super|throw|trait|try|type|val|var|while|with|yield)\\b")
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL, Regex("^(?:true|false|null|this)\\b")
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL, Regex(
                 "^(?:(?:0(?:[0-7]+|X[0-9A-F]+))L?|(?:(?:0|[1-9][0-9]*)(?:(?:\\.[0-9]+)?(?:E[+\\-]?[0-9]+)?F?|L?))|\\\\.[0-9]+(?:E[+\\-]?[0-9]+)?F?)",
                 RegexOption.IGNORE_CASE
             )
         )
         // Treat upper camel case identifiers as types.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_TYPE, Regex("^[\$_]*[A-Z][_\$A-Z0-9]*[a-z][\\w$]*")
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\$a-zA-Z_][\\w$]*")
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT, Regex("^\\/(?:\\/.*|\\*(?:\\/|\\**[^*/])*(?:\\*+\\/?)?)")
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION, Regex("^(?:\\.+|\\/)")
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
+
+
     }
 
     override fun getFileExtensions(): List<String> {

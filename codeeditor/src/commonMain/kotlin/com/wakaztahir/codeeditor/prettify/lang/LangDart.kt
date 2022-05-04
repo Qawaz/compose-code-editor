@@ -43,40 +43,41 @@ class LangDart : Lang() {
             get() = listOf(("dart"))
     }
 
-    init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
 
+    init {
         // Whitespace.
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
 
         // Script tag.
-        _fallthroughStylePatterns.new(Prettify.PR_COMMENT, Regex("^#!(?:.*)"))
+        fallthroughStylePatterns.new(Prettify.PR_COMMENT, Regex("^#!(?:.*)"))
         // `import`, `library`, `part of`, `part`, `as`, `show`, and `hide`
         // keywords.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^\\b(?:import|library|part of|part|as|show|hide)\\b", RegexOption.IGNORE_CASE)
         )
         // Single-line comments.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^\\/\\/(?:.*)")
         )
         // Multiline comments.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^\\/\\*[^*]*\\*+(?:[^\\/*][^*]*\\*+)*\\/")
         )
         // `class` and `interface` keywords.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^\\b(?:class|interface)\\b", RegexOption.IGNORE_CASE)
         )
         // General keywords.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex(
                 "^\\b(?:assert|break|case|catch|continue|default|do|else|finally|for|if|in|is|new|return|super|switch|this|throw|try|while)\\b",
@@ -84,7 +85,7 @@ class LangDart : Lang() {
             )
         )
         // Declaration keywords.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex(
                 "^\\b(?:abstract|const|extends|factory|final|get|implements|native|operator|set|static|typedef|var)\\b",
@@ -92,7 +93,7 @@ class LangDart : Lang() {
             )
         )
         // Keywords for types.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_TYPE,
             Regex(
                 "^\\b(?:bool|double|Dynamic|int|num|Object|String|void)\\b",
@@ -100,62 +101,62 @@ class LangDart : Lang() {
             )
         )
         // Keywords for constants.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("\\b(?:false|null|true)\\b", RegexOption.IGNORE_CASE)
         )
         // Multiline strings, single- and double-quoted.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^r?[\\']{3}[\\s|\\S]*?[^\\\\][\\']{3}")
         )
 
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^r?[\\\"]{3}[\\s|\\S]*?[^\\\\][\\\"]{3}")
         )
 
         // Normal and raw strings, single- and double-quoted.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^r?\\'(\\'|(?:[^\\n\\r\\f])*?[^\\\\]\\')")
         )
 
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^r?\\\"(\\\"|(?:[^\\n\\r\\f])*?[^\\\\]\\\")")
         )
         // Identifiers.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[a-z_$][a-z0-9_]*", RegexOption.IGNORE_CASE)
         )
         // Operators.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[~!%^&*+=|?:<>/-]")
         )
         // Hex numbers.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^\\b0x[0-9a-f]+", RegexOption.IGNORE_CASE)
         )
         // Decimal numbers.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^\\b\\d+(?:\\.\\d*)?(?:e[+-]?\\d+)?", RegexOption.IGNORE_CASE)
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^\\b\\.\\d+(?:e[+-]?\\d+)?", RegexOption.IGNORE_CASE)
         )
         // Punctuation.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[(){}\\[\\],.;]")
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
+
+
     }
 
     override fun getFileExtensions(): List<String> {

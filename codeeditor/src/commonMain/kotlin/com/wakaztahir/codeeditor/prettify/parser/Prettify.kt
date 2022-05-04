@@ -283,6 +283,11 @@ class Prettify {
             in LangWiki.fileExtensions -> LangWiki()
             in LangXq.fileExtensions -> LangXq()
             in LangYaml.fileExtensions -> LangYaml()
+            in LangEx.fileExtensions -> LangEx()
+            in LangKotlin.fileExtensions -> LangKotlin()
+            in LangLasso.fileExtensions -> LangLasso()
+            in LangLogtalk.fileExtensions -> LangLogtalk()
+            in LangSwift.fileExtensions -> LangSwift()
             else -> null
         }
     }
@@ -574,6 +579,9 @@ class Prettify {
             val lang = getLangFromExtension(extension)
             return if (lang != null) {
                 val simpleLexer = CreateSimpleLexer(lang.shortcutStylePatterns, lang.fallthroughStylePatterns)
+                // todo this code to register extended languages in language
+                // also register lang function which registers lang class
+                // then if class is found it creates a lexer , if lexer is not found
                 //                val extendedLangs = lang.extendedLangs
                 //                for (extendedLang in extendedLangs) {
                 //                    register(extendedLang.javaClass)

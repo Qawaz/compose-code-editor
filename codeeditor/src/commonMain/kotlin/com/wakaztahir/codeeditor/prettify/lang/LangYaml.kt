@@ -34,69 +34,71 @@ class LangYaml : Lang() {
             get() = listOf("yaml", "yml")
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
+
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[:|>?]+"),
             null,
             ":|>?"
         )
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_DECLARATION,
             Regex("^%(?:YAML|TAG)[^#\\r\\n]+"),
             null,
             "%"
         )
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_TYPE,
             Regex("^[&]\\S+"),
             null,
             "&"
         )
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_TYPE,
             Regex("^!\\S*"),
             null,
             "!"
         )
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\"(?:[^\\\\\"]|\\\\.)*(?:\"|$)"),
             null,
             "\""
         )
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^'(?:[^']|'')*(?:'|$)"),
             null,
             "'"
         )
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^#[^\\r\\n]*"),
             null,
             "#"
         )
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^\\s+"),
             null,
             " \t\r\n"
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_DECLARATION,
             Regex("^(?:---|\\.\\.\\.)(?:[\\r\\n]|$)")
         )
-        _fallthroughStylePatterns.new(Prettify.PR_PUNCTUATION, Regex("^-"))
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(Prettify.PR_PUNCTUATION, Regex("^-"))
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^\\w+:[ \\r\\n]")
         )
-        _fallthroughStylePatterns.new(Prettify.PR_PLAIN, Regex("^\\w+"))
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
+        fallthroughStylePatterns.new(Prettify.PR_PLAIN, Regex("^\\w+"))
+
+
     }
 
     override fun getFileExtensions(): List<String> {

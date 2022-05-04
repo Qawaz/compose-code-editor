@@ -39,16 +39,17 @@ class LangRd : Lang() {
             get() = listOf("Rd", "rd")
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
 
         // whitespace
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // all comments begin with '%'
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^%[^\\r\\n]*"),
             null,
@@ -56,29 +57,29 @@ class LangRd : Lang() {
         )
 
         // special macros with no args
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^\\\\(?:cr|l?dots|R|tab)\\b")
         )
         // macros
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^\\\\[a-zA-Z@]+")
         )
         // highlighted as macros, since technically they are
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^#(?:ifn?def|endif)")
         )
         // catch escaped brackets
-        _fallthroughStylePatterns.new(Prettify.PR_PLAIN, Regex("^\\\\[{}]"))
+        fallthroughStylePatterns.new(Prettify.PR_PLAIN, Regex("^\\\\[{}]"))
         // punctuation
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[{}()\\[\\]]+")
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
+
+
     }
 
     override fun getFileExtensions(): List<String> {

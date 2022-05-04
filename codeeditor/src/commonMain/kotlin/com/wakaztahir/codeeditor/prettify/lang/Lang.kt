@@ -26,65 +26,17 @@ abstract class Lang {
     /**
      * Similar to those in JavaScript prettify.js.
      */
-    internal var shortcutStylePatterns: List<StylePattern>
+    internal abstract val shortcutStylePatterns: List<StylePattern>
 
     /**
      * Similar to those in JavaScript prettify.js.
      */
-    internal var fallthroughStylePatterns: List<StylePattern>
+    internal abstract val fallthroughStylePatterns: List<StylePattern>
 
     /**
      * See [LangCss] for example.
      */
-    internal var extendedLangs: List<Lang>
-
-    fun setShortcutStylePatterns(shortcutStylePatterns: List<StylePattern>) {
-        this.shortcutStylePatterns = shortcutStylePatterns.toMutableList()
-    }
-
-    fun setFallthroughStylePatterns(fallthroughStylePatterns: List<StylePattern>) {
-        this.fallthroughStylePatterns = fallthroughStylePatterns.toMutableList()
-    }
-
-    /**
-     * Get the extended languages list.
-     * @return the list
-     */
-    fun getExtendedLangs(): List<Lang> {
-        return ArrayList(extendedLangs)
-    }
-
-    /**
-     * Set extended languages. Because we cannot register multiple languages
-     * within one [prettify.lang.Lang], so it is used as an solution. See
-     * [prettify.lang.LangCss] for example.
-     *
-     * @param extendedLangs the list of [prettify.lang.Lang]s
-     */
-    fun setExtendedLangs(extendedLangs: List<Lang>) {
-        this.extendedLangs = extendedLangs
-    }
-
-    companion object {
-        /**
-         * This method should be overridden by the child class.
-         * This provide the file extensions list to help the parser to determine which
-         * [Lang] to use. See JavaScript prettify.js.
-         *
-         * @return the list of file extensions
-         */
-        val fileExtensions: List<String>
-            get() = ArrayList()
-    }
+    internal abstract val extendedLangs: List<Lang>
 
     abstract fun getFileExtensions(): List<String>
-
-    /**
-     * Constructor.
-     */
-    init {
-        shortcutStylePatterns = ArrayList()
-        fallthroughStylePatterns = ArrayList()
-        extendedLangs = ArrayList()
-    }
 }

@@ -49,9 +49,12 @@ class LangMumps : Lang() {
             get() = listOf("mumps")
     }
 
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
+
+
         val commands = "B|BREAK|" +
                 "C|CLOSE|" +
                 "D|DO|" +
@@ -123,11 +126,11 @@ class LangMumps : Lang() {
         val intrinsic = intrinsicVariables + intrinsicFunctions
 
         // Whitespace
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
         // A double or single quoted, possibly multi-line, string.
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^(?:\"(?:[^\"]|\\\\.)*\")"),
             null,
@@ -135,7 +138,7 @@ class LangMumps : Lang() {
         )
 
         // A line comment that starts with ;
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^;[^\\r\\n]*"),
             null,
@@ -143,34 +146,34 @@ class LangMumps : Lang() {
         )
         // Add intrinsic variables and functions as declarations, there not really but it mean
         // they will hilighted differently from commands.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_DECLARATION, Regex(
                 "^(?:\\$(?:$intrinsic))\\b", RegexOption.IGNORE_CASE
             ), null
         )
         // Add commands as keywords
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD, Regex(
                 "^(?:[^\\$]$commands)\\b", RegexOption.IGNORE_CASE
             ), null
         )
         // A number is a decimal real literal or in scientific notation.
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^[+-]?(?:(?:\\.\\d+|\\d+(?:\\.\\d*)?)(?:E[+\\-]?\\d+)?)", RegexOption.IGNORE_CASE)
         )
         // An identifier
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[a-z][a-zA-Z0-9]*", RegexOption.IGNORE_CASE)
         )
         // Exclude $ % and ^
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[^\\w\\t\\n\\r\\xA0\\\"\\$;%\\^]|_")
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
+
+
     }
 
     override fun getFileExtensions(): List<String> {

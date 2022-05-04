@@ -21,50 +21,47 @@ class LangBasic : Lang() {
         val fileExtensions = listOf("basic", "cbm")
     }
 
-    override fun getFileExtensions(): List<String> {
-        return fileExtensions
-    }
+    override fun getFileExtensions(): List<String> = fileExtensions
+
+    override val fallthroughStylePatterns = ArrayList<StylePattern>()
+    override val shortcutStylePatterns = ArrayList<StylePattern>()
+    override val extendedLangs = ArrayList<Lang>()
 
     init {
-        val _shortcutStylePatterns: MutableList<StylePattern> = ArrayList()
-        val _fallthroughStylePatterns: MutableList<StylePattern> = ArrayList()
-
         // "single-line-string"
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^(?:\"(?:[^\\\\\"\\r\\n]|\\\\.)*(?:\"|$))"),
             null,
             "\""
         )
         // Whitespace
-        _shortcutStylePatterns.new(
+        shortcutStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^\\s+"), null, "\t\n\r " + 0xA0.toChar().toString()
         )
 
         // A line comment that starts with REM
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_COMMENT, Regex("^REM[^\\r\\n]*"), null
         )
 
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
             Regex("^\\b(?:AND|CLOSE|CLR|CMD|CONT|DATA|DEF ?FN|DIM|END|FOR|GET|GOSUB|GOTO|IF|INPUT|LET|LIST|LOAD|NEW|NEXT|NOT|ON|OPEN|OR|POKE|PRINT|READ|RESTORE|RETURN|RUN|SAVE|STEP|STOP|SYS|THEN|TO|VERIFY|WAIT)\\b"),
             null
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PLAIN, Regex("^[A-Z][A-Z0-9]?(?:\\$|%)?", RegexOption.IGNORE_CASE), null
         )
         // Literals .0, 0, 0.0 0E13
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+\\-]?\\d+)?", RegexOption.IGNORE_CASE),
             null,
             "0123456789"
         )
-        _fallthroughStylePatterns.new(
+        fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION, Regex("^.[^\\s\\w\\.$%\"]*"), null
         )
-        setShortcutStylePatterns(_shortcutStylePatterns)
-        setFallthroughStylePatterns(_fallthroughStylePatterns)
     }
 }
