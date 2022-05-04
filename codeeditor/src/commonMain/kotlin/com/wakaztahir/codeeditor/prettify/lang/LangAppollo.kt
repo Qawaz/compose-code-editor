@@ -44,7 +44,6 @@ class LangAppollo : Lang() {
 
     override val fallthroughStylePatterns = ArrayList<StylePattern>()
     override val shortcutStylePatterns = ArrayList<StylePattern>()
-    override val extendedLangs = ArrayList<Lang>()
 
     init {
         // A line comment that starts with ;

@@ -33,10 +33,5 @@ abstract class Lang {
      */
     internal abstract val fallthroughStylePatterns: List<StylePattern>
 
-    /**
-     * See [LangCss] for example.
-     */
-    internal abstract val extendedLangs: List<Lang>
-
     abstract fun getFileExtensions(): List<String>
 }

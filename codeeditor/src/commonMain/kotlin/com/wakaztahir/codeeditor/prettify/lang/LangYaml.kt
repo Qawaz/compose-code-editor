@@ -36,7 +36,6 @@ class LangYaml : Lang() {
 
     override val fallthroughStylePatterns = ArrayList<StylePattern>()
     override val shortcutStylePatterns = ArrayList<StylePattern>()
-    override val extendedLangs = ArrayList<Lang>()
 
     init {
         shortcutStylePatterns.new(

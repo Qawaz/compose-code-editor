@@ -10,7 +10,6 @@ class LangSwift : Lang() {
 
     override val fallthroughStylePatterns = ArrayList<StylePattern>()
     override val shortcutStylePatterns = ArrayList<StylePattern>()
-    override val extendedLangs = ArrayList<Lang>()
 
     companion object {
         val fileExtensions = listOf("swift")

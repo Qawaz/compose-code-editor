@@ -81,18 +81,18 @@ class Prettify {
      */
     private val extensionMap = hashMapOf<String, LangProvider>()
 
-    private fun getLangFromExtension(extension: String): Lang? = extensionMap[extension]?.provide()
+    private fun getLangFromExtension(extension: String): Lang = extensionMap[extension]?.provide()!!
 
     /**
      * All languages' extensions are registered in extension Map which has an interface for creating language
      */
     private fun initializeExtensionMap() {
-        fun registerExtensions(extensions: List<String>, langCreator: ()->Lang) {
+        fun registerExtensions(extensions: List<String>, langCreator: () -> Lang) {
             extensions.forEach {
                 extensionMap[it] = object : LangProvider {
-                    var lang : Lang? = null
+                    var lang: Lang? = null
                     override fun provide(): Lang {
-                        if(lang == null){
+                        if (lang == null) {
                             lang = langCreator()
                         }
                         return lang!!
@@ -133,6 +133,11 @@ class Prettify {
         registerExtensions(LangLasso.fileExtensions) { LangLasso() }
         registerExtensions(LangLogtalk.fileExtensions) { LangLogtalk() }
         registerExtensions(LangSwift.fileExtensions) { LangSwift() }
+        registerExtensions(LangCss.LangCssKeyword.fileExtensions) { LangCss.LangCssKeyword() }
+        registerExtensions(LangCss.LangCssString.fileExtensions) { LangCss.LangCssString() }
+        registerExtensions(LangMatlab.LangMatlabIdentifier.fileExtensions) { LangMatlab.LangMatlabIdentifier() }
+        registerExtensions(LangMatlab.LangMatlabOperator.fileExtensions) { LangMatlab.LangMatlabOperator() }
+        registerExtensions(LangWiki.LangWikiMeta.fileExtensions) { LangWiki.LangWikiMeta() }
     }
 
     /** Maps language-specific file extensions to handlers.  */
@@ -408,34 +413,17 @@ class Prettify {
      * @param source the source code
      * @return the parser
      */
-    fun langHandlerForExtension(ext: String?, source: String): CreateSimpleLexer? {
-        var extension = ext
-        if (!(extension != null && langHandlerRegistry[extension] != null)) {
-            // Treat it as markup if the first non whitespace character is a < and
-            // the last non-whitespace character is a >.
-            extension = if (Util.test(Regex("^\\s*<"), source)) "default-markup" else "default-code"
-        }
-        val handler = langHandlerRegistry[extension]
+    fun langHandlerForExtension(ext: String, source: String): CreateSimpleLexer {
+        val handler = langHandlerRegistry[ext]
         return if (handler != null) {
             handler
         } else {
-            val lang = getLangFromExtension(extension)
-            return if (lang != null) {
-                val simpleLexer = CreateSimpleLexer(lang.shortcutStylePatterns, lang.fallthroughStylePatterns)
-                // todo this code to register extended languages in language
-                // also register lang function which registers lang class
-                // then if class is found it creates a lexer , if lexer is not found
-                //                val extendedLangs = lang.extendedLangs
-                //                for (extendedLang in extendedLangs) {
-                //                    register(extendedLang.javaClass)
-                //                }
-                lang.getFileExtensions().forEach {
-                    langHandlerRegistry[it] = simpleLexer
-                }
-                simpleLexer
-            } else {
-                null
+            val lang = getLangFromExtension(ext)
+            val simpleLexer = CreateSimpleLexer(lang.shortcutStylePatterns, lang.fallthroughStylePatterns)
+            lang.getFileExtensions().forEach {
+                langHandlerRegistry[it] = simpleLexer
             }
+            return simpleLexer
         }
     }
 

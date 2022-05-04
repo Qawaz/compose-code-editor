@@ -17,7 +17,7 @@ class LangMd : Lang() {
 
     override val fallthroughStylePatterns = ArrayList<StylePattern>()
     override val shortcutStylePatterns = ArrayList<StylePattern>()
-    override val extendedLangs = ArrayList<Lang>()
+
     init {
         fallthroughStylePatterns.new(
             Prettify.PR_DECLARATION,

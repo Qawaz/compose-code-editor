@@ -34,5 +34,5 @@ interface Parser {
      * @param content       the content
      * @return the parsed result
      */
-    fun parse(fileExtension: String?, content: String): List<ParseResult?>?
+    fun parse(fileExtension: String, content: String): List<ParseResult?>?
 }

@@ -34,7 +34,6 @@ class LangWiki : Lang() {
 
     override val fallthroughStylePatterns = ArrayList<StylePattern>()
     override val shortcutStylePatterns = ArrayList<StylePattern>()
-    override val extendedLangs = listOf(LangWikiMeta())
 
 
     companion object {
@@ -99,7 +98,7 @@ class LangWiki : Lang() {
 
         override val fallthroughStylePatterns = ArrayList<StylePattern>()
         override val shortcutStylePatterns = ArrayList<StylePattern>()
-        override val extendedLangs = ArrayList<Lang>()
+
         init {
 
             val fallthroughStylePatterns: List<StylePattern> = ArrayList()

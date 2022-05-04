@@ -45,7 +45,6 @@ class LangCss : Lang() {
 
     override val fallthroughStylePatterns = ArrayList<StylePattern>()
     override val shortcutStylePatterns = ArrayList<StylePattern>()
-    override val extendedLangs = listOf(LangCssKeyword(), LangCssString())
 
     init {
 
@@ -134,7 +133,6 @@ class LangCss : Lang() {
 
         override val fallthroughStylePatterns = ArrayList<StylePattern>()
         override val shortcutStylePatterns = ArrayList<StylePattern>()
-        override val extendedLangs = ArrayList<Lang>()
 
         init {
             fallthroughStylePatterns.new(
@@ -158,7 +156,6 @@ class LangCss : Lang() {
 
         override val fallthroughStylePatterns = ArrayList<StylePattern>()
         override val shortcutStylePatterns = ArrayList<StylePattern>()
-        override val extendedLangs = ArrayList<Lang>()
 
         init {
             fallthroughStylePatterns.new(

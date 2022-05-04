@@ -5,7 +5,6 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
 import java.util.*
-import java.util.regex.Pattern
 
 class LangLogtalk : Lang() {
 
@@ -17,7 +16,6 @@ class LangLogtalk : Lang() {
 
     override val fallthroughStylePatterns = ArrayList<StylePattern>()
     override val shortcutStylePatterns = ArrayList<StylePattern>()
-    override val extendedLangs = ArrayList<Lang>()
 
     init {
         shortcutStylePatterns.new(
