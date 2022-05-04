@@ -30,7 +30,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.timeline-notes:compose-code-editor:2.0.2'
+    implementation 'com.github.codeckle:compose-code-editor:2.0.2'
 }
 ```
 
