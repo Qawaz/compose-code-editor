@@ -71,225 +71,68 @@ open class StylePattern(
  */
 class Prettify {
 
-
-    inner class CreateSimpleLexer(
-        shortcutStylePatterns: List<StylePattern>,
-        private var fallthroughStylePatterns: List<StylePattern>
-    ) {
-        private var shortcuts: MutableMap<Char, StylePattern> = HashMap()
-        private var tokenizer: Regex
-        private var nPatterns: Int
-
-        /** Given triples of [style, pattern, context] returns a lexing function,
-         * The lexing function interprets the patterns to find token boundaries and
-         * returns a decoration list of the form
-         * [index_0, style_0, index_1, style_1, ..., index_n, style_n]
-         * where index_n is an index into the sourceCode, and style_n is a style
-         * constant like PR_PLAIN.  index_n-1 <= index_n, and style_n-1 applies to
-         * all characters in sourceCode[index_n-1:index_n].
-         *
-         * The stylePatterns is a list whose elements have the form
-         * [style : string, pattern : RegExp, DEPRECATED, shortcut : string].
-         *
-         * Style is a style constant like PR_PLAIN, or can be a string of the
-         * form 'lang-FOO', where FOO is a language extension describing the
-         * language of the portion of the token in $1 after pattern executes.
-         * E.g., if style is 'lang-lisp', and group 1 contains the text
-         * '(hello (world))', then that portion of the token will be passed to the
-         * registered lisp handler for formatting.
-         * The text before and after group 1 will be restyled using this decorator
-         * so decorators should take care that this doesn't result in infinite
-         * recursion.  For example, the HTML lexer rule for SCRIPT elements looks
-         * something like ['lang-js', /<[s]cript>(.+?)<\/script>/].  This may match
-         * '<script>foo()<\/script>', which would cause the current decorator to
-        be called with '<script>' which would not match the same rule since
-        group 1 must not be empty, so it would be instead styled as PR_TAG by
-        the generic tag rule.  The handler registered for the 'js' extension would
-        then be called with 'foo()', and finally, the current decorator would
-        be called with '<\/script>' which would not match the original rule and
-        so the generic tag rule would identify it as a tag.
-
-        Pattern must only match prefixes, and if it matches a prefix, then that
-        match is considered a token with the same style.
-
-        Context is applied to the last non-whitespace, non-comment token
-        recognized.
-
-        Shortcut is an optional string of characters, any of which, if the first
-        character, gurantee that this pattern and only this pattern matches.
-
-        @param shortcutStylePatterns patterns that always start with
-        a known character.  Must have a shortcut string.
-        @param fallthroughStylePatterns patterns that will be tried in
-        order if the shortcut ones fail.  May have shortcuts.
-        </script> */
-        init {
-            val allPatterns: MutableList<StylePattern> = shortcutStylePatterns.toMutableList()
-            allPatterns.addAll(fallthroughStylePatterns)
-            val allRegexs: MutableList<Regex> = ArrayList()
-            val regexKeys: MutableMap<String, Any?> = HashMap()
-            allPatterns.forEach { pattern ->
-                val shortcutChars = pattern.shortcutChars
-                if (shortcutChars != null) {
-                    var c = shortcutChars.length
-                    while (--c >= 0) {
-                        shortcuts[shortcutChars[c]] = pattern
-                    }
-                }
-                val regex = pattern.regExp
-                val k = regex.pattern
-                if (regexKeys[k] == null) {
-                    allRegexs.add(regex)
-                    regexKeys[k] = Any()
-                }
-            }
-            allRegexs.add("[\u0000-\\uffff]".toRegex())
-            tokenizer = CombinePrefixPattern().combinePrefixPattern(allRegexs) //todo change this function
-            nPatterns = fallthroughStylePatterns.size
-        }
-
-        /**
-         * Lexes job.sourceCode and produces an output array job.decorations of
-         * style classes preceded by the position at which they start in
-         * job.sourceCode in order.
-         *
-         * @param job an object like <pre>{
-         * sourceCode: {string} sourceText plain text,
-         * basePos: {int} position of job.sourceCode in the larger chunk of
-         * sourceCode.
-         * }</pre>
-         */
-        fun decorate(job: Job) {
-            val sourceCode = job.getSourceCode()
-            val basePos = job.basePos
-
-            /** Even entries are positions in source in ascending order.  Odd enties
-             * are style markers (e.g., PR_COMMENT) that run from that position until
-             * the end.
-             * @type {Array.<number></number>|string>}
-             */
-            val decorations: MutableList<Any> = ArrayList(listOf(basePos, PR_PLAIN))
-            var pos = 0 // index into sourceCode
-            val tokens = Util.match(tokenizer, sourceCode, true)
-            val styleCache: MutableMap<String, String?> = HashMap()
-            var ti = 0
-            val nTokens = tokens.size
-            while (ti < nTokens) {
-                val token = tokens[ti]
-                var style = styleCache[token]
-                var match: List<String>? = null
-                var isEmbedded: Boolean
-                if (style != null) {
-                    isEmbedded = false
-                } else {
-                    var patternParts = shortcuts[token[0]]
-                    if (patternParts != null) {
-                        match = Util.match(patternParts.regExp, token, false)
-                        style = patternParts.tokenStyle
-                    } else {
-                        for (i in 0 until nPatterns) {
-                            patternParts = fallthroughStylePatterns[i]
-                            match = Util.match(patternParts.regExp, token, false)
-                            if (match.isNotEmpty()) {
-                                style = patternParts.tokenStyle
-                                break
-                            }
-                        }
-                        if (match!!.isEmpty()) {  // make sure that we make progress
-                            style = PR_PLAIN
-                        }
-                    }
-                    isEmbedded = style != null && style.length >= 5 && style.startsWith("lang-")
-                    if (isEmbedded && match.size <= 1) {
-                        isEmbedded = false
-                        style = PR_SOURCE
-                    }
-                    if (!isEmbedded) {
-                        styleCache[token] = style
-                    }
-                }
-                val tokenStart = pos
-                pos += token.length
-                if (!isEmbedded) {
-                    decorations.add(basePos + tokenStart)
-                    if (style != null) {
-                        decorations.add(style)
-                    }
-                } else {  // Treat group 1 as an embedded block of source code.
-                    val embeddedSource = match!![1]
-                    var embeddedSourceStart = token.indexOf(embeddedSource)
-                    var embeddedSourceEnd = embeddedSourceStart + embeddedSource.length
-                    if (match.size > 2) {
-                        // If embeddedSource can be blank, then it would match at the
-                        // beginning which would cause us to infinitely recurse on the
-                        // entire token, so we catch the right context in match[2].
-                        embeddedSourceEnd = token.length - match[2].length
-                        embeddedSourceStart = embeddedSourceEnd - embeddedSource.length
-                    }
-                    val lang = style!!.substring(5)
-                    // Decorate the left of the embedded source
-                    appendDecorations(
-                        basePos + tokenStart,
-                        token.substring(0, embeddedSourceStart),
-                        this, decorations
-                    )
-                    // Decorate the embedded source
-                    appendDecorations(
-                        basePos + tokenStart + embeddedSourceStart,
-                        embeddedSource,
-                        langHandlerForExtension(lang, embeddedSource),
-                        decorations
-                    )
-                    // Decorate the right of the embedded section
-                    appendDecorations(
-                        basePos + tokenStart + embeddedSourceEnd,
-                        token.substring(embeddedSourceEnd),
-                        this, decorations
-                    )
-                }
-                ++ti
-            }
-            job.setDecorations(Util.removeDuplicates(decorations, job.getSourceCode()))
-        }
+    fun interface LangProvider {
+        fun provide(): Lang
     }
 
-    fun getLangFromExtension(extension: String): Lang? {
-        return when (extension) {
-            in LangAppollo.fileExtensions -> LangAppollo()
-            in LangBasic.fileExtensions -> LangBasic()
-            in LangClj.fileExtensions -> LangClj()
-            in LangCss.fileExtensions -> LangCss()
-            in LangDart.fileExtensions -> LangDart()
-            in LangErlang.fileExtensions -> LangErlang()
-            in LangGo.fileExtensions -> LangGo()
-            in LangHs.fileExtensions -> LangHs()
-            in LangLisp.fileExtensions -> LangLisp()
-            in LangLlvm.fileExtensions -> LangLlvm()
-            in LangLua.fileExtensions -> LangLua()
-            in LangMatlab.fileExtensions -> LangMatlab()
-            in LangMd.fileExtensions -> LangMd()
-            in LangMl.fileExtensions -> LangMl()
-            in LangMumps.fileExtensions -> LangMumps()
-            in LangN.fileExtensions -> LangN()
-            in LangPascal.fileExtensions -> LangPascal()
-            in LangR.fileExtensions -> LangR()
-            in LangRd.fileExtensions -> LangRd()
-            in LangScala.fileExtensions -> LangScala()
-            in LangSql.fileExtensions -> LangSql()
-            in LangTex.fileExtensions -> LangTex()
-            in LangVb.fileExtensions -> LangVb()
-            in LangVhdl.fileExtensions -> LangVhdl()
-            in LangTcl.fileExtensions -> LangTcl()
-            in LangWiki.fileExtensions -> LangWiki()
-            in LangXq.fileExtensions -> LangXq()
-            in LangYaml.fileExtensions -> LangYaml()
-            in LangEx.fileExtensions -> LangEx()
-            in LangKotlin.fileExtensions -> LangKotlin()
-            in LangLasso.fileExtensions -> LangLasso()
-            in LangLogtalk.fileExtensions -> LangLogtalk()
-            in LangSwift.fileExtensions -> LangSwift()
-            else -> null
+    /**
+     * maps extensions of languages to their lang providers
+     * lang providers are objects that provide language instances for extensions
+     */
+    private val extensionMap = hashMapOf<String, LangProvider>()
+
+    private fun getLangFromExtension(extension: String): Lang? = extensionMap[extension]?.provide()
+
+    /**
+     * All languages' extensions are registered in extension Map which has an interface for creating language
+     */
+    private fun initializeExtensionMap() {
+        fun registerExtensions(extensions: List<String>, langCreator: ()->Lang) {
+            extensions.forEach {
+                extensionMap[it] = object : LangProvider {
+                    var lang : Lang? = null
+                    override fun provide(): Lang {
+                        if(lang == null){
+                            lang = langCreator()
+                        }
+                        return lang!!
+                    }
+                }
+            }
         }
+        registerExtensions(LangAppollo.fileExtensions) { LangAppollo() }
+        registerExtensions(LangBasic.fileExtensions) { LangBasic() }
+        registerExtensions(LangClj.fileExtensions) { LangClj() }
+        registerExtensions(LangCss.fileExtensions) { LangCss() }
+        registerExtensions(LangDart.fileExtensions) { LangDart() }
+        registerExtensions(LangErlang.fileExtensions) { LangErlang() }
+        registerExtensions(LangGo.fileExtensions) { LangGo() }
+        registerExtensions(LangHs.fileExtensions) { LangHs() }
+        registerExtensions(LangLisp.fileExtensions) { LangLisp() }
+        registerExtensions(LangLlvm.fileExtensions) { LangLlvm() }
+        registerExtensions(LangLua.fileExtensions) { LangLua() }
+        registerExtensions(LangMatlab.fileExtensions) { LangMatlab() }
+        registerExtensions(LangMd.fileExtensions) { LangMd() }
+        registerExtensions(LangMl.fileExtensions) { LangMl() }
+        registerExtensions(LangMumps.fileExtensions) { LangMumps() }
+        registerExtensions(LangN.fileExtensions) { LangN() }
+        registerExtensions(LangPascal.fileExtensions) { LangPascal() }
+        registerExtensions(LangR.fileExtensions) { LangR() }
+        registerExtensions(LangRd.fileExtensions) { LangRd() }
+        registerExtensions(LangScala.fileExtensions) { LangScala() }
+        registerExtensions(LangSql.fileExtensions) { LangSql() }
+        registerExtensions(LangTex.fileExtensions) { LangTex() }
+        registerExtensions(LangVb.fileExtensions) { LangVb() }
+        registerExtensions(LangVhdl.fileExtensions) { LangVhdl() }
+        registerExtensions(LangTcl.fileExtensions) { LangTcl() }
+        registerExtensions(LangWiki.fileExtensions) { LangWiki() }
+        registerExtensions(LangXq.fileExtensions) { LangXq() }
+        registerExtensions(LangYaml.fileExtensions) { LangYaml() }
+        registerExtensions(LangEx.fileExtensions) { LangEx() }
+        registerExtensions(LangKotlin.fileExtensions) { LangKotlin() }
+        registerExtensions(LangLasso.fileExtensions) { LangLasso() }
+        registerExtensions(LangLogtalk.fileExtensions) { LangLogtalk() }
+        registerExtensions(LangSwift.fileExtensions) { LangSwift() }
     }
 
     /** Maps language-specific file extensions to handlers.  */
@@ -770,6 +613,7 @@ class Prettify {
     // TODO: maybe style special characters inside a regexp as punctuation.
     init {
         try {
+            initializeExtensionMap()
             var decorateSourceMap: MutableMap<String?, Any?> = HashMap()
             decorateSourceMap["keywords"] = ALL_KEYWORDS
             decorateSourceMap["hashComments"] = true
@@ -969,4 +813,186 @@ class Prettify {
             throw ex
         }
     }
+
+    inner class CreateSimpleLexer(
+        shortcutStylePatterns: List<StylePattern>,
+        private var fallthroughStylePatterns: List<StylePattern>
+    ) {
+        private var shortcuts: MutableMap<Char, StylePattern> = HashMap()
+        private var tokenizer: Regex
+        private var nPatterns: Int
+
+        /** Given triples of [style, pattern, context] returns a lexing function,
+         * The lexing function interprets the patterns to find token boundaries and
+         * returns a decoration list of the form
+         * [index_0, style_0, index_1, style_1, ..., index_n, style_n]
+         * where index_n is an index into the sourceCode, and style_n is a style
+         * constant like PR_PLAIN.  index_n-1 <= index_n, and style_n-1 applies to
+         * all characters in sourceCode[index_n-1:index_n].
+         *
+         * The stylePatterns is a list whose elements have the form
+         * [style : string, pattern : RegExp, DEPRECATED, shortcut : string].
+         *
+         * Style is a style constant like PR_PLAIN, or can be a string of the
+         * form 'lang-FOO', where FOO is a language extension describing the
+         * language of the portion of the token in $1 after pattern executes.
+         * E.g., if style is 'lang-lisp', and group 1 contains the text
+         * '(hello (world))', then that portion of the token will be passed to the
+         * registered lisp handler for formatting.
+         * The text before and after group 1 will be restyled using this decorator
+         * so decorators should take care that this doesn't result in infinite
+         * recursion.  For example, the HTML lexer rule for SCRIPT elements looks
+         * something like ['lang-js', /<[s]cript>(.+?)<\/script>/].  This may match
+         * '<script>foo()<\/script>', which would cause the current decorator to
+        be called with '<script>' which would not match the same rule since
+        group 1 must not be empty, so it would be instead styled as PR_TAG by
+        the generic tag rule.  The handler registered for the 'js' extension would
+        then be called with 'foo()', and finally, the current decorator would
+        be called with '<\/script>' which would not match the original rule and
+        so the generic tag rule would identify it as a tag.
+
+        Pattern must only match prefixes, and if it matches a prefix, then that
+        match is considered a token with the same style.
+
+        Context is applied to the last non-whitespace, non-comment token
+        recognized.
+
+        Shortcut is an optional string of characters, any of which, if the first
+        character, gurantee that this pattern and only this pattern matches.
+
+        @param shortcutStylePatterns patterns that always start with
+        a known character.  Must have a shortcut string.
+        @param fallthroughStylePatterns patterns that will be tried in
+        order if the shortcut ones fail.  May have shortcuts.
+        </script> */
+        init {
+            val allPatterns: MutableList<StylePattern> = shortcutStylePatterns.toMutableList()
+            allPatterns.addAll(fallthroughStylePatterns)
+            val allRegexs: MutableList<Regex> = ArrayList()
+            val regexKeys: MutableMap<String, Any?> = HashMap()
+            allPatterns.forEach { pattern ->
+                val shortcutChars = pattern.shortcutChars
+                if (shortcutChars != null) {
+                    var c = shortcutChars.length
+                    while (--c >= 0) {
+                        shortcuts[shortcutChars[c]] = pattern
+                    }
+                }
+                val regex = pattern.regExp
+                val k = regex.pattern
+                if (regexKeys[k] == null) {
+                    allRegexs.add(regex)
+                    regexKeys[k] = Any()
+                }
+            }
+            allRegexs.add("[\u0000-\\uffff]".toRegex())
+            tokenizer = CombinePrefixPattern().combinePrefixPattern(allRegexs) //todo change this function
+            nPatterns = fallthroughStylePatterns.size
+        }
+
+        /**
+         * Lexes job.sourceCode and produces an output array job.decorations of
+         * style classes preceded by the position at which they start in
+         * job.sourceCode in order.
+         *
+         * @param job an object like <pre>{
+         * sourceCode: {string} sourceText plain text,
+         * basePos: {int} position of job.sourceCode in the larger chunk of
+         * sourceCode.
+         * }</pre>
+         */
+        fun decorate(job: Job) {
+            val sourceCode = job.getSourceCode()
+            val basePos = job.basePos
+
+            /** Even entries are positions in source in ascending order.  Odd enties
+             * are style markers (e.g., PR_COMMENT) that run from that position until
+             * the end.
+             * @type {Array.<number></number>|string>}
+             */
+            val decorations: MutableList<Any> = ArrayList(listOf(basePos, PR_PLAIN))
+            var pos = 0 // index into sourceCode
+            val tokens = Util.match(tokenizer, sourceCode, true)
+            val styleCache: MutableMap<String, String?> = HashMap()
+            var ti = 0
+            val nTokens = tokens.size
+            while (ti < nTokens) {
+                val token = tokens[ti]
+                var style = styleCache[token]
+                var match: List<String>? = null
+                var isEmbedded: Boolean
+                if (style != null) {
+                    isEmbedded = false
+                } else {
+                    var patternParts = shortcuts[token[0]]
+                    if (patternParts != null) {
+                        match = Util.match(patternParts.regExp, token, false)
+                        style = patternParts.tokenStyle
+                    } else {
+                        for (i in 0 until nPatterns) {
+                            patternParts = fallthroughStylePatterns[i]
+                            match = Util.match(patternParts.regExp, token, false)
+                            if (match.isNotEmpty()) {
+                                style = patternParts.tokenStyle
+                                break
+                            }
+                        }
+                        if (match!!.isEmpty()) {  // make sure that we make progress
+                            style = PR_PLAIN
+                        }
+                    }
+                    isEmbedded = style != null && style.length >= 5 && style.startsWith("lang-")
+                    if (isEmbedded && match.size <= 1) {
+                        isEmbedded = false
+                        style = PR_SOURCE
+                    }
+                    if (!isEmbedded) {
+                        styleCache[token] = style
+                    }
+                }
+                val tokenStart = pos
+                pos += token.length
+                if (!isEmbedded) {
+                    decorations.add(basePos + tokenStart)
+                    if (style != null) {
+                        decorations.add(style)
+                    }
+                } else {  // Treat group 1 as an embedded block of source code.
+                    val embeddedSource = match!![1]
+                    var embeddedSourceStart = token.indexOf(embeddedSource)
+                    var embeddedSourceEnd = embeddedSourceStart + embeddedSource.length
+                    if (match.size > 2) {
+                        // If embeddedSource can be blank, then it would match at the
+                        // beginning which would cause us to infinitely recurse on the
+                        // entire token, so we catch the right context in match[2].
+                        embeddedSourceEnd = token.length - match[2].length
+                        embeddedSourceStart = embeddedSourceEnd - embeddedSource.length
+                    }
+                    val lang = style!!.substring(5)
+                    // Decorate the left of the embedded source
+                    appendDecorations(
+                        basePos + tokenStart,
+                        token.substring(0, embeddedSourceStart),
+                        this, decorations
+                    )
+                    // Decorate the embedded source
+                    appendDecorations(
+                        basePos + tokenStart + embeddedSourceStart,
+                        embeddedSource,
+                        langHandlerForExtension(lang, embeddedSource),
+                        decorations
+                    )
+                    // Decorate the right of the embedded section
+                    appendDecorations(
+                        basePos + tokenStart + embeddedSourceEnd,
+                        token.substring(embeddedSourceEnd),
+                        this, decorations
+                    )
+                }
+                ++ti
+            }
+            job.setDecorations(Util.removeDuplicates(decorations, job.getSourceCode()))
+        }
+    }
+
 }

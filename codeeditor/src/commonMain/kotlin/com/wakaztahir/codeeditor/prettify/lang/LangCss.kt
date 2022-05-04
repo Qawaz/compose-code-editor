@@ -38,56 +38,9 @@ import com.wakaztahir.codeeditor.utils.new
  * @author mikesamuel@gmail.com
  */
 class LangCss : Lang() {
-    protected class LangCssKeyword : Lang() {
-        companion object {
-            val fileExtensions: List<String>
-                get() = listOf(("css-kw"))
-        }
-
-        override val fallthroughStylePatterns = ArrayList<StylePattern>()
-        override val shortcutStylePatterns = ArrayList<StylePattern>()
-        override val extendedLangs = ArrayList<Lang>()
-
-        init {
-            fallthroughStylePatterns.new(
-                Prettify.PR_KEYWORD,
-                Regex(
-                    "^-?(?:[_a-z]|(?:\\\\[\\da-f]+ ?))(?:[_a-z\\d\\-]|\\\\(?:\\\\[\\da-f]+ ?))*",
-                    RegexOption.IGNORE_CASE
-                )
-            )
-        }
-
-        override fun getFileExtensions(): List<String> {
-            return fileExtensions
-        }
-    }
-
-    protected class LangCssString : Lang() {
-        companion object {
-            val fileExtensions: List<String>
-                get() = listOf(("css-str"))
-        }
-
-        override val fallthroughStylePatterns = ArrayList<StylePattern>()
-        override val shortcutStylePatterns = ArrayList<StylePattern>()
-        override val extendedLangs = ArrayList<Lang>()
-
-        init {
-            fallthroughStylePatterns.new(
-                Prettify.PR_STRING,
-                Regex("^[^\\)\\\"\\']+")
-            )
-        }
-
-        override fun getFileExtensions(): List<String> {
-            return fileExtensions
-        }
-    }
-
     companion object {
         val fileExtensions: List<String>
-            get() = listOf(("css"))
+            get() = listOf("css")
     }
 
     override val fallthroughStylePatterns = ArrayList<StylePattern>()
@@ -172,4 +125,51 @@ class LangCss : Lang() {
     override fun getFileExtensions(): List<String> {
         return fileExtensions
     }
+
+    class LangCssKeyword : Lang() {
+        companion object {
+            val fileExtensions: List<String>
+                get() = listOf("css-kw")
+        }
+
+        override val fallthroughStylePatterns = ArrayList<StylePattern>()
+        override val shortcutStylePatterns = ArrayList<StylePattern>()
+        override val extendedLangs = ArrayList<Lang>()
+
+        init {
+            fallthroughStylePatterns.new(
+                Prettify.PR_KEYWORD,
+                Regex(
+                    "^-?(?:[_a-z]|(?:\\\\[\\da-f]+ ?))(?:[_a-z\\d\\-]|\\\\(?:\\\\[\\da-f]+ ?))*",
+                    RegexOption.IGNORE_CASE
+                )
+            )
+        }
+
+        override fun getFileExtensions(): List<String> {
+            return fileExtensions
+        }
+    }
+
+    class LangCssString : Lang() {
+        companion object {
+            val fileExtensions: List<String> = listOf("css-str")
+        }
+
+        override val fallthroughStylePatterns = ArrayList<StylePattern>()
+        override val shortcutStylePatterns = ArrayList<StylePattern>()
+        override val extendedLangs = ArrayList<Lang>()
+
+        init {
+            fallthroughStylePatterns.new(
+                Prettify.PR_STRING,
+                Regex("^[^\\)\\\"\\']+")
+            )
+        }
+
+        override fun getFileExtensions(): List<String> {
+            return fileExtensions
+        }
+    }
+
 }
