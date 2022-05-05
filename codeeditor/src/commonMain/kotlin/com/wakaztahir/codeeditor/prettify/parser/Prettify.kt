@@ -134,8 +134,7 @@ class Prettify {
     }
 
     private fun getLangFromExtension(extension: String): Lang = extensionMap[extension]?.provide() ?: run {
-        println("Missing language for extension: $extension")
-        null!!
+        throw IllegalArgumentException("Missing language for extension : $extension")
     }
 
     /** Maps language-specific file extensions to handlers.  */
@@ -395,12 +394,12 @@ class Prettify {
      * @param fileExtensions
      */
     @Throws(Exception::class)
-    internal fun registerLangHandler(handler: CreateSimpleLexer?, fileExtensions: List<String>) {
-        fileExtensions.forEach {
-            if (langHandlerRegistry[it] == null) {
-                langHandlerRegistry[it] = handler
+    internal fun registerLangHandler(handler: CreateSimpleLexer, fileExtensions: List<String>) {
+        for(extension in fileExtensions){
+            if (langHandlerRegistry[extension] == null) {
+                langHandlerRegistry[extension] = handler
             } else {
-                throw Exception("cannot override language handler $it")
+                throw Exception("cannot override language handler for extension $extension")
             }
         }
     }
@@ -430,173 +429,6 @@ class Prettify {
             lang.getFileExtensions().forEach {
                 langHandlerRegistry[it] = lexer
             }
-        }
-    }
-
-    companion object {
-
-        // Keyword lists for various languages.
-        const val FLOW_CONTROL_KEYWORDS = "break,continue,do,else,for,if,return,while"
-        const val C_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "auto,case,char,const,default,"
-                + "double,enum,extern,float,goto,inline,int,long,register,short,signed,"
-                + "sizeof,static,struct,switch,typedef,union,unsigned,void,volatile")
-        const val COMMON_KEYWORDS = (C_KEYWORDS + "," + "catch,class,delete,false,import,"
-                + "new,operator,private,protected,public,this,throw,true,try,typeof")
-        const val CPP_KEYWORDS = (COMMON_KEYWORDS + "," + "alignof,align_union,asm,axiom,bool,"
-                + "concept,concept_map,const_cast,constexpr,decltype,delegate,"
-                + "dynamic_cast,explicit,export,friend,generic,late_check,"
-                + "mutable,namespace,nullptr,property,reinterpret_cast,static_assert,"
-                + "static_cast,template,typeid,typename,using,virtual,where")
-        const val JAVA_KEYWORDS = (COMMON_KEYWORDS + ","
-                + "abstract,assert,boolean,byte,extends,final,finally,implements,import,"
-                + "instanceof,interface,null,native,package,strictfp,super,synchronized,"
-                + "throws,transient")
-        const val KOTLIN_KEYWORDS = (JAVA_KEYWORDS + ","
-                + "as,as?,fun,in,!in,object,typealias,val,var,when,by,constructor,delegate,dynamic,field"
-                + "file,get,init,set,value,where,actual,annotation,companion,crossinline,data,enum,expect"
-                + "external,field,infix,inline,inner,internal,it,lateinit,noinline,open,operator,out,override,"
-                + "reified,sealed,suspend,tailrec,vararg");
-        const val RUST_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "as,assert,const,copy,drop,"
-                + "enum,extern,fail,false,fn,impl,let,log,loop,match,mod,move,mut,priv,"
-                + "pub,pure,ref,self,static,struct,true,trait,type,unsafe,use")
-        const val CSHARP_KEYWORDS = (JAVA_KEYWORDS + ","
-                + "as,base,by,checked,decimal,delegate,descending,dynamic,event,"
-                + "fixed,foreach,from,group,implicit,in,internal,into,is,let,"
-                + "lock,object,out,override,orderby,params,partial,readonly,ref,sbyte,"
-                + "sealed,stackalloc,string,select,uint,ulong,unchecked,unsafe,ushort,"
-                + "var,virtual,where")
-        const val COFFEE_KEYWORDS = ("all,and,by,catch,class,else,extends,false,finally,"
-                + "for,if,in,is,isnt,loop,new,no,not,null,of,off,on,or,return,super,then,"
-                + "throw,true,try,unless,until,when,while,yes")
-        const val JSCRIPT_KEYWORDS = (COMMON_KEYWORDS + ","
-                + "debugger,eval,export,function,get,null,set,undefined,var,with,"
-                + "Infinity,NaN")
-        const val PERL_KEYWORDS = ("caller,delete,die,do,dump,elsif,eval,exit,foreach,for,"
-                + "goto,if,import,last,local,my,next,no,our,print,package,redo,require,"
-                + "sub,undef,unless,until,use,wantarray,while,BEGIN,END")
-        const val PYTHON_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "and,as,assert,class,def,del,"
-                + "elif,except,exec,finally,from,global,import,in,is,lambda,"
-                + "nonlocal,not,or,pass,print,raise,try,with,yield,"
-                + "False,True,None")
-        const val RUBY_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "alias,and,begin,case,class,"
-                + "def,defined,elsif,end,ensure,false,in,module,next,nil,not,or,redo,"
-                + "rescue,retry,self,super,then,true,undef,unless,until,when,yield,"
-                + "BEGIN,END")
-        const val SH_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "case,done,elif,esac,eval,fi,"
-                + "function,in,local,set,then,until")
-        const val ALL_KEYWORDS = (CPP_KEYWORDS + "," + KOTLIN_KEYWORDS + "," + CSHARP_KEYWORDS
-                + "," + JSCRIPT_KEYWORDS + "," + PERL_KEYWORDS + "," + PYTHON_KEYWORDS + "," + RUBY_KEYWORDS
-                + "," + SH_KEYWORDS);
-        val C_TYPES =
-            Regex("^(DIR|FILE|vector|(de|priority_)?queue|list|stack|(const_)?iterator|(multi)?(set|map)|bitset|u?(int|float)\\d*)\\b")
-        // token style names.  correspond to css classes
-        /**
-         * token style for a string literal
-         */
-        const val PR_STRING = "str"
-
-        /**
-         * token style for a keyword
-         */
-        const val PR_KEYWORD = "kwd"
-
-        /**
-         * token style for a comment
-         */
-        const val PR_COMMENT = "com"
-
-        /**
-         * token style for a type
-         */
-        const val PR_TYPE = "typ"
-
-        /**
-         * token style for a literal value.  e.g. 1, null, true.
-         */
-        const val PR_LITERAL = "lit"
-
-        /**
-         * token style for a punctuation string.
-         */
-        const val PR_PUNCTUATION = "pun"
-
-        /**
-         * token style for a plain text.
-         */
-        const val PR_PLAIN = "pln"
-
-        /**
-         * token style for an sgml tag.
-         */
-        const val PR_TAG = "tag"
-
-        /**
-         * token style for a markup declaration such as a DOCTYPE.
-         */
-        const val PR_DECLARATION = "dec"
-
-        /**
-         * token style for embedded source.
-         */
-        const val PR_SOURCE = "src"
-
-        /**
-         * token style for an sgml attribute name.
-         */
-        const val PR_ATTRIB_NAME = "atn"
-
-        /**
-         * token style for an sgml attribute value.
-         */
-        const val PR_ATTRIB_VALUE = "atv"
-
-        /**
-         * A class that indicates a section of markup that is not code, e.g. to allow
-         * embedding of line numbers within code listings.
-         */
-        const val PR_NOCODE = "nocode"
-
-        /**
-         * A set of tokens that can precede a regular expression literal in
-         * javascript
-         * http://web.archive.org/web/20070717142515/http://www.mozilla.org/js/language/js20/rationale/syntax.html
-         * has the full list, but I've removed ones that might be problematic when
-         * seen in languages that don't support regular expression literals.
-         *
-         *
-         * Specifically, I've removed any keywords that can't precede a regexp
-         * literal in a syntactically legal javascript program, and I've removed the
-         * "in" keyword since it's not a keyword in many languages, and might be used
-         * as a count of inches.
-         *
-         *
-         * The link above does not accurately describe EcmaScript rules since
-         * it fails to distinguish between (a=++/b/i) and (a++/b/i) but it works
-         * very well in practice.
-         */
-        private const val REGEXP_PRECEDER_PATTERN =
-            "(?:^^\\.?|[+-]|[!=]=?=?|\\#|%=?|&&?=?|\\(|\\*=?|[+\\-]=|->|\\/=?|::?|<<?=?|>>?>?=?|,|;|\\?|@|\\[|~|\\{|\\^\\^?=?|\\|\\|?=?|break|case|continue|delete|do|else|finally|instanceof|return|throw|try|typeof)\\s*"
-
-        /**
-         * Apply the given language handler to sourceCode and add the resulting
-         * decorations to out.
-         * @param basePos the index of sourceCode within the chunk of source
-         * whose decorations are already present on out.
-         */
-        protected fun appendDecorations(
-            basePos: Int,
-            sourceCode: String?,
-            langHandler: CreateSimpleLexer?,
-            out: MutableList<Any>
-        ) {
-            if (sourceCode == null) {
-                throw NullPointerException("argument 'sourceCode' cannot be null")
-            }
-            val job = Job()
-            job.setSourceCode(sourceCode)
-            job.basePos = basePos
-            langHandler!!.decorate(job)
-            out.addAll(job.getDecorations())
         }
     }
 
@@ -733,10 +565,6 @@ class Prettify {
             decorateSourceMap["keywords"] = JAVA_KEYWORDS
             decorateSourceMap["cStyleComments"] = true
             registerLangHandler(sourceDecorator(decorateSourceMap), listOf("java"))
-            decorateSourceMap = HashMap()
-            decorateSourceMap["keywords"] = KOTLIN_KEYWORDS
-            decorateSourceMap["cStyleComments"] = true;
-            registerLangHandler(sourceDecorator(decorateSourceMap), listOf("kt"));
             decorateSourceMap = HashMap()
             decorateSourceMap["keywords"] = SH_KEYWORDS
             decorateSourceMap["hashComments"] = true
@@ -985,6 +813,173 @@ class Prettify {
                 ++ti
             }
             job.setDecorations(Util.removeDuplicates(decorations, job.getSourceCode()))
+        }
+    }
+
+    companion object {
+
+        // Keyword lists for various languages.
+        const val FLOW_CONTROL_KEYWORDS = "break,continue,do,else,for,if,return,while"
+        const val C_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "auto,case,char,const,default,"
+                + "double,enum,extern,float,goto,inline,int,long,register,short,signed,"
+                + "sizeof,static,struct,switch,typedef,union,unsigned,void,volatile")
+        const val COMMON_KEYWORDS = (C_KEYWORDS + "," + "catch,class,delete,false,import,"
+                + "new,operator,private,protected,public,this,throw,true,try,typeof")
+        const val CPP_KEYWORDS = (COMMON_KEYWORDS + "," + "alignof,align_union,asm,axiom,bool,"
+                + "concept,concept_map,const_cast,constexpr,decltype,delegate,"
+                + "dynamic_cast,explicit,export,friend,generic,late_check,"
+                + "mutable,namespace,nullptr,property,reinterpret_cast,static_assert,"
+                + "static_cast,template,typeid,typename,using,virtual,where")
+        const val JAVA_KEYWORDS = (COMMON_KEYWORDS + ","
+                + "abstract,assert,boolean,byte,extends,final,finally,implements,import,"
+                + "instanceof,interface,null,native,package,strictfp,super,synchronized,"
+                + "throws,transient")
+        const val KOTLIN_KEYWORDS = (JAVA_KEYWORDS + ","
+                + "as,as?,fun,in,!in,object,typealias,val,var,when,by,constructor,delegate,dynamic,field,"
+                + "file,get,init,set,value,where,actual,annotation,companion,crossinline,data,enum,expect,"
+                + "external,field,infix,inline,inner,internal,it,lateinit,noinline,open,operator,out,override,"
+                + "reified,sealed,suspend,tailrec,vararg");
+        const val RUST_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "as,assert,const,copy,drop,"
+                + "enum,extern,fail,false,fn,impl,let,log,loop,match,mod,move,mut,priv,"
+                + "pub,pure,ref,self,static,struct,true,trait,type,unsafe,use")
+        const val CSHARP_KEYWORDS = (JAVA_KEYWORDS + ","
+                + "as,base,by,checked,decimal,delegate,descending,dynamic,event,"
+                + "fixed,foreach,from,group,implicit,in,internal,into,is,let,"
+                + "lock,object,out,override,orderby,params,partial,readonly,ref,sbyte,"
+                + "sealed,stackalloc,string,select,uint,ulong,unchecked,unsafe,ushort,"
+                + "var,virtual,where")
+        const val COFFEE_KEYWORDS = ("all,and,by,catch,class,else,extends,false,finally,"
+                + "for,if,in,is,isnt,loop,new,no,not,null,of,off,on,or,return,super,then,"
+                + "throw,true,try,unless,until,when,while,yes")
+        const val JSCRIPT_KEYWORDS = (COMMON_KEYWORDS + ","
+                + "debugger,eval,export,function,get,null,set,undefined,var,with,"
+                + "Infinity,NaN")
+        const val PERL_KEYWORDS = ("caller,delete,die,do,dump,elsif,eval,exit,foreach,for,"
+                + "goto,if,import,last,local,my,next,no,our,print,package,redo,require,"
+                + "sub,undef,unless,until,use,wantarray,while,BEGIN,END")
+        const val PYTHON_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "and,as,assert,class,def,del,"
+                + "elif,except,exec,finally,from,global,import,in,is,lambda,"
+                + "nonlocal,not,or,pass,print,raise,try,with,yield,"
+                + "False,True,None")
+        const val RUBY_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "alias,and,begin,case,class,"
+                + "def,defined,elsif,end,ensure,false,in,module,next,nil,not,or,redo,"
+                + "rescue,retry,self,super,then,true,undef,unless,until,when,yield,"
+                + "BEGIN,END")
+        const val SH_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "case,done,elif,esac,eval,fi,"
+                + "function,in,local,set,then,until")
+        const val ALL_KEYWORDS = (CPP_KEYWORDS + "," + KOTLIN_KEYWORDS + "," + CSHARP_KEYWORDS
+                + "," + JSCRIPT_KEYWORDS + "," + PERL_KEYWORDS + "," + PYTHON_KEYWORDS + "," + RUBY_KEYWORDS
+                + "," + SH_KEYWORDS);
+        val C_TYPES =
+            Regex("^(DIR|FILE|vector|(de|priority_)?queue|list|stack|(const_)?iterator|(multi)?(set|map)|bitset|u?(int|float)\\d*)\\b")
+        // token style names.  correspond to css classes
+        /**
+         * token style for a string literal
+         */
+        const val PR_STRING = "str"
+
+        /**
+         * token style for a keyword
+         */
+        const val PR_KEYWORD = "kwd"
+
+        /**
+         * token style for a comment
+         */
+        const val PR_COMMENT = "com"
+
+        /**
+         * token style for a type
+         */
+        const val PR_TYPE = "typ"
+
+        /**
+         * token style for a literal value.  e.g. 1, null, true.
+         */
+        const val PR_LITERAL = "lit"
+
+        /**
+         * token style for a punctuation string.
+         */
+        const val PR_PUNCTUATION = "pun"
+
+        /**
+         * token style for a plain text.
+         */
+        const val PR_PLAIN = "pln"
+
+        /**
+         * token style for an sgml tag.
+         */
+        const val PR_TAG = "tag"
+
+        /**
+         * token style for a markup declaration such as a DOCTYPE.
+         */
+        const val PR_DECLARATION = "dec"
+
+        /**
+         * token style for embedded source.
+         */
+        const val PR_SOURCE = "src"
+
+        /**
+         * token style for an sgml attribute name.
+         */
+        const val PR_ATTRIB_NAME = "atn"
+
+        /**
+         * token style for an sgml attribute value.
+         */
+        const val PR_ATTRIB_VALUE = "atv"
+
+        /**
+         * A class that indicates a section of markup that is not code, e.g. to allow
+         * embedding of line numbers within code listings.
+         */
+        const val PR_NOCODE = "nocode"
+
+        /**
+         * A set of tokens that can precede a regular expression literal in
+         * javascript
+         * http://web.archive.org/web/20070717142515/http://www.mozilla.org/js/language/js20/rationale/syntax.html
+         * has the full list, but I've removed ones that might be problematic when
+         * seen in languages that don't support regular expression literals.
+         *
+         *
+         * Specifically, I've removed any keywords that can't precede a regexp
+         * literal in a syntactically legal javascript program, and I've removed the
+         * "in" keyword since it's not a keyword in many languages, and might be used
+         * as a count of inches.
+         *
+         *
+         * The link above does not accurately describe EcmaScript rules since
+         * it fails to distinguish between (a=++/b/i) and (a++/b/i) but it works
+         * very well in practice.
+         */
+        private const val REGEXP_PRECEDER_PATTERN =
+            "(?:^^\\.?|[+-]|[!=]=?=?|\\#|%=?|&&?=?|\\(|\\*=?|[+\\-]=|->|\\/=?|::?|<<?=?|>>?>?=?|,|;|\\?|@|\\[|~|\\{|\\^\\^?=?|\\|\\|?=?|break|case|continue|delete|do|else|finally|instanceof|return|throw|try|typeof)\\s*"
+
+        /**
+         * Apply the given language handler to sourceCode and add the resulting
+         * decorations to out.
+         * @param basePos the index of sourceCode within the chunk of source
+         * whose decorations are already present on out.
+         */
+        protected fun appendDecorations(
+            basePos: Int,
+            sourceCode: String?,
+            langHandler: CreateSimpleLexer?,
+            out: MutableList<Any>
+        ) {
+            if (sourceCode == null) {
+                throw NullPointerException("argument 'sourceCode' cannot be null")
+            }
+            val job = Job()
+            job.setSourceCode(sourceCode)
+            job.basePos = basePos
+            langHandler!!.decorate(job)
+            out.addAll(job.getDecorations())
         }
     }
 

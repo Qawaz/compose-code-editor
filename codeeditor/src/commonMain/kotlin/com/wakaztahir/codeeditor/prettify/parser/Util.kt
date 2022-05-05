@@ -29,8 +29,7 @@ object Util {
      * @return the boolean value
      */
     fun getVariableValueAsBoolean(`var`: Any?): Boolean {
-        var returnResult: Boolean? = null
-        returnResult = if (`var` == null) {
+        return if (`var` == null) {
             false
         } else if (`var` is String) {
             `var`.isNotEmpty()
@@ -41,7 +40,6 @@ object Util {
         } else {
             true
         }
-        return returnResult
     }
 
     /**

@@ -4,7 +4,7 @@ import com.wakaztahir.codeeditor.prettify.lang.*
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
 
 enum class CodeLang(val langProvider: Prettify.LangProvider?, val value: List<String>) {
-    Default(null, listOf("default-code", "default-markup")),
+    Default(null, listOf("default-code")),
     HTML(null, listOf("default-markup")),
     C(null, listOf("c")),
     CPP(null, listOf("cpp")),

@@ -5,13 +5,14 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
+import com.wakaztahir.codeeditor.model.CodeLang
 import com.wakaztahir.codeeditor.prettify.PrettifyParser
 import com.wakaztahir.codeeditor.theme.CodeThemeType
 import com.wakaztahir.codeeditor.utils.parseCodeAsAnnotatedString
 
 @Composable
 fun DisplayCodeEditor() {
-    val language = "java"
+    val language = CodeLang.Kotlin
     val code = """             
     package com.wakaztahir.codeeditor
     
@@ -22,7 +23,7 @@ fun DisplayCodeEditor() {
 
     val parser = remember { PrettifyParser() }
     val themeState by remember { mutableStateOf(CodeThemeType.Default) }
-    val theme = remember(themeState) { themeState.theme() }
+    val theme = remember(themeState) { themeState.theme }
     var textFieldValue by remember {
         mutableStateOf(
             TextFieldValue(

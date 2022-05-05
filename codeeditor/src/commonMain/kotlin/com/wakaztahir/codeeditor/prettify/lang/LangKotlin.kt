@@ -31,7 +31,7 @@ class LangKotlin : Lang() {
         )
         fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
-            Regex("^\\b(package|public|protected|private|open|abstract|constructor|final|override|import|for|while|as|typealias|get|set|((data|enum|annotation|sealed) )?class|this|super|val|var|fun|is|in|throw|return|break|continue|(companion )?object|if|try|else|do|when|init|interface|typeof)\\b")
+            Regex("^\\b(package|public|protected|external|internal|private|open|abstract|constructor|final|override|import|for|while|as|typealias|get|set|((data|enum|annotation|sealed) )?class|this|super|val|var|fun|is|in|throw|return|break|continue|(companion )?object|if|try|else|do|when|init|interface|typeof)\\b")
         )
         fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,
