@@ -170,6 +170,3 @@ releases.
 ## Issues
 
 * Lack of themes
-* Everytime user types code in a text field , all the code is parsed again rather than only the
-  changed lines which makes it a little inefficient , This is due to compose not supporting
-  multiline text editing yet , so it will be fixed in future
