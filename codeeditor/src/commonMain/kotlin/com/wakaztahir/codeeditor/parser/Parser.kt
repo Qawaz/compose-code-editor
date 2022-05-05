@@ -20,6 +20,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.wakaztahir.codeeditor.parser
 
+import com.wakaztahir.codeeditor.prettify.parser.Prettify
+
 /**
  * The parser for syntax highlight.
  *
@@ -34,5 +36,7 @@ interface Parser {
      * @param content       the content
      * @return the parsed result
      */
-    fun parse(fileExtension: String, content: String): List<ParseResult?>?
+    fun parse(fileExtension: String, content: String): List<ParseResult>
+
+    fun parse(provider: Prettify.LangProvider, content: String): List<ParseResult>
 }

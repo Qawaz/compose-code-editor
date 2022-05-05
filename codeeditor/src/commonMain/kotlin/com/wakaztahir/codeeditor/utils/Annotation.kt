@@ -26,7 +26,9 @@ fun parseCodeAsAnnotatedString(
     theme: CodeTheme,
     lang: CodeLang,
     code: String
-): AnnotatedString = parseCodeAsAnnotatedString(
+): AnnotatedString = lang.langProvider?.let {
+    parser.parse(it, code).toAnnotatedString(theme, code)
+} ?: parseCodeAsAnnotatedString(
     parser = parser,
     theme = theme,
     lang = lang.value.first(),

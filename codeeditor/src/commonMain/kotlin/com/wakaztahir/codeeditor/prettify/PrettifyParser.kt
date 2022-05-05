@@ -11,14 +11,18 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
  * @author Chan Wai Shing <cws1989></cws1989>@gmail.com>
  */
 class PrettifyParser : Parser {
-    /**
-     * The prettify parser.
-     */
+
     private var prettify: Prettify = Prettify()
 
-    override fun parse(fileExtension: String, content: String): List<ParseResult> {
+    override fun parse(fileExtension: String, content: String): List<ParseResult> =
+        parse(prettify.getLexerForExtension(fileExtension), content)
+
+    override fun parse(provider: Prettify.LangProvider, content: String): List<ParseResult> =
+        parse(prettify.getLexerForLanguageProvider(provider), content)
+
+    private fun parse(lexer: Prettify.CreateSimpleLexer, content: String): List<ParseResult> {
         val job = Job(0, content)
-        prettify.langHandlerForExtension(fileExtension, content).decorate(job)
+        lexer.decorate(job)
         val decorations = job.decorations
         val returnList = ArrayList<ParseResult>()
 

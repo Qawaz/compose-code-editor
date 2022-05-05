@@ -79,65 +79,63 @@ class Prettify {
      * maps extensions of languages to their lang providers
      * lang providers are objects that provide language instances for extensions
      */
-    private val extensionMap = hashMapOf<String, LangProvider>()
-
-    private fun getLangFromExtension(extension: String): Lang = extensionMap[extension]?.provide()!!
-
-    /**
-     * All languages' extensions are registered in extension Map which has an interface for creating language
-     */
-    private fun initializeExtensionMap() {
-        fun registerExtensions(extensions: List<String>, langCreator: () -> Lang) {
-            extensions.forEach {
-                extensionMap[it] = object : LangProvider {
-                    var lang: Lang? = null
-                    override fun provide(): Lang {
-                        if (lang == null) {
-                            lang = langCreator()
-                        }
-                        return lang!!
-                    }
+    private val extensionMap by lazy {
+        hashMapOf<String, LangProvider>().apply {
+            // registers extensions for languages
+            fun registerExtensions(extensions: List<String>, langCreator: () -> Lang) {
+                val provider = object : LangProvider {
+                    val lang by lazy { langCreator() }
+                    override fun provide(): Lang = lang
+                }
+                for (extension in extensions){
+                    this[extension] = provider
                 }
             }
+            // registering extensions for available languages
+            registerExtensions(LangAppollo.fileExtensions) { LangAppollo() }
+            registerExtensions(LangBasic.fileExtensions) { LangBasic() }
+            registerExtensions(LangClj.fileExtensions) { LangClj() }
+            registerExtensions(LangCss.fileExtensions) { LangCss() }
+            registerExtensions(LangDart.fileExtensions) { LangDart() }
+            registerExtensions(LangErlang.fileExtensions) { LangErlang() }
+            registerExtensions(LangGo.fileExtensions) { LangGo() }
+            registerExtensions(LangHs.fileExtensions) { LangHs() }
+            registerExtensions(LangLisp.fileExtensions) { LangLisp() }
+            registerExtensions(LangLlvm.fileExtensions) { LangLlvm() }
+            registerExtensions(LangLua.fileExtensions) { LangLua() }
+            registerExtensions(LangMatlab.fileExtensions) { LangMatlab() }
+            registerExtensions(LangMd.fileExtensions) { LangMd() }
+            registerExtensions(LangMl.fileExtensions) { LangMl() }
+            registerExtensions(LangMumps.fileExtensions) { LangMumps() }
+            registerExtensions(LangN.fileExtensions) { LangN() }
+            registerExtensions(LangPascal.fileExtensions) { LangPascal() }
+            registerExtensions(LangR.fileExtensions) { LangR() }
+            registerExtensions(LangRd.fileExtensions) { LangRd() }
+            registerExtensions(LangScala.fileExtensions) { LangScala() }
+            registerExtensions(LangSql.fileExtensions) { LangSql() }
+            registerExtensions(LangTex.fileExtensions) { LangTex() }
+            registerExtensions(LangVb.fileExtensions) { LangVb() }
+            registerExtensions(LangVhdl.fileExtensions) { LangVhdl() }
+            registerExtensions(LangTcl.fileExtensions) { LangTcl() }
+            registerExtensions(LangWiki.fileExtensions) { LangWiki() }
+            registerExtensions(LangXq.fileExtensions) { LangXq() }
+            registerExtensions(LangYaml.fileExtensions) { LangYaml() }
+            registerExtensions(LangEx.fileExtensions) { LangEx() }
+            registerExtensions(LangKotlin.fileExtensions) { LangKotlin() }
+            registerExtensions(LangLasso.fileExtensions) { LangLasso() }
+            registerExtensions(LangLogtalk.fileExtensions) { LangLogtalk() }
+            registerExtensions(LangSwift.fileExtensions) { LangSwift() }
+            registerExtensions(LangCss.LangCssKeyword.fileExtensions) { LangCss.LangCssKeyword() }
+            registerExtensions(LangCss.LangCssString.fileExtensions) { LangCss.LangCssString() }
+            registerExtensions(LangMatlab.LangMatlabIdentifier.fileExtensions) { LangMatlab.LangMatlabIdentifier() }
+            registerExtensions(LangMatlab.LangMatlabOperator.fileExtensions) { LangMatlab.LangMatlabOperator() }
+            registerExtensions(LangWiki.LangWikiMeta.fileExtensions) { LangWiki.LangWikiMeta() }
         }
-        registerExtensions(LangAppollo.fileExtensions) { LangAppollo() }
-        registerExtensions(LangBasic.fileExtensions) { LangBasic() }
-        registerExtensions(LangClj.fileExtensions) { LangClj() }
-        registerExtensions(LangCss.fileExtensions) { LangCss() }
-        registerExtensions(LangDart.fileExtensions) { LangDart() }
-        registerExtensions(LangErlang.fileExtensions) { LangErlang() }
-        registerExtensions(LangGo.fileExtensions) { LangGo() }
-        registerExtensions(LangHs.fileExtensions) { LangHs() }
-        registerExtensions(LangLisp.fileExtensions) { LangLisp() }
-        registerExtensions(LangLlvm.fileExtensions) { LangLlvm() }
-        registerExtensions(LangLua.fileExtensions) { LangLua() }
-        registerExtensions(LangMatlab.fileExtensions) { LangMatlab() }
-        registerExtensions(LangMd.fileExtensions) { LangMd() }
-        registerExtensions(LangMl.fileExtensions) { LangMl() }
-        registerExtensions(LangMumps.fileExtensions) { LangMumps() }
-        registerExtensions(LangN.fileExtensions) { LangN() }
-        registerExtensions(LangPascal.fileExtensions) { LangPascal() }
-        registerExtensions(LangR.fileExtensions) { LangR() }
-        registerExtensions(LangRd.fileExtensions) { LangRd() }
-        registerExtensions(LangScala.fileExtensions) { LangScala() }
-        registerExtensions(LangSql.fileExtensions) { LangSql() }
-        registerExtensions(LangTex.fileExtensions) { LangTex() }
-        registerExtensions(LangVb.fileExtensions) { LangVb() }
-        registerExtensions(LangVhdl.fileExtensions) { LangVhdl() }
-        registerExtensions(LangTcl.fileExtensions) { LangTcl() }
-        registerExtensions(LangWiki.fileExtensions) { LangWiki() }
-        registerExtensions(LangXq.fileExtensions) { LangXq() }
-        registerExtensions(LangYaml.fileExtensions) { LangYaml() }
-        registerExtensions(LangEx.fileExtensions) { LangEx() }
-        registerExtensions(LangKotlin.fileExtensions) { LangKotlin() }
-        registerExtensions(LangLasso.fileExtensions) { LangLasso() }
-        registerExtensions(LangLogtalk.fileExtensions) { LangLogtalk() }
-        registerExtensions(LangSwift.fileExtensions) { LangSwift() }
-        registerExtensions(LangCss.LangCssKeyword.fileExtensions) { LangCss.LangCssKeyword() }
-        registerExtensions(LangCss.LangCssString.fileExtensions) { LangCss.LangCssString() }
-        registerExtensions(LangMatlab.LangMatlabIdentifier.fileExtensions) { LangMatlab.LangMatlabIdentifier() }
-        registerExtensions(LangMatlab.LangMatlabOperator.fileExtensions) { LangMatlab.LangMatlabOperator() }
-        registerExtensions(LangWiki.LangWikiMeta.fileExtensions) { LangWiki.LangWikiMeta() }
+    }
+
+    private fun getLangFromExtension(extension: String): Lang = extensionMap[extension]?.provide() ?: run {
+        println("Missing language for extension: $extension")
+        null!!
     }
 
     /** Maps language-specific file extensions to handlers.  */
@@ -410,20 +408,28 @@ class Prettify {
     /**
      * Get the parser for the extension specified.
      * @param extension the file extension, if null, default parser will be returned
-     * @param source the source code
      * @return the parser
      */
-    fun langHandlerForExtension(ext: String, source: String): CreateSimpleLexer {
-        val handler = langHandlerRegistry[ext]
-        return if (handler != null) {
-            handler
-        } else {
-            val lang = getLangFromExtension(ext)
-            val simpleLexer = CreateSimpleLexer(lang.shortcutStylePatterns, lang.fallthroughStylePatterns)
+    fun getLexerForExtension(extension: String): CreateSimpleLexer {
+        return langHandlerRegistry[extension] ?: getLexerForLanguage(getLangFromExtension(extension))
+    }
+
+    fun getLexerForLanguageProvider(langProvider: LangProvider): CreateSimpleLexer {
+        val lang = langProvider.provide()
+        var lexer: CreateSimpleLexer? = null
+        for (extension in lang.getFileExtensions()) {
+            lexer = langHandlerRegistry[extension]
+            if (lexer != null) break
+        }
+        return lexer ?: getLexerForLanguage(lang)
+    }
+
+
+    private fun getLexerForLanguage(lang: Lang): CreateSimpleLexer {
+        return CreateSimpleLexer(lang.shortcutStylePatterns, lang.fallthroughStylePatterns).also { lexer ->
             lang.getFileExtensions().forEach {
-                langHandlerRegistry[it] = simpleLexer
+                langHandlerRegistry[it] = lexer
             }
-            return simpleLexer
         }
     }
 
@@ -601,7 +607,6 @@ class Prettify {
     // TODO: maybe style special characters inside a regexp as punctuation.
     init {
         try {
-            initializeExtensionMap()
             var decorateSourceMap: MutableMap<String?, Any?> = HashMap()
             decorateSourceMap["keywords"] = ALL_KEYWORDS
             decorateSourceMap["hashComments"] = true
@@ -967,7 +972,7 @@ class Prettify {
                     appendDecorations(
                         basePos + tokenStart + embeddedSourceStart,
                         embeddedSource,
-                        langHandlerForExtension(lang, embeddedSource),
+                        getLexerForExtension(lang),
                         decorations
                     )
                     // Decorate the right of the embedded section
