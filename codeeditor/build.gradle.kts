@@ -66,25 +66,26 @@ android {
 }
 
 val githubProperties = Properties()
-runCatching { githubProperties.load(FileInputStream(rootProject.file("github.properties"))) }
+try {
+    githubProperties.load(FileInputStream(rootProject.file("github.properties")))
+}catch(ex : Exception){
+    ex.printStackTrace()
+}
 
 afterEvaluate {
     publishing {
         repositories {
             maven {
                 name = "GithubPackages"
-                /** Configure path of your package repository on Github
-                 *  Replace GITHUB_USERID with your/organisation Github userID and REPOSITORY with the repository name on GitHub
-                 */
                 url = uri("https://maven.pkg.github.com/codeckle/compose-code-editor")
-
-                kotlin.runCatching {
+                try {
                     credentials {
-                        /**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
                         username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
                         password = (githubProperties["gpr.key"] ?: System.getenv("GPR_API_KEY")).toString()
                     }
-                }.onFailure { it.printStackTrace() }
+                }catch(ex : Exception){
+                    ex.printStackTrace()
+                }
             }
         }
     }
