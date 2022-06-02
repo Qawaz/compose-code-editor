@@ -140,6 +140,66 @@ OutlinedTextField(
 )
 ```
 
+### Displaying Line Numbers
+
+To display line numbers in the text field we must use a `BasicTextField` since it has a parameter for `onTextLayout`
+
+A basic example can be setup like this , On every text layout a new array is created
+which contains top offsets of each line in the `BasicTextField`
+
+```kotlin
+
+val language = CodeLang.Kotlin
+val code = """             
+    package com.wakaztahir.codeeditor
+    
+    fun main(){
+        println("Hello World");
+    }
+    """.trimIndent()
+
+val parser = remember { PrettifyParser() }
+val themeState by remember { mutableStateOf(CodeThemeType.Default) }
+val theme = remember(themeState) { themeState.theme }
+
+fun parse(code: String): AnnotatedString {
+    return parseCodeAsAnnotatedString(
+        parser = parser,
+        theme = theme,
+        lang = language,
+        code = code
+    )
+}
+
+var textFieldValue by remember { mutableStateOf(TextFieldValue(parse(code))) }
+var lineTops by remember { mutableStateOf(emptyArray<Float>()) }
+val density = LocalDensity.current
+
+Row {
+    if (lineTops.isNotEmpty()) {
+        Box(modifier = Modifier.padding(horizontal = 4.dp)) {
+            lineTops.forEachIndexed { index, top ->
+                Text(
+                    modifier = Modifier.offset(y = with(density) { top.toDp() }),
+                    text = index.toString(),
+                    color = MaterialTheme.colors.onBackground.copy(.3f)
+                )
+            }
+        }
+    }
+    BasicTextField(
+        modifier = Modifier.fillMaxSize(),
+        value = textFieldValue,
+        onValueChange = {
+            textFieldValue = it.copy(annotatedString = parse(it.text))
+        },
+        onTextLayout = { result ->
+            lineTops = Array(result.lineCount) { result.getLineTop(it) }
+        }
+    )
+}
+```
+
 ## List of available languages & their extensions
 
 Default (```"default-code"```), HTML (```"default-markup"```) , C/C++/Objective-C (```"c"```, ```"cc"```, ```"cpp"```, ```"cxx"```, ```"cyc"```, ```"m"```),
