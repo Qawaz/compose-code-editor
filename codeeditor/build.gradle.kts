@@ -77,7 +77,7 @@ afterEvaluate {
         repositories {
             maven {
                 name = "GithubPackages"
-                url = uri("https://maven.pkg.github.com/codeckle/compose-code-editor")
+                url = uri("https://maven.pkg.github.com/zehanti/compose-code-editor")
                 try {
                     credentials {
                         username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
