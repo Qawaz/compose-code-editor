@@ -1,0 +1,11 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+module:codeeditor
+com.wakaztahir.codeeditor.model
+com.wakaztahir.codeeditor.parser
+com.wakaztahir.codeeditor.prettify
+com.wakaztahir.codeeditor.prettify.lang
+com.wakaztahir.codeeditor.prettify.parser
+com.wakaztahir.codeeditor.theme
+com.wakaztahir.codeeditor.utils
