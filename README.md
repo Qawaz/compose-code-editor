@@ -69,7 +69,7 @@ gpr.key=yourgithubpersonalaccesstoken
 #### Step 3 : Add The Dependency
 
 ```kotlin
-implementation("com.wakaztahir:codeeditor:3.0.4")
+implementation("com.wakaztahir:codeeditor:3.0.5")
 ```
 
 ## Usage
