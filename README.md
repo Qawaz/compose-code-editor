@@ -30,7 +30,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.codeckle:compose-code-editor:2.0.2'
+    implementation 'com.github.qawaz:compose-code-editor:2.0.3'
 }
 ```
 
@@ -69,7 +69,7 @@ gpr.key=yourgithubpersonalaccesstoken
 #### Step 3 : Add The Dependency
 
 ```kotlin
-implementation("com.wakaztahir:codeeditor:3.0.3")
+implementation("com.wakaztahir:codeeditor:3.0.4")
 ```
 
 ## Usage

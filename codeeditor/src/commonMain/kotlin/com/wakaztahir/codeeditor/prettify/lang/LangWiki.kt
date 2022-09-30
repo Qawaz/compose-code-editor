@@ -100,16 +100,12 @@ class LangWiki : Lang() {
         override val shortcutStylePatterns = ArrayList<StylePattern>()
 
         init {
-
-            val fallthroughStylePatterns: List<StylePattern> = ArrayList()
             shortcutStylePatterns.new(
                 Prettify.PR_KEYWORD,
                 Regex("^#[a-z]+", RegexOption.IGNORE_CASE),
                 null,
                 "#"
             )
-
-
         }
 
         override fun getFileExtensions(): List<String> {

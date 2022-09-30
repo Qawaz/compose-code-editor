@@ -30,7 +30,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.timeline-notes:compose-code-editor:2.0.2'
+    implementation 'com.github.qawaz:compose-code-editor:2.0.3'
 }
 ```
 
@@ -69,19 +69,19 @@ gpr.key=yourgithubpersonalaccesstoken
 #### Step 3 : Add The Dependency
 
 ```kotlin
-implementation("com.wakaztahir:codeeditor:3.0.1")
+implementation("com.wakaztahir:codeeditor:3.0.4")
 ```
 
 ## Usage
 
 ```kotlin
 // Step 1. Declare Language & Code
-val language = CodeLang.Java
+val language = CodeLang.Kotlin
 val code = """             
     package com.wakaztahir.codeeditor
     
-    public static void main(String[] args){
-        System.out.println("Hello World")
+    fun main(){
+        println("Hello World");
     }
 """.trimIndent()
 
@@ -111,20 +111,6 @@ Text(parsedCode)
 ### Using TextField Composable
 
 ```kotlin
-  val language = CodeLang.Java
-val code = """             
-    package com.wakaztahir.codeeditor
-    
-    public static void main(String[] args){
-        System.out.println("Hello World")
-    }
-    """.trimIndent()
-
-val scope = rememberCoroutineScope()
-var bringIntoViewRequester = remember { BringIntoViewRequester() }
-val parser = remember { PrettifyParser() }
-val themeState by remember { mutableStateOf(CodeThemeType.Default) }
-val theme = remember(themeState) { themeState.theme() }
 var textFieldValue by remember {
   mutableStateOf(
     TextFieldValue(
@@ -139,7 +125,7 @@ var textFieldValue by remember {
 }
 
 OutlinedTextField(
-  modifier = Modifier.fillMaxSize().bringIntoViewRequester(bringIntoViewRequester),
+  modifier = Modifier.fillMaxSize(),
   value = textFieldValue,
   onValueChange = {
     textFieldValue = it.copy(
@@ -150,17 +136,74 @@ OutlinedTextField(
         code = it.text
       )
     )
-    scope.launch {
-      bringIntoViewRequester.bringIntoView()
-    }
   }
 )
+```
+
+### Displaying Line Numbers
+
+To display line numbers in the text field we must use a `BasicTextField` since it has a parameter for `onTextLayout`
+
+A basic example can be setup like this , On every text layout a new array is created
+which contains top offsets of each line in the `BasicTextField`
+
+```kotlin
+
+val language = CodeLang.Kotlin
+val code = """             
+    package com.wakaztahir.codeeditor
+    
+    fun main(){
+        println("Hello World");
+    }
+    """.trimIndent()
+
+val parser = remember { PrettifyParser() }
+val themeState by remember { mutableStateOf(CodeThemeType.Default) }
+val theme = remember(themeState) { themeState.theme }
+
+fun parse(code: String): AnnotatedString {
+    return parseCodeAsAnnotatedString(
+        parser = parser,
+        theme = theme,
+        lang = language,
+        code = code
+    )
+}
+
+var textFieldValue by remember { mutableStateOf(TextFieldValue(parse(code))) }
+var lineTops by remember { mutableStateOf(emptyArray<Float>()) }
+val density = LocalDensity.current
+
+Row {
+    if (lineTops.isNotEmpty()) {
+        Box(modifier = Modifier.padding(horizontal = 4.dp)) {
+            lineTops.forEachIndexed { index, top ->
+                Text(
+                    modifier = Modifier.offset(y = with(density) { top.toDp() }),
+                    text = index.toString(),
+                    color = MaterialTheme.colors.onBackground.copy(.3f)
+                )
+            }
+        }
+    }
+    BasicTextField(
+        modifier = Modifier.fillMaxSize(),
+        value = textFieldValue,
+        onValueChange = {
+            textFieldValue = it.copy(annotatedString = parse(it.text))
+        },
+        onTextLayout = { result ->
+            lineTops = Array(result.lineCount) { result.getLineTop(it) }
+        }
+    )
+}
 ```
 
 ## List of available languages & their extensions
 
 Default (```"default-code"```), HTML (```"default-markup"```) , C/C++/Objective-C (```"c"```, ```"cc"```, ```"cpp"```, ```"cxx"```, ```"cyc"```, ```"m"```),
-C# (```"cs"```), Java (```"java"```), Bash (```"bash"```, ```"bsh"```, ```"csh"```, ```"sh"```),
+C# (```"cs"```), Java (```"java"```),Kotlin (```"kt"```) ,Bash (```"bash"```, ```"bsh"```, ```"csh"```, ```"sh"```),
 Python (```"cv"```, ```"py"```, ```"python"```), Perl (```"perl"```, ```"pl"```, ```"pm"```),
 Ruby (```"rb"```, ```"ruby"```), JavaScript (```"javascript"```, ```"js"```),
 CoffeeScript (```"coffee"```), Rust (```"rc"```, ```"rs"```, ```"rust"```), Appollo (```"apollo"```
@@ -186,9 +229,4 @@ releases.
 
 ## Issues
 
-* Does not support kotlin yet , but basic syntax highlighting can be achieved by using another
-  language
 * Lack of themes
-* Everytime user types code in a text field , all the code is parsed again rather than only the
-  changed lines which makes it a little inefficient , This is due to compose not supporting
-  multiline text editing yet , so it will be fixed in future

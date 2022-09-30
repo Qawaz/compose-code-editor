@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.wakaztahir"
-version = "3.0.3"
+version = findProperty("version") as String
 
 kotlin {
     android {
@@ -40,7 +40,7 @@ kotlin {
         }
         val androidTest by getting {
             dependencies {
-                implementation("junit:junit:4.13")
+                implementation("junit:junit:4.13.2")
             }
         }
         val desktopMain by getting {
@@ -53,11 +53,11 @@ kotlin {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 21
-        targetSdk = 31
+        targetSdk = 32
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -77,7 +77,7 @@ afterEvaluate {
         repositories {
             maven {
                 name = "GithubPackages"
-                url = uri("https://maven.pkg.github.com/zehanti/compose-code-editor")
+                url = uri("https://maven.pkg.github.com/Qawaz/compose-code-editor")
                 try {
                     credentials {
                         username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
