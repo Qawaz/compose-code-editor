@@ -21,6 +21,10 @@ kotlin {
             kotlinOptions.jvmTarget = "11"
         }
     }
+    js(IR) {
+        browser()
+        binaries.executable()
+    }
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -49,6 +53,12 @@ kotlin {
             }
         }
         val desktopTest by getting
+
+        named("jsMain") {
+            dependencies {
+                api(compose.web.core)
+            }
+        }
     }
 }
 
@@ -72,21 +82,28 @@ try {
     ex.printStackTrace()
 }
 
+// val githubProperties = Properties()
+// try {
+//     githubProperties.load(FileInputStream(rootProject.file("github.properties")))
+// }catch(ex : Exception){
+//     ex.printStackTrace()
+// }
+
 afterEvaluate {
     publishing {
         repositories {
-            maven {
-                name = "GithubPackages"
-                url = uri("https://maven.pkg.github.com/Qawaz/compose-code-editor")
-                try {
-                    credentials {
-                        username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
-                        password = (githubProperties["gpr.key"] ?: System.getenv("GPR_API_KEY")).toString()
-                    }
-                }catch(ex : Exception){
-                    ex.printStackTrace()
-                }
-            }
+            // maven {
+            //     name = "GithubPackages"
+            //     url = uri("https://maven.pkg.github.com/Qawaz/compose-code-editor")
+            //     try {
+            //         credentials {
+            //             username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
+            //             password = (githubProperties["gpr.key"] ?: System.getenv("GPR_API_KEY")).toString()
+            //         }
+            //     }catch(ex : Exception){
+            //         ex.printStackTrace()
+            //     }
+            // }
         }
     }
 }
