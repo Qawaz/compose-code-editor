@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -48,19 +47,18 @@ fun DisplayCodeEditor() {
     }
 
     var textFieldValue by remember { mutableStateOf(TextFieldValue(parse(code))) }
-    var lineTops by remember { mutableStateOf(emptyArray<Float>()) }
-    val density = LocalDensity.current
+
+    val (lineCount, setLineCount) = remember { mutableStateOf(0) }
+    val (lineHeight, setLineHeight) = remember { mutableStateOf(0f) }
 
     Row {
-        if (lineTops.isNotEmpty()) {
-            Box(modifier = Modifier.padding(horizontal = 4.dp)) {
-                lineTops.forEachIndexed { index, top ->
-                    Text(
-                        modifier = Modifier.offset(y = with(density) { top.toDp() }),
-                        text = index.toString(),
-                        color = MaterialTheme.colors.onBackground.copy(.3f)
-                    )
-                }
+        Box(modifier = Modifier.padding(horizontal = 4.dp)) {
+            repeat(lineCount) { line ->
+                Text(
+                    text = (line + 1).toString(),
+                    color = MaterialTheme.colors.onBackground.copy(.3f),
+                    modifier = Modifier.offset(y = (line * lineHeight).dp)
+                )
             }
         }
         BasicTextField(
@@ -70,7 +68,8 @@ fun DisplayCodeEditor() {
                 textFieldValue = it.copy(annotatedString = parse(it.text))
             },
             onTextLayout = { result ->
-                lineTops = Array(result.lineCount) { result.getLineTop(it) }
+                setLineCount(result.lineCount)
+                setLineHeight(result.multiParagraph.height / result.lineCount)
             }
         )
     }
