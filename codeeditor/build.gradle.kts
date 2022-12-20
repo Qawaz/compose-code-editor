@@ -1,5 +1,4 @@
-import java.io.FileInputStream
-import java.util.*
+import java.util.Properties
 
 plugins {
     kotlin("multiplatform")
@@ -75,35 +74,42 @@ android {
     }
 }
 
-val githubProperties = Properties()
-try {
-    githubProperties.load(FileInputStream(rootProject.file("github.properties")))
-}catch(ex : Exception){
-    ex.printStackTrace()
-}
 
-// val githubProperties = Properties()
-// try {
-//     githubProperties.load(FileInputStream(rootProject.file("github.properties")))
-// }catch(ex : Exception){
-//     ex.printStackTrace()
-// }
+val propertiesFile = project.rootProject.file("github.properties")
+val isGithubPropAvailable = propertiesFile.exists()
 
-afterEvaluate {
+if (isGithubPropAvailable) {
+
+    val githubProperties = Properties().apply {
+        propertiesFile.reader().use { load(it) }
+    }
+
     publishing {
         repositories {
-            // maven {
-            //     name = "GithubPackages"
-            //     url = uri("https://maven.pkg.github.com/Qawaz/compose-code-editor")
-            //     try {
-            //         credentials {
-            //             username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
-            //             password = (githubProperties["gpr.key"] ?: System.getenv("GPR_API_KEY")).toString()
-            //         }
-            //     }catch(ex : Exception){
-            //         ex.printStackTrace()
-            //     }
-            // }
+            maven {
+                name = "GithubPackages"
+                url = uri("https://maven.pkg.github.com/esafirm/compose-code-editor")
+                try {
+                    credentials {
+                        username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
+                        password = (githubProperties["gpr.key"] ?: System.getenv("GPR_API_KEY")).toString()
+                    }
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
+            }
         }
     }
+}
+
+val checkGithubTask = tasks.register("checkGithubProperties") {
+    doLast {
+        if (!isGithubPropAvailable) {
+            error("Github properties file is not available. Throwing error.")
+        }
+    }
+}
+
+tasks.withType(PublishToMavenRepository::class.java).configureEach {
+    dependsOn(checkGithubTask)
 }
