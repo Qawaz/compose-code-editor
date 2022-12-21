@@ -88,7 +88,7 @@ if (isGithubPropAvailable) {
         repositories {
             maven {
                 name = "GithubPackages"
-                url = uri("https://maven.pkg.github.com/esafirm/compose-code-editor")
+                url = uri("https://maven.pkg.github.com/Qawaz/compose-code-editor")
                 try {
                     credentials {
                         username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
