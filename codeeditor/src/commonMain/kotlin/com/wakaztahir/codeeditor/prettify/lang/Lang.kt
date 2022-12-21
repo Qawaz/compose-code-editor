@@ -13,7 +13,6 @@
 // limitations under the License.
 package com.wakaztahir.codeeditor.prettify.lang
 
-import com.wakaztahir.codeeditor.prettify.lang.Lang
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 
 /**

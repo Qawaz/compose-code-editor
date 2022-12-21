@@ -1,6 +1,5 @@
 package com.wakaztahir.codeeditor.theme
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import com.wakaztahir.codeeditor.parser.ParseResult
 import com.wakaztahir.codeeditor.prettify.parser.Prettify

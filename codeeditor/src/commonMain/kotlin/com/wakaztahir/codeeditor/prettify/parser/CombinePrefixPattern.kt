@@ -183,7 +183,7 @@ class CombinePrefixPattern {
 
         // [[1, 10], [3, 4], [8, 12], [14, 14], [16, 16], [17, 17]]
         // -> [[1, 12], [14, 14], [16, 17]]
-        ranges.sortWith(Comparator { a, b -> if (a[0] != b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
+        ranges.sortWith({ a, b -> if (a[0] != b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
 //        Collections.sort(ranges, Comparator { a, b -> if (a[0] !== b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
         val consolidatedRanges: MutableList<List<Int>> = ArrayList()
         //        List<Integer> lastRange = listOf(new Integer[]{0, 0});
@@ -242,7 +242,7 @@ class CombinePrefixPattern {
             var i: Int = 0
             var groupIndex: Int = 0
             while (i < n) {
-                val p: String? = parts.get(i)
+                val p: String = parts.get(i)
                 if ((p == "(")) {
                     // groups are 1-indexed, so max group index is count of '('
                     ++groupIndex
@@ -275,7 +275,7 @@ class CombinePrefixPattern {
             var i: Int = 0
             var groupIndex: Int = 0
             while (i < n) {
-                val p: String? = parts.get(i)
+                val p: String = parts.get(i)
                 if ((p == "(")) {
                     ++groupIndex
                     if (capturedGroups.get(groupIndex) == null) {

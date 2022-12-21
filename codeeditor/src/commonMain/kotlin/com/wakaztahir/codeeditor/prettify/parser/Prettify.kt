@@ -827,7 +827,7 @@ class Prettify {
                 + "as,as?,fun,in,!in,object,typealias,val,var,when,by,constructor,delegate,dynamic,field,"
                 + "file,get,init,set,value,where,actual,annotation,companion,crossinline,data,enum,expect,"
                 + "external,field,infix,inline,inner,internal,it,lateinit,noinline,open,operator,out,override,"
-                + "reified,sealed,suspend,tailrec,vararg");
+                + "reified,sealed,suspend,tailrec,vararg")
         const val RUST_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "as,assert,const,copy,drop,"
                 + "enum,extern,fail,false,fn,impl,let,log,loop,match,mod,move,mut,priv,"
                 + "pub,pure,ref,self,static,struct,true,trait,type,unsafe,use")
@@ -858,7 +858,7 @@ class Prettify {
                 + "function,in,local,set,then,until")
         const val ALL_KEYWORDS = (CPP_KEYWORDS + "," + KOTLIN_KEYWORDS + "," + CSHARP_KEYWORDS
                 + "," + JSCRIPT_KEYWORDS + "," + PERL_KEYWORDS + "," + PYTHON_KEYWORDS + "," + RUBY_KEYWORDS
-                + "," + SH_KEYWORDS);
+                + "," + SH_KEYWORDS)
         val C_TYPES =
             Regex("^(DIR|FILE|vector|(de|priority_)?queue|list|stack|(const_)?iterator|(multi)?(set|map)|bitset|u?(int|float)\\d*)\\b")
         // token style names.  correspond to css classes

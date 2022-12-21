@@ -51,7 +51,7 @@ class LangMatlab : Lang() {
         const val PR_TRANSPOSE = "transpose"
         const val PR_LINE_CONTINUATION = "linecont"
         val fileExtensions: List<String>
-            get() = listOf(*arrayOf("matlab"))
+            get() = listOf("matlab")
     }
 
     override val fallthroughStylePatterns = ArrayList<StylePattern>()
@@ -243,7 +243,7 @@ class LangMatlab : Lang() {
     class LangMatlabOperator : Lang() {
         companion object {
             val fileExtensions: List<String>
-                get() = listOf(*arrayOf("matlab-operators"))
+                get() = listOf("matlab-operators")
         }
 
         override val fallthroughStylePatterns = ArrayList<StylePattern>()
