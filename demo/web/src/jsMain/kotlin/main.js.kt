@@ -8,7 +8,7 @@ import org.jetbrains.skiko.wasm.onWasmReady
 
 fun main() {
     onWasmReady {
-        Window("Chat") {
+        BrowserViewportWindow("Code Editor") {
             MaterialTheme {
                 Box(modifier = Modifier.fillMaxSize()) {
                     DisplayCodeEditor()

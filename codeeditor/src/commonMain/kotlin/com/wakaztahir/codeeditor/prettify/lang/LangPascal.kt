@@ -50,12 +50,11 @@ class LangPascal : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*(?:\\'|$))"),
-            null,
-            "'"
+            null
         )
         // Whitespace
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^\\s+"), null
         )
 
         // A cStyleComments comment (* *) or {}
@@ -89,8 +88,7 @@ class LangPascal : Lang() {
                 "^(?:\\$[a-f0-9]+|(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+\\-]?\\d+)?)",
                 RegexOption.IGNORE_CASE
             ),
-            null,
-            "0123456789"
+            null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION,

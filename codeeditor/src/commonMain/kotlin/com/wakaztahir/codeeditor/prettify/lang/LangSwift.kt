@@ -21,14 +21,12 @@ class LangSwift : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[ \\n\\r\\t\\v\\u000c\\\u0000]+"),
-            null,
-            " \\n\\r\\t\\v\\u000c\\0"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\"(?:[^\"\\\\]|(?:\\\\.)|(?:\\\\\\((?:[^\"\\\\)]|\\\\.)*\\)))*\""),
-            null,
-            "\""
+            null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_LITERAL,

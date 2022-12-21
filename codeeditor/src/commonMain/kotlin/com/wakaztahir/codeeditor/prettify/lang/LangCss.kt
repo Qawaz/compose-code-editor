@@ -52,8 +52,7 @@ class LangCss : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[ \t\r\n\\f]+"),
-            null,
-            " \t\r\n\\f"
+            null
         )
         // Quoted strings.  <string1> and <string2>
         fallthroughStylePatterns.new(

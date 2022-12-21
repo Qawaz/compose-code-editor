@@ -49,15 +49,13 @@ class LangErlang : Lang() {
         // whitechar    ->    newline | vertab | space | tab | uniWhite
         // newline      ->    return linefeed | return | linefeed | formfeed
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("\\t\\n\\x0B\\x0C\\r ]+"), null, "\t\n" + 0x0B.toChar().toString() + 0x0C.toChar()
-                .toString() + "\r "
+            Prettify.PR_PLAIN, Regex("\\t\\n\\x0B\\x0C\\r ]+"), null
         )
         // Single line double-quoted strings.
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
-            null,
-            "\""
+            null
         )
 
         // Handle atoms
@@ -68,8 +66,7 @@ class LangErlang : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])+\\'?"),
-            null,
-            "'"
+            null
         )
 
         // Handle macros. Just to be extra clear on this one, it detects the ?
@@ -78,8 +75,7 @@ class LangErlang : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^\\?[^ \\t\\n({]+"),
-            null,
-            "?"
+            null
         )
 
         // decimal      ->    digit{digit}
@@ -97,8 +93,7 @@ class LangErlang : Lang() {
                 "^(?:0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
                 RegexOption.IGNORE_CASE
             ),
-            null,
-            "0123456789"
+            null
         )
 
 

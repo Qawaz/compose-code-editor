@@ -1,6 +1,4 @@
-import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
 plugins {
     kotlin("multiplatform")
@@ -13,10 +11,6 @@ kotlin {
             kotlinOptions.jvmTarget = "11"
         }
     }
-    js(IR) {
-        browser()
-        binaries.executable()
-    }
     sourceSets {
         val jvmMain by getting {
             dependencies {
@@ -25,23 +19,6 @@ kotlin {
             }
         }
         val jvmTest by getting
-        named("jsMain") {
-            dependencies {
-                implementation(project(":demo:common"))
-            }
-        }
-    }
-}
-
-compose.experimental {
-    web.application {}
-}
-
-afterEvaluate {
-    rootProject.extensions.configure<NodeJsRootExtension> {
-        versions.webpackDevServer.version = "4.0.0"
-        versions.webpackCli.version = "4.9.0"
-        nodeVersion = "16.0.0"
     }
 }
 

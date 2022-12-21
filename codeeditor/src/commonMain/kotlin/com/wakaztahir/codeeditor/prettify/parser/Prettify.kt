@@ -19,8 +19,7 @@ import com.wakaztahir.codeeditor.utils.new
 open class StylePattern(
     val tokenStyle: String,
     val regExp: Regex,
-    val shortcutChars: String? = null,
-    val unknownThing: String? = null
+    val shortcutChars: String? = null
 )
 
 /**
@@ -165,24 +164,21 @@ class Prettify {
             shortcutStylePatterns.new(
                 tokenStyle = PR_STRING,
                 regExp = Regex("^(?:'''(?:[^'\\\\]|\\\\[\\s\\S]|'{1,2}(?=[^']))*(?:'''|$)|\"\"\"(?:[^\"\\\\]|\\\\[\\s\\S]|\"{1,2}(?=[^\"]))*(?:\"\"\"|$)|'(?:[^\\\\']|\\\\[\\s\\S])*(?:'|$)|\"(?:[^\\\\\"]|\\\\[\\s\\S])*(?:\"|$))"),
-                shortcutChars = null,
-                unknownThing = "'\""
+                shortcutChars = null
             )
         } else if (Util.getVariableValueAsBoolean(options["multiLineStrings"])) {
             // 'multi-line-string', "multi-line-string"
             shortcutStylePatterns.new(
                 PR_STRING,
                 Regex("^(?:'(?:[^\\\\']|\\\\[\\s\\S])*(?:'|$)|\"(?:[^\\\\\"]|\\\\[\\s\\S])*(?:\"|$)|`(?:[^\\\\`]|\\\\[\\s\\S])*(?:`|$))"),
-                null,
-                "'\"`"
+                null
             )
         } else {
             // 'single-line-string', "single-line-string"
             shortcutStylePatterns.new(
                 PR_STRING,
                 Regex("^(?:'(?:[^\\\\'\r\n]|\\\\.)*(?:'|$)|\"(?:[^\\\\\"\r\n]|\\\\.)*(?:\"|$))"),
-                null,
-                "\"'"
+                null
             )
         }
         if (Util.getVariableValueAsBoolean(options["verbatimStrings"])) {
@@ -200,16 +196,14 @@ class Prettify {
                     shortcutStylePatterns.new(
                         PR_COMMENT,
                         Regex("^#(?:##(?:[^#]|#(?!##))*(?:###|$)|.*)"),
-                        null,
-                        "#"
+                        null
                     )
                 } else {
                     // Stop C preprocessor declarations at an unclosed open comment
                     shortcutStylePatterns.new(
                         PR_COMMENT,
                         Regex("^#(?:(?:define|e(?:l|nd)if|else|error|ifn?def|include|line|pragma|undef|warning)\\b|[^\r\n]*)"),
-                        null,
-                        "#"
+                        null
                     )
                 }
                 // #include <stdio.h>
@@ -222,8 +216,7 @@ class Prettify {
                 shortcutStylePatterns.new(
                     PR_COMMENT,
                     Regex("^#[^\r\n]*"),
-                    null,
-                    "#"
+                    null
                 )
             }
         }
@@ -289,9 +282,7 @@ class Prettify {
         shortcutStylePatterns.new(
             PR_PLAIN,
             Regex("^\\s+"),
-            null,
-            """ 
-	${0xA0.toChar()}"""
+            null
         )
 
         // TODO(mikesamuel): recognize non-latin letters and numerals in idents
@@ -320,8 +311,7 @@ class Prettify {
                         + ')' // with an optional modifier like UL for unsigned long
                         + "[a-z]*", RegexOption.IGNORE_CASE
             ),
-            null,
-            "0123456789"
+            null
         )
         // Don't treat escaped quotes in bash as starting strings.
         // See issue 144.
@@ -491,14 +481,12 @@ class Prettify {
             shortcutStylePatterns.new(
                 PR_PLAIN,
                 Regex("^[\\s]+"),
-                null,
-                " \t\r\n"
+                null
             )
             shortcutStylePatterns.new(
                 PR_ATTRIB_VALUE,
                 Regex("^(?:\"[^\"]*\"?|'[^']*'?)"),
-                null,
-                "\"'"
+                null
             )
             fallthroughStylePatterns.new(
                 PR_TAG, Regex("^^</?[a-z](?:[\\w.:-]*\\w)?|/?>$", RegexOption.IGNORE_CASE)

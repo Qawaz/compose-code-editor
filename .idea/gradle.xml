@@ -4,8 +4,11 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <option name="delegatedBuild" value="true" />
+        <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="jbr-17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -14,6 +17,7 @@
             <option value="$PROJECT_DIR$/demo/android" />
             <option value="$PROJECT_DIR$/demo/common" />
             <option value="$PROJECT_DIR$/demo/desktop" />
+            <option value="$PROJECT_DIR$/demo/web" />
           </set>
         </option>
       </GradleProjectSettings>

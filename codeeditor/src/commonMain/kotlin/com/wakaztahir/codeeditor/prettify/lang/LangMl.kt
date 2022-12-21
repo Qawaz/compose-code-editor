@@ -46,7 +46,7 @@ class LangMl : Lang() {
 
         // Whitespace is made up of spaces, tabs and newline characters.
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null
         )
         // #if ident/#else/#endif directives delimit conditional compilation
         // sections
@@ -56,16 +56,14 @@ class LangMl : Lang() {
                 "^#(?:if[\\t\\n\\r \\xA0]+(?:[a-z_$][\\w\\']*|``[^\\r\\n\\t`]*(?:``|$))|else|endif|light)",
                 RegexOption.IGNORE_CASE
             ),
-            null,
-            "#"
+            null
         )
         // A double or single quoted, possibly multi-line, string.
         // F# allows escaped newlines in strings.
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])(?:\\'|$))"),
-            null,
-            "\"'"
+            null
         )
         // Block comments are delimited by (* and *) and may be
         // nested. Single-line comments begin with // and extend to

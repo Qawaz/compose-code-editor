@@ -46,14 +46,13 @@ class LangRd : Lang() {
 
         // whitespace
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null
         )
         // all comments begin with '%'
         shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^%[^\\r\\n]*"),
-            null,
-            "%"
+            null
         )
 
         // special macros with no args

@@ -47,17 +47,15 @@ class LangN : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*\\'|\\\"(?:[^\\\\\\\"\\r\\n]|\\\\.)*(?:\\\"|$))"),
-            null,
-            "\""
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^#(?:(?:define|elif|else|endif|error|ifdef|include|ifndef|line|pragma|undef|warning)\\b|[^\\r\\n]*)"),
-            null,
-            "#"
+            null
         )
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^\\s+"), null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_STRING,
@@ -117,7 +115,7 @@ class LangN : Lang() {
                         + "(?:e[+\\\\-]?\\\\d+)?"
                         + ")" // with an optional modifier like UL for unsigned long
                         + "[a-z]*", RegexOption.IGNORE_CASE
-            ), null, "0123456789"
+            ), null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION,

@@ -46,15 +46,13 @@ class LangWiki : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[\\t \\xA0a-gi-z0-9]+"),
-            null,
-            "\t " + 0xA0.toChar().toString() + "abcdefgijklmnopqrstuvwxyz0123456789"
+            null
         )
         // Wiki formatting
         shortcutStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[=*~\\^\\[\\]]+"),
-            null,
-            "=*~^[]"
+            null
         )
         // Meta-info like #summary, #labels, etc.
         fallthroughStylePatterns.new(
@@ -103,8 +101,7 @@ class LangWiki : Lang() {
             shortcutStylePatterns.new(
                 Prettify.PR_KEYWORD,
                 Regex("^#[a-z]+", RegexOption.IGNORE_CASE),
-                null,
-                "#"
+                null
             )
         }
 

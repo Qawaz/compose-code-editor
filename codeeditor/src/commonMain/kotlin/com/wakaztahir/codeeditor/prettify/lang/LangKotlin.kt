@@ -20,14 +20,12 @@ class LangKotlin : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[\\t\\n\\r \\xA0]+"),
-            null,
-            "\\t\\n\\r \\xA0"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[.!%&()*+,\\-;<=>?\\[\\\\\\]^{|}:]+"),
-            null,
-            ".!%&()*+,-;<=>?[\\\\]^{|}:"
+            null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,

@@ -51,7 +51,7 @@ class LangXq : Lang() {
 
         // Matching $var-ia_bles
         shortcutStylePatterns.new(
-            PR_VARIABLE, Regex("^\\$[A-Za-z0-9_\\-]+"), null, "$"
+            PR_VARIABLE, Regex("^\\$[A-Za-z0-9_\\-]+"), null
         )
         // Matching lt and gt operators
         // Not the best matching solution but you have to differentiate between the gt operator and the tag closing char
@@ -78,7 +78,7 @@ class LangXq : Lang() {
             Prettify.PR_STRING, Regex(
                 "^(?:\\\"(?:[^\\\"\\\\\\{]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\\\{]|\\\\[\\s\\S])*(?:\\'|$))",
                 RegexOption.IGNORE_CASE
-            ), null, "\"'"
+            ), null
         )
         // Matching standard xquery keywords
         fallthroughStylePatterns.new(

@@ -49,13 +49,13 @@ class LangR : Lang() {
 
 
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null
         )
         shortcutStylePatterns.new(
-            Prettify.PR_STRING, Regex("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"), null, "\""
+            Prettify.PR_STRING, Regex("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"), null
         )
         shortcutStylePatterns.new(
-            Prettify.PR_STRING, Regex("^\\'(?:[^\\'\\\\]|\\\\[\\s\\S])*(?:\\'|$)"), null, "'"
+            Prettify.PR_STRING, Regex("^\\'(?:[^\\'\\\\]|\\\\[\\s\\S])*(?:\\'|$)"), null
         )
         fallthroughStylePatterns.new(Prettify.PR_COMMENT, Regex("^#.*"))
         fallthroughStylePatterns.new(

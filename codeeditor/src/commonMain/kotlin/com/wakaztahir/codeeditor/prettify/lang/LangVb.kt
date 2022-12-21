@@ -54,8 +54,7 @@ class LangVb : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[\\t\\n\\r \\xA0\\u2028\\u2029]+"),
-            null,
-            "\t\n\r " + 0xA0.toChar().toString() + "\u2028\u2029"
+            null
         )
         // A double quoted string with quotes escaped by doubling them.
         // A single character can be suffixed with C.
@@ -63,7 +62,7 @@ class LangVb : Lang() {
             Prettify.PR_STRING, Regex(
                 "^(?:[\\\"\\u201C\\u201D](?:[^\\\"\\u201C\\u201D]|[\\\"\\u201C\\u201D]{2})(?:[\\\"\\u201C\\u201D]c|$)|[\\\"\\u201C\\u201D](?:[^\\\"\\u201C\\u201D]|[\\\"\\u201C\\u201D]{2})*(?:[\\\"\\u201C\\u201D]|$))",
                 RegexOption.IGNORE_CASE
-            ), null, "\"\u201C\u201D"
+            ), null
         )
         // A comment starts with a single quote and runs until the end of the line.
         // VB6 apparently allows _ as an escape sequence for newlines though
@@ -72,8 +71,7 @@ class LangVb : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^[\\'\\u2018\\u2019](?:_(?:\r\n?|[^\r]?)|[^\\r\\n_\\u2028\\u2029])*"),
-            null,
-            "'\u2018\u2019"
+            null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
