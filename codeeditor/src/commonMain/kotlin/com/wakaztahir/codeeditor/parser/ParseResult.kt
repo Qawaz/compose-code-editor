@@ -60,7 +60,7 @@ class ParseResult(
      * The style keys of the content. The style at higher index of the list will
      * override the style of the lower index.
      */
-    protected var styleKeys: MutableList<String>
+    private var styleKeys: MutableList<String>
 
     /**
      * Get the style keys represented by one string key, see

@@ -244,7 +244,7 @@ class Prettify {
             /**
              * @const
              */
-            val regexAny = if (!regexExcls.isEmpty()) "." else "[\\S\\s]"
+            val regexAny = if (regexExcls.isNotEmpty()) "." else "[\\S\\s]"
 
             /**
              * @const
@@ -808,11 +808,11 @@ class Prettify {
     companion object {
 
         // Keyword lists for various languages.
-        const val FLOW_CONTROL_KEYWORDS = "break,continue,do,else,for,if,return,while"
-        const val C_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "auto,case,char,const,default,"
+        private const val FLOW_CONTROL_KEYWORDS = "break,continue,do,else,for,if,return,while"
+        private const val C_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "auto,case,char,const,default,"
                 + "double,enum,extern,float,goto,inline,int,long,register,short,signed,"
                 + "sizeof,static,struct,switch,typedef,union,unsigned,void,volatile")
-        const val COMMON_KEYWORDS = (C_KEYWORDS + "," + "catch,class,delete,false,import,"
+        private const val COMMON_KEYWORDS = (C_KEYWORDS + "," + "catch,class,delete,false,import,"
                 + "new,operator,private,protected,public,this,throw,true,try,typeof")
         const val CPP_KEYWORDS = (COMMON_KEYWORDS + "," + "alignof,align_union,asm,axiom,bool,"
                 + "concept,concept_map,const_cast,constexpr,decltype,delegate,"
@@ -823,7 +823,7 @@ class Prettify {
                 + "abstract,assert,boolean,byte,extends,final,finally,implements,import,"
                 + "instanceof,interface,null,native,package,strictfp,super,synchronized,"
                 + "throws,transient")
-        const val KOTLIN_KEYWORDS = (JAVA_KEYWORDS + ","
+        private const val KOTLIN_KEYWORDS = (JAVA_KEYWORDS + ","
                 + "as,as?,fun,in,!in,object,typealias,val,var,when,by,constructor,delegate,dynamic,field,"
                 + "file,get,init,set,value,where,actual,annotation,companion,crossinline,data,enum,expect,"
                 + "external,field,infix,inline,inner,internal,it,lateinit,noinline,open,operator,out,override,"
@@ -955,7 +955,7 @@ class Prettify {
          * @param basePos the index of sourceCode within the chunk of source
          * whose decorations are already present on out.
          */
-        protected fun appendDecorations(
+        private fun appendDecorations(
             basePos: Int,
             sourceCode: String?,
             langHandler: CreateSimpleLexer?,

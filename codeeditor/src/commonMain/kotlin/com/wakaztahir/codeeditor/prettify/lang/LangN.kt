@@ -30,7 +30,7 @@ import com.wakaztahir.codeeditor.utils.new
  */
 class LangN : Lang() {
     companion object {
-        protected var keywords = ("abstract|and|as|base|catch|class|def|delegate|enum|event|extern|false|finally|"
+        private var keywords = ("abstract|and|as|base|catch|class|def|delegate|enum|event|extern|false|finally|"
                 + "fun|implements|interface|internal|is|macro|match|matches|module|mutable|namespace|new|"
                 + "null|out|override|params|partial|private|protected|public|ref|sealed|static|struct|"
                 + "syntax|this|throw|true|try|type|typeof|using|variant|virtual|volatile|when|where|with|"
@@ -84,7 +84,7 @@ class LangN : Lang() {
         )
         fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
-            Regex("^(?:" + keywords + ")\\\\b"),
+            Regex("^(?:$keywords)\\\\b"),
             null
         )
         fallthroughStylePatterns.new(
