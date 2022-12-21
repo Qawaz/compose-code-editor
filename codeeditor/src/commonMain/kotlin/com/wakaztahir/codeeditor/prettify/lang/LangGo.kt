@@ -65,14 +65,13 @@ class LangGo : Lang() {
 
         // Whitespace is made up of spaces, tabs and newline characters.
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null
         )
         // Not escaped as a string.  See note on minimalism above.
         shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^(?:\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)|\\'(?:[^\\'\\\\]|\\\\[\\s\\S])+(?:\\'|$)|`[^`]*(?:`|$))"),
-            null,
-            "\"'"
+            null
         )
         // Block comments are delimited by /* and */.
         // Single-line comments begin with // and extend to the end of a line.

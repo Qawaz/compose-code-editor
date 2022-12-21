@@ -1,5 +1,4 @@
-import java.io.FileInputStream
-import java.util.*
+import java.util.Properties
 
 plugins {
     kotlin("multiplatform")
@@ -20,6 +19,10 @@ kotlin {
         compilations.all {
             kotlinOptions.jvmTarget = "11"
         }
+    }
+    js(IR) {
+        browser()
+        binaries.executable()
     }
     sourceSets {
         val commonMain by getting {
@@ -49,6 +52,12 @@ kotlin {
             }
         }
         val desktopTest by getting
+
+        named("jsMain") {
+            dependencies {
+                api(compose.web.core)
+            }
+        }
     }
 }
 
@@ -65,14 +74,16 @@ android {
     }
 }
 
-val githubProperties = Properties()
-try {
-    githubProperties.load(FileInputStream(rootProject.file("github.properties")))
-}catch(ex : Exception){
-    ex.printStackTrace()
-}
 
-afterEvaluate {
+val propertiesFile = project.rootProject.file("github.properties")
+val isGithubPropAvailable = propertiesFile.exists()
+
+if (isGithubPropAvailable) {
+
+    val githubProperties = Properties().apply {
+        propertiesFile.reader().use { load(it) }
+    }
+
     publishing {
         repositories {
             maven {
@@ -83,10 +94,22 @@ afterEvaluate {
                         username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
                         password = (githubProperties["gpr.key"] ?: System.getenv("GPR_API_KEY")).toString()
                     }
-                }catch(ex : Exception){
+                } catch (ex: Exception) {
                     ex.printStackTrace()
                 }
             }
         }
     }
+}
+
+val checkGithubTask = tasks.register("checkGithubProperties") {
+    doLast {
+        if (!isGithubPropAvailable) {
+            error("Github properties file is not available. Throwing error.")
+        }
+    }
+}
+
+tasks.withType(PublishToMavenRepository::class.java).configureEach {
+    dependsOn(checkGithubTask)
 }

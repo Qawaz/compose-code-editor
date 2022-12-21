@@ -1,10 +1,8 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
-
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
-import java.util.*
 
 class LangLogtalk : Lang() {
 
@@ -21,8 +19,7 @@ class LangLogtalk : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\\"(?:[^\\\"\\\\\\n\\x0C\\r]|\\\\[\\s\\S])*(?:\\\"|$)"),
-            null,
-            "\""
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
@@ -31,8 +28,7 @@ class LangLogtalk : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^\\'(?:[^\\'\\\\\\n\\x0C\\r]|\\\\[^&])+\\'?"),
-            null,
-            "\'"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
@@ -40,14 +36,12 @@ class LangLogtalk : Lang() {
                 "^(?:0'.|0b[0-1]+|0o[0-7]+|0x[\\da-f]+|\\d+(?:\\.\\d+)?(?:e[+\\-]?\\d+)?)",
                 RegexOption.IGNORE_CASE
             ),
-            null,
-            "0123456789"
+            null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^%[^\\r\\n]*"),
-            null,
-            "%"
+            null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_COMMENT,

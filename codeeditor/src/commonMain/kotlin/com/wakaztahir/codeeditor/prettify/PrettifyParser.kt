@@ -12,7 +12,7 @@ import com.wakaztahir.codeeditor.prettify.parser.Prettify
  */
 class PrettifyParser : Parser {
 
-    private var prettify: Prettify = Prettify()
+    private val prettify: Prettify = Prettify()
 
     override fun parse(fileExtension: String, content: String): List<ParseResult> =
         parse(prettify.getLexerForExtension(fileExtension), content)

@@ -13,7 +13,6 @@
 // limitations under the License.
 package com.wakaztahir.codeeditor.prettify.lang
 
-import com.wakaztahir.codeeditor.prettify.lang.Lang
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 
 /**
@@ -26,12 +25,12 @@ abstract class Lang {
     /**
      * Similar to those in JavaScript prettify.js.
      */
-    internal abstract val shortcutStylePatterns: List<StylePattern>
+    abstract val shortcutStylePatterns: List<StylePattern>
 
     /**
      * Similar to those in JavaScript prettify.js.
      */
-    internal abstract val fallthroughStylePatterns: List<StylePattern>
+    abstract val fallthroughStylePatterns: List<StylePattern>
 
     abstract fun getFileExtensions(): List<String>
 }

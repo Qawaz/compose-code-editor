@@ -20,38 +20,32 @@ class LangLasso : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[\\t\\n\\r \\xA0]+"),
-            null,
-            "\\t\\n\\r \\xA0"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\'[^\\'\\\\]*(?:\\\\[\\s\\S][^\\'\\\\]*)*(?:\\'|$)"),
-            null,
-            "\'"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\\"[^\\\"\\\\]*(?:\\\\[\\s\\S][^\\\"\\\\]*)*(?:\\\"|$)"),
-            null,
-            "\""
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\`[^\\`]*(?:\\`|$)"),
-            null,
-            "`"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^0x[\\da-f]+|\\d+", RegexOption.IGNORE_CASE),
-            null,
-            "0123456789"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_ATTRIB_NAME,
             Regex("^[#$][a-z_][\\w.]*|#\\d+\\b|#![ \\S]+lasso9\\b", RegexOption.IGNORE_CASE),
-            null,
-            "#$"
+            null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_TAG,

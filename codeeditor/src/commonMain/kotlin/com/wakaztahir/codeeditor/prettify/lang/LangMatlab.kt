@@ -51,7 +51,7 @@ class LangMatlab : Lang() {
         const val PR_TRANSPOSE = "transpose"
         const val PR_LINE_CONTINUATION = "linecont"
         val fileExtensions: List<String>
-            get() = listOf(*arrayOf("matlab"))
+            get() = listOf("matlab")
     }
 
     override val fallthroughStylePatterns = ArrayList<StylePattern>()
@@ -70,8 +70,7 @@ class LangMatlab : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[ \\t\\r\\n\\v\\f\\xA0]+"),
-            null,
-            " \t\n\r" + 0x0B.toChar().toString() + 0x0C.toChar().toString() + 0xA0.toChar().toString()
+            null
         )
         // block comments
         //TODO: chokes on nested block comments
@@ -87,11 +86,10 @@ class LangMatlab : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^%[^\\r\\n]*"),
-            null,
-            "%"
+            null
         )
         // system commands
-        shortcutStylePatterns.new(PR_SYSCMD, Regex("^![^\\r\\n]*"), null, "!")
+        shortcutStylePatterns.new(PR_SYSCMD, Regex("^![^\\r\\n]*"), null)
 
         // patterns that will be tried in order if the shortcut ones fail. May have shortcuts.
         // line continuation
@@ -245,7 +243,7 @@ class LangMatlab : Lang() {
     class LangMatlabOperator : Lang() {
         companion object {
             val fileExtensions: List<String>
-                get() = listOf(*arrayOf("matlab-operators"))
+                get() = listOf("matlab-operators")
         }
 
         override val fallthroughStylePatterns = ArrayList<StylePattern>()

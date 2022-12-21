@@ -1,7 +1,6 @@
 package com.wakaztahir.codeeditor.utils
 
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.buildAnnotatedString
 import com.wakaztahir.codeeditor.model.CodeLang
 import com.wakaztahir.codeeditor.parser.ParseResult
 import com.wakaztahir.codeeditor.prettify.PrettifyParser

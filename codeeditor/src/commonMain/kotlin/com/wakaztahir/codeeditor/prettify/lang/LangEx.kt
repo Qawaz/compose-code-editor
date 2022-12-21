@@ -21,41 +21,35 @@ class LangEx : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^[\\t\\n\\r \\xA0]+"),
-            null,
-            "\t\n\r \\xA0"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^#.*"),
-            null,
-            "#"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_LITERAL,
             Regex("^'(?:[^'\\\\]|\\\\(?:.|\\n|\\r))*'?"),
-            null,
-            "\\'"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_ATTRIB_NAME,
             Regex("^@\\w+"),
-            null,
-            "@"
+            null
         )
         shortcutStylePatterns.new(
 
             Prettify.PR_PUNCTUATION,
             Regex("^[!%&()*+,\\-;<=>?\\[\\\\\\]^{|}]+"),
-            null,
-            "!%&()*+,-;<=>?[\\\\]^{|}"
+            null
 
         )
         shortcutStylePatterns.new(
 
             Prettify.PR_LITERAL,
             Regex("^(?:0o[0-7](?:[0-7]|_[0-7])*|0x[\\da-fA-F](?:[\\da-fA-F]|_[\\da-fA-F])*|\\d(?:\\d|_\\d)*(?:\\.\\d(?:\\d|_\\d)*)?(?:[eE][+\\-]?\\d(?:\\d|_\\d)*)?)"),
-            null,
-            "0123456789"
+            null
 
         )
         fallthroughStylePatterns.new(

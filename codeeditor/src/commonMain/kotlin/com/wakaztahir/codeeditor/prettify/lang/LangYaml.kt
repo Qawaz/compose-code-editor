@@ -41,50 +41,42 @@ class LangYaml : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[:|>?]+"),
-            null,
-            ":|>?"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_DECLARATION,
             Regex("^%(?:YAML|TAG)[^#\\r\\n]+"),
-            null,
-            "%"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_TYPE,
             Regex("^[&]\\S+"),
-            null,
-            "&"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_TYPE,
             Regex("^!\\S*"),
-            null,
-            "!"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\"(?:[^\\\\\"]|\\\\.)*(?:\"|$)"),
-            null,
-            "\""
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^'(?:[^']|'')*(?:'|$)"),
-            null,
-            "'"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^#[^\\r\\n]*"),
-            null,
-            "#"
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_PLAIN,
             Regex("^\\s+"),
-            null,
-            " \t\r\n"
+            null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_DECLARATION,

@@ -19,8 +19,7 @@ import com.wakaztahir.codeeditor.utils.new
 open class StylePattern(
     val tokenStyle: String,
     val regExp: Regex,
-    val shortcutChars: String? = null,
-    val unknownThing: String? = null
+    val shortcutChars: String? = null
 )
 
 /**
@@ -81,16 +80,6 @@ class Prettify {
      */
     private val extensionMap by lazy {
         hashMapOf<String, LangProvider>().apply {
-            // registers extensions for languages
-            fun registerExtensions(extensions: List<String>, langCreator: () -> Lang) {
-                val provider = object : LangProvider {
-                    val lang by lazy { langCreator() }
-                    override fun provide(): Lang = lang
-                }
-                for (extension in extensions){
-                    this[extension] = provider
-                }
-            }
             // registering extensions for available languages
             registerExtensions(LangAppollo.fileExtensions) { LangAppollo() }
             registerExtensions(LangBasic.fileExtensions) { LangBasic() }
@@ -133,6 +122,17 @@ class Prettify {
         }
     }
 
+    // registers extensions for languages
+    private fun MutableMap<String, LangProvider>.registerExtensions(extensions: List<String>, langCreator: () -> Lang) {
+        val provider = object : LangProvider {
+            val lang by lazy { langCreator() }
+            override fun provide(): Lang = lang
+        }
+        for (extension in extensions){
+            this[extension] = provider
+        }
+    }
+
     private fun getLangFromExtension(extension: String): Lang = extensionMap[extension]?.provide() ?: run {
         throw IllegalArgumentException("Missing language for extension : $extension")
     }
@@ -163,32 +163,29 @@ class Prettify {
             // '''multi-line-string''', 'single-line-string', and double-quoted
             shortcutStylePatterns.new(
                 tokenStyle = PR_STRING,
-                regExp = Regex("^(?:\\'\\'\\'(?:[^\\'\\\\]|\\\\[\\s\\S]|\\'{1,2}(?=[^\\']))*(?:\\'\\'\\'|$)|\\\"\\\"\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S]|\\\"{1,2}(?=[^\\\"]))*(?:\\\"\\\"\\\"|$)|\\'(?:[^\\\\\\']|\\\\[\\s\\S])*(?:\\'|$)|\\\"(?:[^\\\\\\\"]|\\\\[\\s\\S])*(?:\\\"|$))"),
-                shortcutChars = null,
-                unknownThing = "'\""
+                regExp = Regex("^(?:'''(?:[^'\\\\]|\\\\[\\s\\S]|'{1,2}(?=[^']))*(?:'''|$)|\"\"\"(?:[^\"\\\\]|\\\\[\\s\\S]|\"{1,2}(?=[^\"]))*(?:\"\"\"|$)|'(?:[^\\\\']|\\\\[\\s\\S])*(?:'|$)|\"(?:[^\\\\\"]|\\\\[\\s\\S])*(?:\"|$))"),
+                shortcutChars = null
             )
         } else if (Util.getVariableValueAsBoolean(options["multiLineStrings"])) {
             // 'multi-line-string', "multi-line-string"
             shortcutStylePatterns.new(
                 PR_STRING,
-                Regex("^(?:\\'(?:[^\\\\\\']|\\\\[\\s\\S])*(?:\\'|$)|\\\"(?:[^\\\\\\\"]|\\\\[\\s\\S])*(?:\\\"|$)|\\`(?:[^\\\\\\`]|\\\\[\\s\\S])*(?:\\`|$))"),
-                null,
-                "'\"`"
+                Regex("^(?:'(?:[^\\\\']|\\\\[\\s\\S])*(?:'|$)|\"(?:[^\\\\\"]|\\\\[\\s\\S])*(?:\"|$)|`(?:[^\\\\`]|\\\\[\\s\\S])*(?:`|$))"),
+                null
             )
         } else {
             // 'single-line-string', "single-line-string"
             shortcutStylePatterns.new(
                 PR_STRING,
-                Regex("^(?:\\'(?:[^\\\\\\'\r\n]|\\\\.)*(?:\\'|$)|\\\"(?:[^\\\\\\\"\r\n]|\\\\.)*(?:\\\"|$))"),
-                null,
-                "\"'"
+                Regex("^(?:'(?:[^\\\\'\r\n]|\\\\.)*(?:'|$)|\"(?:[^\\\\\"\r\n]|\\\\.)*(?:\"|$))"),
+                null
             )
         }
         if (Util.getVariableValueAsBoolean(options["verbatimStrings"])) {
             // verbatim-string-literal production from the C# grammar.  See issue 93.
             fallthroughStylePatterns.new(
                 PR_STRING,
-                Regex("^@\\\"(?:[^\\\"]|\\\"\\\")*(?:\\\"|$)"),
+                Regex("^@\"(?:[^\"]|\"\")*(?:\"|$)"),
                 null
             )
         }
@@ -199,42 +196,39 @@ class Prettify {
                     shortcutStylePatterns.new(
                         PR_COMMENT,
                         Regex("^#(?:##(?:[^#]|#(?!##))*(?:###|$)|.*)"),
-                        null,
-                        "#"
+                        null
                     )
                 } else {
                     // Stop C preprocessor declarations at an unclosed open comment
                     shortcutStylePatterns.new(
                         PR_COMMENT,
                         Regex("^#(?:(?:define|e(?:l|nd)if|else|error|ifn?def|include|line|pragma|undef|warning)\\b|[^\r\n]*)"),
-                        null,
-                        "#"
+                        null
                     )
                 }
                 // #include <stdio.h>
                 fallthroughStylePatterns.new(
                     PR_STRING,
-                    Regex("^<(?:(?:(?:\\.\\.\\/)*|\\/?)(?:[\\w-]+(?:\\/[\\w-]+)+)?[\\w-]+\\.h(?:h|pp|\\+\\+)?|[a-z]\\w*)>"),
+                    Regex("^<(?:(?:(?:\\.\\./)*|/?)(?:[\\w-]+(?:/[\\w-]+)+)?[\\w-]+\\.h(?:h|pp|\\+\\+)?|[a-z]\\w*)>"),
                     null
                 )
             } else {
                 shortcutStylePatterns.new(
                     PR_COMMENT,
                     Regex("^#[^\r\n]*"),
-                    null,
-                    "#"
+                    null
                 )
             }
         }
         if (Util.getVariableValueAsBoolean(options["cStyleComments"])) {
             fallthroughStylePatterns.new(
                 PR_COMMENT,
-                Regex("^\\/\\/[^\r\n]*"),
+                Regex("^//[^\r\n]*"),
                 null
             )
             fallthroughStylePatterns.new(
                 PR_COMMENT,
-                Regex("^\\/\\*[\\s\\S]*?(?:\\*\\/|$)"),
+                Regex("^/\\*[\\s\\S]*?(?:\\*/|$)"),
                 null
             )
         }
@@ -250,7 +244,7 @@ class Prettify {
             /**
              * @const
              */
-            val regexAny = if (!regexExcls.isEmpty()) "." else "[\\S\\s]"
+            val regexAny = if (regexExcls.isNotEmpty()) "." else "[\\S\\s]"
 
             /**
              * @const
@@ -266,7 +260,7 @@ class Prettify {
                         + "/")
             fallthroughStylePatterns.new(
                 "lang-regex",
-                Regex("^$REGEXP_PRECEDER_PATTERN($REGEX_LITERAL)")
+                Regex("^$REGEXP_PRECEDES_PATTERN($REGEX_LITERAL)")
             )
         }
         val types = options["types"] as? Regex
@@ -288,9 +282,7 @@ class Prettify {
         shortcutStylePatterns.new(
             PR_PLAIN,
             Regex("^\\s+"),
-            null,
-            """ 
-	${0xA0.toChar()}"""
+            null
         )
 
         // TODO(mikesamuel): recognize non-latin letters and numerals in idents
@@ -319,8 +311,7 @@ class Prettify {
                         + ')' // with an optional modifier like UL for unsigned long
                         + "[a-z]*", RegexOption.IGNORE_CASE
             ),
-            null,
-            "0123456789"
+            null
         )
         // Don't treat escaped quotes in bash as starting strings.
         // See issue 144.
@@ -453,7 +444,7 @@ class Prettify {
                 PR_DECLARATION, Regex("^<!\\w[^>]*(?:>|$)")
             )
             fallthroughStylePatterns.new(
-                PR_COMMENT, Regex("^<\\!--[\\s\\S]*?(?:-\\->|$)")
+                PR_COMMENT, Regex("^<!--[\\s\\S]*?(?:-->|$)")
             )
             // Unescaped content in an unknown language
             fallthroughStylePatterns.new(
@@ -466,20 +457,20 @@ class Prettify {
                 PR_PUNCTUATION, Regex("^(?:<[%?]|[%?]>)")
             )
             fallthroughStylePatterns.new(
-                "lang-", Regex("^<xmp\\b[^>]*>([\\s\\S]+?)<\\/xmp\\b[^>]*>", RegexOption.IGNORE_CASE)
+                "lang-", Regex("^<xmp\\b[^>]*>([\\s\\S]+?)</xmp\\b[^>]*>", RegexOption.IGNORE_CASE)
             )
             // Unescaped content in javascript.  (Or possibly vbscript).
             fallthroughStylePatterns.new(
                 "lang-js",
-                Regex("^<script\\b[^>]*>([\\s\\S]*?)(<\\/script\\b[^>]*>)", RegexOption.IGNORE_CASE)
+                Regex("^<script\\b[^>]*>([\\s\\S]*?)(</script\\b[^>]*>)", RegexOption.IGNORE_CASE)
             )
             // Contains unescaped stylesheet content
             fallthroughStylePatterns.new(
                 "lang-css",
-                Regex("^<style\\b[^>]*>([\\s\\S]*?)(<\\/style\\b[^>]*>)", RegexOption.IGNORE_CASE)
+                Regex("^<style\\b[^>]*>([\\s\\S]*?)(</style\\b[^>]*>)", RegexOption.IGNORE_CASE)
             )
             fallthroughStylePatterns.new(
-                "lang-in.tag", Regex("^(<\\/?[a-z][^<>]*>)", RegexOption.IGNORE_CASE)
+                "lang-in.tag", Regex("^(</?[a-z][^<>]*>)", RegexOption.IGNORE_CASE)
             )
             registerLangHandler(
                 CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns),
@@ -490,17 +481,15 @@ class Prettify {
             shortcutStylePatterns.new(
                 PR_PLAIN,
                 Regex("^[\\s]+"),
-                null,
-                " \t\r\n"
+                null
             )
             shortcutStylePatterns.new(
                 PR_ATTRIB_VALUE,
-                Regex("^(?:\\\"[^\\\"]*\\\"?|\\'[^\\']*\\'?)"),
-                null,
-                "\"'"
+                Regex("^(?:\"[^\"]*\"?|'[^']*'?)"),
+                null
             )
             fallthroughStylePatterns.new(
-                PR_TAG, Regex("^^<\\/?[a-z](?:[\\w.:-]*\\w)?|\\/?>$", RegexOption.IGNORE_CASE)
+                PR_TAG, Regex("^^</?[a-z](?:[\\w.:-]*\\w)?|/?>$", RegexOption.IGNORE_CASE)
             )
             fallthroughStylePatterns.new(
                 PR_ATTRIB_NAME,
@@ -508,28 +497,28 @@ class Prettify {
             )
             fallthroughStylePatterns.new(
                 "lang-uq.val", Regex(
-                    "^=\\s*([^>\\'\\\"\\s]*(?:[^>\\'\\\"\\s\\/]|\\/(?=\\s)))",
+                    "^=\\s*([^>'\"\\s]*(?:[^>'\"\\s/]|/(?=\\s)))",
                     RegexOption.IGNORE_CASE
                 )
             )
-            fallthroughStylePatterns.new(PR_PUNCTUATION, Regex("^[=<>\\/]+"))
+            fallthroughStylePatterns.new(PR_PUNCTUATION, Regex("^[=<>/]+"))
             fallthroughStylePatterns.new(
-                "lang-js", Regex("^on\\w+\\s*=\\s*\\\"([^\\\"]+)\\\"", RegexOption.IGNORE_CASE)
+                "lang-js", Regex("^on\\w+\\s*=\\s*\"([^\"]+)\"", RegexOption.IGNORE_CASE)
             )
             fallthroughStylePatterns.new(
-                "lang-js", Regex("^on\\w+\\s*=\\s*\\'([^\\']+)\\'", RegexOption.IGNORE_CASE)
+                "lang-js", Regex("^on\\w+\\s*=\\s*'([^']+)'", RegexOption.IGNORE_CASE)
             )
             fallthroughStylePatterns.new(
-                "lang-js", Regex("^on\\w+\\s*=\\s*([^\\\"\\'>\\s]+)", RegexOption.IGNORE_CASE)
+                "lang-js", Regex("^on\\w+\\s*=\\s*([^\"'>\\s]+)", RegexOption.IGNORE_CASE)
             )
             fallthroughStylePatterns.new(
-                "lang-css", Regex("^style\\s*=\\s*\\\"([^\\\"]+)\\\"", RegexOption.IGNORE_CASE)
+                "lang-css", Regex("^style\\s*=\\s*\"([^\"]+)\"", RegexOption.IGNORE_CASE)
             )
             fallthroughStylePatterns.new(
-                "lang-css", Regex("^style\\s*=\\s*\\'([^\\']+)\\'", RegexOption.IGNORE_CASE)
+                "lang-css", Regex("^style\\s*=\\s*'([^']+)'", RegexOption.IGNORE_CASE)
             )
             fallthroughStylePatterns.new(
-                "lang-css", Regex("^style\\s*=\\s\\*([^\\\"\\'>\\s]+)", RegexOption.IGNORE_CASE)
+                "lang-css", Regex("^style\\s*=\\s\\*([^\"'>\\s]+)", RegexOption.IGNORE_CASE)
             )
             registerLangHandler(
                 CreateSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns),
@@ -819,11 +808,11 @@ class Prettify {
     companion object {
 
         // Keyword lists for various languages.
-        const val FLOW_CONTROL_KEYWORDS = "break,continue,do,else,for,if,return,while"
-        const val C_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "auto,case,char,const,default,"
+        private const val FLOW_CONTROL_KEYWORDS = "break,continue,do,else,for,if,return,while"
+        private const val C_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "auto,case,char,const,default,"
                 + "double,enum,extern,float,goto,inline,int,long,register,short,signed,"
                 + "sizeof,static,struct,switch,typedef,union,unsigned,void,volatile")
-        const val COMMON_KEYWORDS = (C_KEYWORDS + "," + "catch,class,delete,false,import,"
+        private const val COMMON_KEYWORDS = (C_KEYWORDS + "," + "catch,class,delete,false,import,"
                 + "new,operator,private,protected,public,this,throw,true,try,typeof")
         const val CPP_KEYWORDS = (COMMON_KEYWORDS + "," + "alignof,align_union,asm,axiom,bool,"
                 + "concept,concept_map,const_cast,constexpr,decltype,delegate,"
@@ -834,11 +823,11 @@ class Prettify {
                 + "abstract,assert,boolean,byte,extends,final,finally,implements,import,"
                 + "instanceof,interface,null,native,package,strictfp,super,synchronized,"
                 + "throws,transient")
-        const val KOTLIN_KEYWORDS = (JAVA_KEYWORDS + ","
+        private const val KOTLIN_KEYWORDS = (JAVA_KEYWORDS + ","
                 + "as,as?,fun,in,!in,object,typealias,val,var,when,by,constructor,delegate,dynamic,field,"
                 + "file,get,init,set,value,where,actual,annotation,companion,crossinline,data,enum,expect,"
                 + "external,field,infix,inline,inner,internal,it,lateinit,noinline,open,operator,out,override,"
-                + "reified,sealed,suspend,tailrec,vararg");
+                + "reified,sealed,suspend,tailrec,vararg")
         const val RUST_KEYWORDS = (FLOW_CONTROL_KEYWORDS + "," + "as,assert,const,copy,drop,"
                 + "enum,extern,fail,false,fn,impl,let,log,loop,match,mod,move,mut,priv,"
                 + "pub,pure,ref,self,static,struct,true,trait,type,unsafe,use")
@@ -869,7 +858,7 @@ class Prettify {
                 + "function,in,local,set,then,until")
         const val ALL_KEYWORDS = (CPP_KEYWORDS + "," + KOTLIN_KEYWORDS + "," + CSHARP_KEYWORDS
                 + "," + JSCRIPT_KEYWORDS + "," + PERL_KEYWORDS + "," + PYTHON_KEYWORDS + "," + RUBY_KEYWORDS
-                + "," + SH_KEYWORDS);
+                + "," + SH_KEYWORDS)
         val C_TYPES =
             Regex("^(DIR|FILE|vector|(de|priority_)?queue|list|stack|(const_)?iterator|(multi)?(set|map)|bitset|u?(int|float)\\d*)\\b")
         // token style names.  correspond to css classes
@@ -957,8 +946,8 @@ class Prettify {
          * it fails to distinguish between (a=++/b/i) and (a++/b/i) but it works
          * very well in practice.
          */
-        private const val REGEXP_PRECEDER_PATTERN =
-            "(?:^^\\.?|[+-]|[!=]=?=?|\\#|%=?|&&?=?|\\(|\\*=?|[+\\-]=|->|\\/=?|::?|<<?=?|>>?>?=?|,|;|\\?|@|\\[|~|\\{|\\^\\^?=?|\\|\\|?=?|break|case|continue|delete|do|else|finally|instanceof|return|throw|try|typeof)\\s*"
+        private const val REGEXP_PRECEDES_PATTERN =
+            "(?:^^\\.?|[+-]|[!=]=?=?|#|%=?|&&?=?|\\(|\\*=?|[+\\-]=|->|/=?|::?|<<?=?|>>?>?=?|,|;|\\?|@|\\[|~|\\{|\\^\\^?=?|\\|\\|?=?|break|case|continue|delete|do|else|finally|instanceof|return|throw|try|typeof)\\s*"
 
         /**
          * Apply the given language handler to sourceCode and add the resulting
@@ -966,7 +955,7 @@ class Prettify {
          * @param basePos the index of sourceCode within the chunk of source
          * whose decorations are already present on out.
          */
-        protected fun appendDecorations(
+        private fun appendDecorations(
             basePos: Int,
             sourceCode: String?,
             langHandler: CreateSimpleLexer?,

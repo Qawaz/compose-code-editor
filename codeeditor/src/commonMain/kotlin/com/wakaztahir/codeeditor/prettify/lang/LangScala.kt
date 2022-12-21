@@ -43,24 +43,22 @@ class LangScala : Lang() {
 
         // Whitespace
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null
         )
         // A double or single quoted string 
         // or a triple double-quoted multi-line string.
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^(?:\"(?:(?:\"\"(?:\"\"?(?!\")|[^\\\\\"]|\\\\.)*\"{0,3})|(?:[^\"\\r\\n\\\\]|\\\\.)*\"?))"),
-            null,
-            "\""
+            null
         )
         shortcutStylePatterns.new(
-            Prettify.PR_LITERAL, Regex("^`(?:[^\\r\\n\\\\`]|\\\\.)*`?"), null, "`"
+            Prettify.PR_LITERAL, Regex("^`(?:[^\\r\\n\\\\`]|\\\\.)*`?"), null
         )
         shortcutStylePatterns.new(
             Prettify.PR_PUNCTUATION,
             Regex("^[!#%&()*+,\\-:;<=>?@\\[\\\\\\]^{|}~]+"),
-            null,
-            "!#%&()*+,-:;<=>?@[\\\\]^{|}~"
+            null
         )
         // A symbol literal is a single quote followed by an identifier with no
         // single quote following

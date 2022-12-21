@@ -39,7 +39,7 @@ class CombinePrefixPattern {
     }
 
     /**
-     * Given a group of [java.util.regex.Pattern]s, returns a `RegExp` that globally
+     * Given a group of [Regex]s, returns a `RegExp` that globally
      * matches the union of the sets of strings matched by the input RegExp.
      * Since it matches globally, if the input strings have a start-of-input
      * anchor (/^.../), it is ignored for the purposes of unioning.
@@ -53,7 +53,7 @@ class CombinePrefixPattern {
             var i: Int = 0
             val n: Int = regexs.size
             while (i < n) {
-                val regex: Regex = regexs.get(i)
+                val regex: Regex = regexs[i]
                 if (regex.options.contains(RegexOption.IGNORE_CASE)) {
                     ignoreCase = true
                 } else if (Util.test(
@@ -87,7 +87,7 @@ class CombinePrefixPattern {
         )
     }
 
-    internal fun decodeEscape(charsetPart: String): Int {
+    private fun decodeEscape(charsetPart: String): Int {
         val cc0: Int = charsetPart[0].code
         if (cc0 != 92  /* \\ */) {
             return cc0
@@ -102,7 +102,7 @@ class CombinePrefixPattern {
         }
     }
 
-    internal fun encodeEscape(charCode: Int): String {
+    private fun encodeEscape(charCode: Int): String {
         if (charCode < 0x20) {
             return (if (charCode < 0x10) "\\x0" else "\\x") + charCode.toString(16)
         }
@@ -111,7 +111,7 @@ class CombinePrefixPattern {
         return if (((charCode == '\\'.code) || (charCode == '-'.code) || (charCode == ']'.code) || (charCode == '^'.code))) "\\" + ch else ch
     }
 
-    internal fun toChars(codePoint: Int): CharArray {
+    private fun toChars(codePoint: Int): CharArray {
         return if (codePoint ushr 16 == 0) {
             charArrayOf(codePoint.toChar())
         } else if (codePoint ushr 16 < 0X10FFFF + 1 ushr 16) {
@@ -125,7 +125,7 @@ class CombinePrefixPattern {
         }
     }
 
-    internal fun caseFoldCharset(charSet: String?): String {
+    private fun caseFoldCharset(charSet: String?): String {
         val charsetParts = Util.match(
             Regex(
                 ("\\\\u[0-9A-Fa-f]{4}"
@@ -183,14 +183,14 @@ class CombinePrefixPattern {
 
         // [[1, 10], [3, 4], [8, 12], [14, 14], [16, 16], [17, 17]]
         // -> [[1, 12], [14, 14], [16, 17]]
-        ranges.sortWith(Comparator { a, b -> if (a[0] != b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
+        ranges.sortWith { a, b -> if (a[0] != b[0]) (a[0] - b[0]) else (b[1] - a[1]) }
 //        Collections.sort(ranges, Comparator { a, b -> if (a[0] !== b[0]) (a[0] - b[0]) else (b[1] - a[1]) })
         val consolidatedRanges: MutableList<List<Int>> = ArrayList()
         //        List<Integer> lastRange = listOf(new Integer[]{0, 0});
         var lastRange: MutableList<Int> = ArrayList(listOf(0, 0))
         for (i in ranges.indices) {
             val range = ranges[i]
-            if (lastRange[1] != null && range[0] <= lastRange[1] + 1) {
+            if (range[0] <= lastRange[1] + 1) {
                 lastRange[1] = (lastRange[1]).coerceAtLeast(range[1])
             } else {
                 // reference of lastRange is added
@@ -211,7 +211,7 @@ class CombinePrefixPattern {
         return join(out)
     }
 
-    internal fun allowAnywhereFoldCaseAndRenumberGroups(regex: Regex): String {
+    private fun allowAnywhereFoldCaseAndRenumberGroups(regex: Regex): String {
         // Split into character sets, escape sequences, punctuation strings
         // like ('(', '(?:', ')', '^'), and runs of characters that do not
         // include any of the above.
@@ -242,11 +242,11 @@ class CombinePrefixPattern {
             var i: Int = 0
             var groupIndex: Int = 0
             while (i < n) {
-                val p: String? = parts.get(i)
+                val p: String = parts[i]
                 if ((p == "(")) {
                     // groups are 1-indexed, so max group index is count of '('
                     ++groupIndex
-                } else if ('\\' == p!![0]) {
+                } else if ('\\' == p[0]) {
                     try {
                         val decimalValue: Int = abs(p.substring(1).toInt())
                         if (decimalValue <= groupIndex) {
@@ -275,17 +275,17 @@ class CombinePrefixPattern {
             var i: Int = 0
             var groupIndex: Int = 0
             while (i < n) {
-                val p: String? = parts.get(i)
+                val p: String = parts[i]
                 if ((p == "(")) {
                     ++groupIndex
-                    if (capturedGroups.get(groupIndex) == null) {
+                    if (capturedGroups[groupIndex] == null) {
                         parts[i] = "(?:"
                     }
-                } else if ('\\' == p!!.get(0)) {
+                } else if ('\\' == p[0]) {
                     try {
                         val decimalValue: Int = abs(p.substring(1).toInt())
                         if (decimalValue <= groupIndex) {
-                            parts[i] = "\\" + capturedGroups.get(decimalValue)
+                            parts[i] = "\\" + capturedGroups[decimalValue]
                         }
                     } catch (ex: NumberFormatException) {
                     }
@@ -297,7 +297,7 @@ class CombinePrefixPattern {
         // Remove any prefix anchors so that the output will match anywhere.
         // ^^ really does mean an anchored match though.
         for (i in 0 until n) {
-            if (("^" == parts[i]) && "^" != parts.get(i + 1)) {
+            if (("^" == parts[i]) && "^" != parts[i + 1]) {
                 parts[i] = ""
             }
         }
@@ -307,7 +307,7 @@ class CombinePrefixPattern {
         if (regex.options.contains(RegexOption.IGNORE_CASE) && needToFoldCase) {
             for (i in 0 until n) {
                 val p = parts[i]
-                val ch0: Char = if (p.length > 0) p[0] else '0'
+                val ch0: Char = if (p.isNotEmpty()) p[0] else '0'
                 if (p.length >= 2 && ch0 == '[') {
                     parts[i] = caseFoldCharset(p)
                 } else if (ch0 != '\\') {
@@ -335,7 +335,7 @@ class CombinePrefixPattern {
                     }
                     var appendIndex = 0
                     while (matchResult != null) {
-                        val cc = matchResult.groups.get(0)?.value?.get(0)?.code
+                        val cc = matchResult.groups[0]?.value?.get(0)?.code
                         mySb.append(p.substring(appendIndex,matchResult.range.first))
                         appendIndex = matchResult.range.last
                         if (cc != null) {

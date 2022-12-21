@@ -51,14 +51,13 @@ class LangSql : Lang() {
     init {
         // Whitespace
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\\t\\n\\r \\xA0]+"), null
         )
         // A double or single quoted, possibly multi-line, string.
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^(?:\"(?:[^\\\"\\\\]|\\\\.)*\"|'(?:[^\\'\\\\]|\\\\.)*')"),
-            null,
-            "\"'"
+            null
         )
         // A comment is either a line comment that starts with two dashes, or
         // two dashes preceding a long bracketed block.

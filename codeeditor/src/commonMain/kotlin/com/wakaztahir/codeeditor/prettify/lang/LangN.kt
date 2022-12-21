@@ -30,7 +30,7 @@ import com.wakaztahir.codeeditor.utils.new
  */
 class LangN : Lang() {
     companion object {
-        protected var keywords = ("abstract|and|as|base|catch|class|def|delegate|enum|event|extern|false|finally|"
+        private var keywords = ("abstract|and|as|base|catch|class|def|delegate|enum|event|extern|false|finally|"
                 + "fun|implements|interface|internal|is|macro|match|matches|module|mutable|namespace|new|"
                 + "null|out|override|params|partial|private|protected|public|ref|sealed|static|struct|"
                 + "syntax|this|throw|true|try|type|typeof|using|variant|virtual|volatile|when|where|with|"
@@ -47,17 +47,15 @@ class LangN : Lang() {
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^(?:\\'(?:[^\\\\\\'\\r\\n]|\\\\.)*\\'|\\\"(?:[^\\\\\\\"\\r\\n]|\\\\.)*(?:\\\"|$))"),
-            null,
-            "\""
+            null
         )
         shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^#(?:(?:define|elif|else|endif|error|ifdef|include|ifndef|line|pragma|undef|warning)\\b|[^\\r\\n]*)"),
-            null,
-            "#"
+            null
         )
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^\\s+"), null, " \r\n\t" + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^\\s+"), null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_STRING,
@@ -86,7 +84,7 @@ class LangN : Lang() {
         )
         fallthroughStylePatterns.new(
             Prettify.PR_KEYWORD,
-            Regex("^(?:" + keywords + ")\\\\b"),
+            Regex("^(?:$keywords)\\\\b"),
             null
         )
         fallthroughStylePatterns.new(
@@ -117,7 +115,7 @@ class LangN : Lang() {
                         + "(?:e[+\\\\-]?\\\\d+)?"
                         + ")" // with an optional modifier like UL for unsigned long
                         + "[a-z]*", RegexOption.IGNORE_CASE
-            ), null, "0123456789"
+            ), null
         )
         fallthroughStylePatterns.new(
             Prettify.PR_PUNCTUATION,

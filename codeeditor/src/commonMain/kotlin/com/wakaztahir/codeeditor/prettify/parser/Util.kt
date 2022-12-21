@@ -174,7 +174,7 @@ object Util {
             throw NullPointerException("argument 'strings' cannot be null")
         }
         val sb = StringBuilder()
-        if (strings.size != 0) {
+        if (strings.isNotEmpty()) {
             sb.append(strings[0])
             var i = 1
             val iEnd = strings.size

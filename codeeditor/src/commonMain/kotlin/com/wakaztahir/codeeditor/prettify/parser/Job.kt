@@ -37,7 +37,7 @@ class Job constructor(basePos: Int = 0, sourceCode: String? = "") {
     /**
      * The source code.
      */
-    internal var sourceCode: String
+    private var sourceCode: String
 
     /**
      * The parsed results. n<sup>th</sup> items are starting position position,

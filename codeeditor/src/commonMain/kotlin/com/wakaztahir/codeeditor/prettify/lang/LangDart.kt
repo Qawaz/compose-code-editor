@@ -49,7 +49,7 @@ class LangDart : Lang() {
     init {
         // Whitespace.
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null
         )
 
         // Script tag.

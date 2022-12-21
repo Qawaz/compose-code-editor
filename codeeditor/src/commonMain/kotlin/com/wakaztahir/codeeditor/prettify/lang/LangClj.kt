@@ -64,25 +64,23 @@ class LangClj : Lang() {
     init {
 
         // clojure has more paren types than minimal lisp.
-        shortcutStylePatterns.new("opn", Regex("^[\\(\\{\\[]+"), null, "([{")
-        shortcutStylePatterns.new("clo", Regex("^[\\)\\}\\]]+"), null, ")]}")
+        shortcutStylePatterns.new("opn", Regex("^[\\(\\{\\[]+"), null)
+        shortcutStylePatterns.new("clo", Regex("^[\\)\\}\\]]+"), null)
         // A line comment that starts with ;
         shortcutStylePatterns.new(
             Prettify.PR_COMMENT,
             Regex("^;[^\r\n]*"),
-            null,
-            ";"
+            null
         )
         // Whitespace
         shortcutStylePatterns.new(
-            Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null, "\t\n\r " + 0xA0.toChar().toString()
+            Prettify.PR_PLAIN, Regex("^[\t\n\r \\xA0]+"), null
         )
         // A double quoted, possibly multi-line, string.
         shortcutStylePatterns.new(
             Prettify.PR_STRING,
             Regex("^\\\"(?:[^\\\"\\\\]|\\\\[\\s\\S])*(?:\\\"|$)"),
-            null,
-            "\""
+            null
         )
         // clojure has a much larger set of keywords
         fallthroughStylePatterns.new(
