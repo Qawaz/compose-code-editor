@@ -1,10 +1,8 @@
 package com.wakaztahir.codeeditor.prettify.lang
 
-
 import com.wakaztahir.codeeditor.prettify.parser.Prettify
 import com.wakaztahir.codeeditor.prettify.parser.StylePattern
 import com.wakaztahir.codeeditor.utils.new
-import java.util.*
 
 class LangLogtalk : Lang() {
 
