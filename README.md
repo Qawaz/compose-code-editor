@@ -4,7 +4,7 @@
 
 **Compose Code Editor** is a code highlighting / editing library for compose , it does not make use of web view so it renders fast
 
-It also supports kotlin multiplatform and supports Android & JVM at the moment , It will be better if you could get it from
+It also supports kotlin multiplatform and supports Android,JVM & Web at the moment , It will be better if you could get it from
 github packages since I use that and post latest versions there and Jitpack might not support multiplatform
 The version 2.0.3 is only for Android , Its 3.0.0 and afterwards for multiplatform
 
