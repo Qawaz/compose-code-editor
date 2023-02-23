@@ -4,10 +4,10 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -92,14 +92,14 @@ fun DisplayCodeEditor() {
             }
         }
         if(customLanguage != null){
-            Text(text = "Custom Lang has these keywords : Google , Jetbrains , Compose , Qawaz",color = MaterialTheme.colors.onBackground.copy(.5f))
+            Text(text = "Custom Lang has these keywords : Google , Jetbrains , Compose , Qawaz",color = MaterialTheme.colorScheme.onBackground.copy(.5f))
         }
         Row {
             Box(modifier = Modifier.padding(horizontal = 4.dp)) {
                 repeat(lineCount) { line ->
                     Text(
                         text = (line + 1).toString(),
-                        color = MaterialTheme.colors.onBackground.copy(.3f),
+                        color = MaterialTheme.colorScheme.onBackground.copy(.3f),
                         modifier = Modifier.offset(y = (line * lineHeight).dp)
                     )
                 }

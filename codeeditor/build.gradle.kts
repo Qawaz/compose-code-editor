@@ -41,11 +41,11 @@ kotlin {
 
             }
         }
-        val androidTest by getting {
-            dependencies {
-                implementation("junit:junit:4.13.2")
-            }
-        }
+//        val androidTest by getting {
+//            dependencies {
+//                implementation("junit:junit:4.13.2")
+//            }
+//        }
         val desktopMain by getting {
             dependencies {
                 api(compose.preview)

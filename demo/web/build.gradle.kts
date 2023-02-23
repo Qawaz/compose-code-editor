@@ -47,10 +47,10 @@ compose.experimental {
     web.application {}
 }
 
-afterEvaluate {
-    rootProject.extensions.configure<NodeJsRootExtension> {
-        versions.webpackDevServer.version = "4.0.0"
-        versions.webpackCli.version = "4.9.0"
-        nodeVersion = "16.0.0"
-    }
-}
+//afterEvaluate {
+//    rootProject.extensions.configure<NodeJsRootExtension> {
+//        versions.webpackDevServer.version = "4.0.0"
+//        versions.webpackCli.version = "4.9.0"
+//        nodeVersion = "16.0.0"
+//    }
+//}
