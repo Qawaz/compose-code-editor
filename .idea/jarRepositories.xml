@@ -31,5 +31,10 @@
       <option name="name" value="BintrayJCenter" />
       <option name="url" value="https://jcenter.bintray.com/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="GithubPackages" />
+      <option name="name" value="GithubPackages" />
+      <option name="url" value="https://maven.pkg.github.com/Qawaz/compose-code-editor" />
+    </remote-repository>
   </component>
 </project>
