@@ -27,9 +27,8 @@ githubProperties.load(FileInputStream(rootProject.file("github.properties")))
 
 allprojects {
     repositories {
-        maven {
+        maven("https://maven.pkg.github.com/username/repo") {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/username/repo")
             credentials {
                 username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
                 password = (githubProperties["gpr.key"] ?: System.getenv("GPR_API_KEY")).toString()
