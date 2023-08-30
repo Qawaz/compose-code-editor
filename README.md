@@ -16,24 +16,6 @@ The version 2.0.3 is only for Android , Its 3.0.0 and afterwards for multiplatfo
 
 You can either get this from github packages or jitpack
 
-#### Step 1. Make sure you have jitpack repository in your build file
-
-```groovy
-allprojects {
-    repositories {
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
-
-#### Step 2. Add the dependency
-
-```groovy
-dependencies {
-    implementation 'com.github.qawaz:compose-code-editor:2.0.3'
-}
-```
-
 ### Multiplatform Dependency
 
 #### Step 1 : Add the Github Packages Repo
@@ -45,9 +27,8 @@ githubProperties.load(FileInputStream(rootProject.file("github.properties")))
 
 allprojects {
     repositories {
-        maven {
+        maven("https://maven.pkg.github.com/username/repo") {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/username/repo")
             credentials {
                 username = (githubProperties["gpr.usr"] ?: System.getenv("GPR_USER")).toString()
                 password = (githubProperties["gpr.key"] ?: System.getenv("GPR_API_KEY")).toString()
@@ -70,6 +51,26 @@ gpr.key=yourgithubpersonalaccesstoken
 
 ```kotlin
 implementation("com.wakaztahir:codeeditor:3.0.5")
+```
+
+### Android Only Dependency
+
+#### Step 1. Make sure you have jitpack repository in your build file
+
+```groovy
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+#### Step 2. Add the dependency
+
+```groovy
+dependencies {
+    implementation 'com.github.qawaz:compose-code-editor:2.0.3'
+}
 ```
 
 ## Usage
