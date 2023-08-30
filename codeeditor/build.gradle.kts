@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     kotlin("multiplatform")
     id("maven-publish")
@@ -12,12 +10,12 @@ group = "com.wakaztahir"
 version = findProperty("version") as String
 
 kotlin {
-    android {
+    androidTarget {
         publishLibraryVariants("release")
     }
     jvm("desktop") {
         compilations.all {
-            kotlinOptions.jvmTarget = "11"
+            kotlinOptions.jvmTarget = "17"
         }
     }
     js(IR) {
@@ -62,14 +60,15 @@ kotlin {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 34
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+    namespace = "com.wakaztahir.codeeditor"
 }
