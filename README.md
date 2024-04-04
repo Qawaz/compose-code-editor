@@ -43,9 +43,13 @@ allprojects {
 Create `github.properties` file in your project at root level and add two properties (make github personal access token)
 
 ```properties
-gpr.usr=yourusername
+gpr.usr=yourgithubusername
 gpr.key=yourgithubpersonalaccesstoken
 ```
+
+Or you could also set "GPR_USER" (your github username) or "GPR_API_KEY" (your github personal access token) as environment variables
+This would be very easy and you don't need to worry about checking out this file in git.
+
 
 #### Step 3 : Add The Dependency
 
