@@ -14,7 +14,7 @@ The version 2.0.3 is only for Android , Its 3.0.0 and afterwards for multiplatfo
 
 ## Setup
 
-You can either get this from github packages or jitpack
+You can either get this from github packages or jitpack, Please note that Jitpack is android only.
 
 ### Multiplatform Dependency
 
